@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>One Stop Lawn</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0e1016;font-family:Georgia,serif}
+input,select,button{font-family:Georgia,serif}
+::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body style="background:#0d1117;color:#fff;">
+<div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.10/babel.min.js"></script>
+<script type="text/babel">
+const GRASS = [
+  {name:"Bermuda",season:"Warm",mow:'0.5–1.5"',mowM:"1.3–3.8cm",scalp:true},
+  {name:"Zoysia",season:"Warm",mow:'0.5–2"',mowM:"1.3–5cm",scalp:true},
+  {name:"St. Augustine",season:"Warm",mow:'2.5–4"',mowM:"6.4–10cm",scalp:false},
+  {name:"Centipede",season:"Warm",mow:'1–2"',mowM:"2.5–5cm",scalp:false},
+  {name:"Bahia",season:"Warm",mow:'3–4"',mowM:"7.6–10cm",scalp:false},
+  {name:"Buffalo Grass",season:"Warm",mow:'2–4"',mowM:"5–10cm",scalp:false},
+  {name:"Kentucky Bluegrass",season:"Cool",mow:'2.5–3.5"',mowM:"6.4–8.9cm",scalp:false},
+  {name:"Tall Fescue",season:"Cool",mow:'3–4"',mowM:"7.6–10cm",scalp:false},
+  {name:"Fine Fescue",season:"Cool",mow:'2.5–3.5"',mowM:"6.4–8.9cm",scalp:false},
+  {name:"Perennial Ryegrass",season:"Cool",mow:'1.5–2.5"',mowM:"3.8–6.4cm",scalp:false},
+];
+
+const WEEDS = [
+  {name:"Annual Bluegrass (Poa annua)",noWiki:true,img:"./Annual%20Bluegrass%20%28Poa%20Annua%29.png",img:"./Annual%20Bluegrass%20%28Poa%20Annua%29.png",type:"Grassy Annual",season:"Winter–Spring",conditions:"Cool temps, moist/shaded, compacted soil",img:"./Annual%20Bluegrass%20%28Poa%20Annua%29.png",desc:"Pale green grass with white seed heads. Germinates in fall, highly visible in winter. Major problem in fine turf.",herbicides:["Bispyribac-sodium","Ethofumesate","Prodiamine"],products:["Prograss EC","ProStar WG","Prodiamine 65 WDG"],google:"poa annua annual bluegrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=poa+annua",ext:"https://www.google.com/search?q=poa+annua+annual+bluegrass+control+university+extension"},
+  {name:"Bahiagrass (weed in other lawns)",noWiki:true,img:"./Bahia%20Grass.jpg",img:"./Bahia%20Grass.jpg",type:"Grassy Perennial",season:"Spring–Fall",conditions:"Sandy, infertile, drought-stressed soil",img:"./Bahia%20Grass.jpg",desc:"Coarse perennial with V-shaped seed heads on tall wiry stalks. Difficult to control in finer lawns.",herbicides:["Imazaquin","Metsulfuron-methyl"],products:["Image 70 DG","Manor MSM 60 DF"],google:"bahiagrass weed",reddit:"https://reddit.com/r/lawncare/search?q=bahiagrass",ext:"https://www.google.com/search?q=bahiagrass+weed+control+university+extension"},
+  {name:"Bedstraw (Catchweed)",noWiki:true,img:"./Bedstraw.jpg",img:"./Bedstraw.jpg",type:"Broadleaf Annual",season:"Spring",conditions:"Cool moist soils, shaded areas, disturbed ground",img:"./Bedstraw.jpg",desc:"Sticky whorled leaves cling to clothing. Scrambling vine forming tangled mats. Cool-season annual.",herbicides:["2,4-D","Fluroxypyr","MCPP"],products:["SpeedZone","Surge","Trimec Classic"],google:"catchweed bedstraw lawn",reddit:"https://reddit.com/r/lawncare/search?q=bedstraw",ext:"https://www.google.com/search?q=bedstraw+catchweed+lawn+university+extension"},
+  {name:"Bindweed (Field)",noWiki:true,img:"./Bind%20Weed%20%28Field%29.png",type:"Broadleaf Perennial Vine",season:"Summer",conditions:"Well-drained disturbed soils, roadsides, lawn edges",img:"./Bind%20Weed%20%28Field%29.png",desc:"Morning glory relative with arrow-shaped leaves and white/pink trumpet flowers. Extremely deep roots — multiple seasons needed for control.",herbicides:["2,4-D","Dicamba","Triclopyr"],products:["Trimec Classic","T-Zone SE","SpeedZone"],google:"field bindweed lawn",reddit:"https://reddit.com/r/lawncare/search?q=bindweed",ext:"https://www.google.com/search?q=field+bindweed+control+university+extension"},
+  {name:"Bittercress (Hairy)",noWiki:true,img:"./hgic_weeds_hairybittercress_600.jpg",img:"./hgic_weeds_hairybittercress_600.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Moist disturbed soil, mulched beds, thin turf",img:"./hgic_weeds_hairybittercress_600.jpg",desc:"Explosive seed pods launch seeds up to 3 feet. Must treat before pods form in spring.",herbicides:["Carfentrazone-ethyl","2,4-D","Prodiamine (pre-emergent)"],products:["QuickSilver T&O","SpeedZone","Prodiamine 65 WDG"],google:"hairy bittercress lawn",reddit:"https://reddit.com/r/lawncare/search?q=bittercress",ext:"https://www.google.com/search?q=hairy+bittercress+lawn+university+extension"},
+  {name:"Chickweed (Common)",noWiki:true,img:"./crop_common_chickweed_growth_habit_hugo-arg_wikipedia.jpg",img:"./crop_common_chickweed_growth_habit_hugo-arg_wikipedia.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Cool moist conditions, thin or weak turf, shaded areas",img:"./crop_common_chickweed_growth_habit_hugo-arg_wikipedia.jpg",desc:"Forms dense mats with small star-shaped white flowers. Very competitive with weak turf. Germinates fall, dies as temps rise.",herbicides:["2,4-D","Carfentrazone-ethyl","Dicamba","Fluroxypyr"],products:["SpeedZone","QuickSilver T&O","Trimec Classic","Surge"],google:"common chickweed lawn",reddit:"https://reddit.com/r/lawncare/search?q=chickweed",ext:"https://www.google.com/search?q=common+chickweed+lawn+control+university+extension"},
+  {name:"Crabgrass (Large)",noWiki:true,img:"./large-crabgrass-b_edit_small.jpg",img:"./large-crabgrass-b_edit_small.jpg",type:"Grassy Annual",season:"Summer",conditions:"Soil temps above 55°F, bare/thin turf, compacted, full sun",img:"./large-crabgrass-b_edit_small.jpg",desc:"The #1 summer grassy weed. Forms finger-like seed heads. Thrives in hot bare areas. Best controlled with pre-emergent.",herbicides:["Dithiopyr","Fenoxaprop-p-ethyl","Prodiamine","Quinclorac"],products:["Acclaim Extra","Dimension 2EW","Drive XLR8","Prodiamine 65 WDG"],google:"crabgrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=crabgrass",ext:"https://www.google.com/search?q=large+crabgrass+lawn+control+university+extension"},
+  {name:"Crabgrass (Smooth)",noWiki:true,img:"./smooth-crabgrass.jpg",img:"./smooth-crabgrass.jpg",type:"Grassy Annual",season:"Summer",conditions:"Hot dry, compacted soil, thin turf, full sun",img:"./smooth-crabgrass.jpg",desc:"Smaller than large crabgrass with smooth leaf sheaths. Same control methods apply.",herbicides:["Dithiopyr","Prodiamine","Quinclorac"],products:["Dimension 2EW","Drive XLR8","Prodiamine 65 WDG"],google:"smooth crabgrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=smooth+crabgrass",ext:"https://www.google.com/search?q=smooth+crabgrass+lawn+control+university+extension"},
+  {name:"Cudweed",noWiki:true,img:"./cudweed-11467-cudweed3.jpg",img:"./cudweed-11467-cudweed3.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Thin warm-season turf in winter, disturbed or low-N lawns",img:"./cudweed-11467-cudweed3.jpg",desc:"Woolly white cottony stems and leaves in basal rosettes. Common in warm-season lawns during dormancy.",herbicides:["Atrazine (warm-season only)","Metsulfuron-methyl","2,4-D"],products:["Bonus S","Manor MSM 60 DF","SpeedZone"],google:"cudweed lawn",reddit:"https://reddit.com/r/lawncare/search?q=cudweed",ext:"https://www.google.com/search?q=cudweed+lawn+control+university+extension"},
+  {name:"Dallisgrass",noWiki:true,img:"./Dallis%20grass.jpeg",img:"./Dallis%20grass.jpeg",type:"Grassy Perennial",season:"Summer",conditions:"Warm humid climates, moist soils, roadsides, turf edges",img:"./Dallis%20grass.jpeg",desc:"Coarse clumping perennial with star-shaped growth pattern. One of the most difficult grassy weeds to control selectively.",herbicides:["Fenoxaprop-p-ethyl","Fluazifop-p-butyl","MSMA (restricted)"],products:["Acclaim Extra","Fusilade II","MSMA Turf"],google:"dallisgrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=dallisgrass",ext:"https://www.google.com/search?q=dallisgrass+control+university+extension"},
+  {name:"Dandelion",noWiki:true,img:"./hgic_weeds_dandelion_1600.jpg",img:"./hgic_weeds_dandelion_1600.jpg",type:"Broadleaf Perennial",season:"Spring–Fall",conditions:"Any turf, especially low-N or thin lawns, compacted soil",img:"./hgic_weeds_dandelion_1600.jpg",desc:"Deep taproot — hand pulling ineffective without a tool. Yellow flowers turn to wind-spread seed heads. Indicates low nitrogen.",herbicides:["2,4-D","Dicamba","MCPP","Triclopyr"],products:["SpeedZone","T-Zone SE","Trimec Classic","Weed Free Zone"],google:"dandelion lawn",reddit:"https://reddit.com/r/lawncare/search?q=dandelion",ext:"https://www.google.com/search?q=dandelion+lawn+control+university+extension"},
+  {name:"Dollarweed (Pennywort)",noWiki:true,img:"./Dollarweed_Pennywort-in-lawn-1024x732.jpg",img:"./Dollarweed_Pennywort-in-lawn-1024x732.jpg",type:"Broadleaf Perennial",season:"Summer",conditions:"Wet/poorly drained soil, over-irrigated lawns, warm humid climates",img:"./Dollarweed_Pennywort-in-lawn-1024x732.jpg",desc:"Circular coin-shaped leaves with center stem attachment. Fix drainage first. Loves over-irrigated areas.",herbicides:["Atrazine (warm-season)","Imazaquin","Metsulfuron-methyl","2,4-D"],products:["Bonus S","Image 70 DG","Manor MSM 60 DF","SpeedZone"],google:"dollarweed pennywort lawn",reddit:"https://reddit.com/r/lawncare/search?q=dollarweed",ext:"https://www.google.com/search?q=dollarweed+pennywort+lawn+control+university+extension"},
+  {name:"Florida Betony (Rattlesnake Weed)",noWiki:true,img:"./Florida%20Betony.jpg",img:"./Florida%20Betony.jpg",type:"Broadleaf Perennial",season:"Winter–Spring",conditions:"Moist disturbed soils, southeastern US lawns and gardens",img:"./Florida%20Betony.jpg",desc:"White segmented tubers resembling rattlesnake rattles. Square stems, pink flowers. Multiple seasons of treatment required.",herbicides:["2,4-D + Dicamba","Metsulfuron-methyl","Triclopyr"],products:["Trimec Classic","Manor MSM 60 DF","T-Zone SE"],google:"florida betony rattlesnake weed",reddit:"https://reddit.com/r/lawncare/search?q=florida+betony",ext:"https://www.google.com/search?q=florida+betony+rattlesnake+weed+control+university+extension"},
+  {name:"Globe Sedge",type:"Sedge",season:"Summer",conditions:"Moist soils, poorly drained areas, warm climates",img:"https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/Cyperus_echinatus.jpg&width=500",desc:"Spiky round seed heads. Fibrous roots — no tubers. Easier to control than nutsedge.",herbicides:["Bentazon","Halosulfuron-methyl"],products:["Basagran","Sedgehammer+"],google:"globe sedge lawn",reddit:"https://reddit.com/r/lawncare/search?q=globe+sedge",ext:"https://www.google.com/search?q=globe+sedge+lawn+control+university+extension"},
+  {name:"Goosegrass",noWiki:true,img:"./Goose%20Grass.jpeg",img:"./Goose%20Grass.jpeg",type:"Grassy Annual",season:"Summer",conditions:"Compacted hot soil, driveways, high-traffic areas; germinates 3-4 weeks after crabgrass",img:"./Goose%20Grass.jpeg",desc:"Distinctive silvery-white center stem. Resistant to many pre-emergents. Second application critical for control.",herbicides:["Dithiopyr","Fenoxaprop-p-ethyl","Fluazifop-p-butyl","Oxadiazon"],products:["Acclaim Extra","Dimension 2EW","Fusilade II","Ronstar G"],google:"goosegrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=goosegrass",ext:"https://www.google.com/search?q=goosegrass+lawn+control+university+extension"},
+  {name:"Ground Ivy (Creeping Charlie)",noWiki:true,img:"./ground%20ivy%201-350x233.jpg",img:"./ground%20ivy%201-350x233.jpg",type:"Broadleaf Perennial",season:"Spring–Fall",conditions:"Shaded moist areas, poor drainage, thin turf under trees",img:"./ground%20ivy%201-350x233.jpg",desc:"Creeping vine with scalloped leaves and a strong mint-like odor when crushed. Spreads aggressively. One of the harder broadleafs to control.",herbicides:["2,4-D","Dicamba","Triclopyr"],products:["T-Zone SE","Trimec Classic","Turflon Ester"],google:"creeping charlie ground ivy lawn",reddit:"https://reddit.com/r/lawncare/search?q=creeping+charlie",ext:"https://www.google.com/search?q=ground+ivy+creeping+charlie+lawn+control+university+extension"},
+  {name:"Henbit",noWiki:true,img:"./Henbit.jpg",img:"./Henbit.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Thin or bare turf, disturbed soil, cool temperatures",img:"./Henbit.jpg",desc:"Square stems with pink-purple tubular flowers in early spring. Treat in late fall or early winter before it establishes.",herbicides:["2,4-D","Carfentrazone-ethyl","Dicamba"],products:["QuickSilver T&O","SpeedZone","Trimec Classic"],google:"henbit lawn weed",reddit:"https://reddit.com/r/lawncare/search?q=henbit",ext:"https://www.google.com/search?q=henbit+lawn+control+university+extension"},
+  {name:"Kyllinga (Green)",type:"Sedge",season:"Summer",conditions:"Moist warm soils, irrigation zones, over-watered lawns",img:"https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/Cyperus_brevifolius.jpg&width=500",desc:"Low-growing sedge with round green seed heads. Spreads by rhizomes. Very common in over-irrigated lawns.",herbicides:["Halosulfuron-methyl","Imazaquin","Pyrimisulfan"],products:["Image 70 DG","Sedgehammer+","SurePyc IQ"],google:"green kyllinga sedge lawn",reddit:"https://reddit.com/r/lawncare/search?q=kyllinga",ext:"https://www.google.com/search?q=green+kyllinga+lawn+control+university+extension"},
+  {name:"Lespedeza (Common)",img:"./common-lespedeza-11571-commonlespedeza-p1180802.jpg",noWiki:true,img:"./common-lespedeza-11571-commonlespedeza-p1180802.jpg",type:"Broadleaf Annual",season:"Summer",conditions:"Compacted, low-fertility, acidic soil, hot dry conditions",img:"./common-lespedeza-11571-commonlespedeza-p1180802.jpg",desc:"Three-leaflet leaves on wiry stems with tiny pink-purple flowers. Indicates compacted soil needing aeration.",herbicides:["Metsulfuron-methyl","Triclopyr","2,4-D"],products:["Blade MSM 60 DF","T-Zone SE","Trimec Classic"],google:"lespedeza lawn",reddit:"https://reddit.com/r/lawncare/search?q=lespedeza",ext:"https://www.google.com/search?q=common+lespedeza+lawn+control+university+extension"},
+  {name:"Mouseear Chickweed",noWiki:true,img:"./mouseear-chickweed-11495-mousear.jpg",img:"./mouseear-chickweed-11495-mousear.jpg",type:"Broadleaf Perennial",season:"Winter–Spring",conditions:"Moist cool soils, shaded areas, low-maintenance turf",img:"./mouseear-chickweed-11495-mousear.jpg",desc:"Hairy perennial version of common chickweed. Waxy, hairy leaf surface makes control harder.",herbicides:["Fluroxypyr","Triclopyr","2,4-D"],products:["Surge","T-Zone SE","Trimec Classic"],google:"mouseear chickweed lawn",reddit:"https://reddit.com/r/lawncare/search?q=mouseear+chickweed",ext:"https://www.google.com/search?q=mouseear+chickweed+lawn+university+extension"},
+  {name:"Mugwort",img:"./Mugwort.jpg",noWiki:true,img:"./Mugwort.jpg",type:"Broadleaf Perennial",season:"Summer",conditions:"Disturbed soils, roadsides, lawn edges, poorly maintained areas",img:"./Mugwort.jpg",desc:"Silvery-white leaf underside, strong sage scent. Spreads aggressively by rhizomes. Multiple season treatment required.",herbicides:["Metsulfuron-methyl","Triclopyr (repeated applications)"],products:["Blade MSM 60 DF","Turflon Ester"],google:"mugwort lawn",reddit:"https://reddit.com/r/lawncare/search?q=mugwort",ext:"https://www.google.com/search?q=mugwort+lawn+weed+university+extension"},
+  {name:"Nimblewill",noWiki:true,img:"./Nimbleweed.jpg",img:"./Nimbleweed.jpg",type:"Grassy Perennial",season:"Summer (dormant in winter)",conditions:"Shaded lawns, moist areas, transition zone climates",img:"./Nimbleweed.jpg",desc:"Wiry fine-textured warm-season grass that turns straw-colored in winter. Tenacity herbicide is one of the few selective options.",herbicides:["Mesotrione","Glyphosate (non-selective spot)"],products:["Tenacity Herbicide","Roundup (spot only)"],google:"nimblewill lawn",reddit:"https://reddit.com/r/lawncare/search?q=nimblewill",ext:"https://www.google.com/search?q=nimblewill+lawn+control+university+extension"},
+  {name:"Orchardgrass",noWiki:true,img:"./Orchard%20grass.jpeg",img:"./Orchard%20grass.jpeg",type:"Grassy Perennial",season:"Cool–Warm",conditions:"Disturbed soils, roadsides, transition zone lawns",img:"./Orchard%20grass.jpeg",desc:"Coarse clumping grass common in cool-season and transition zone lawns. Non-selective spot treatment followed by reseeding usually necessary.",herbicides:["Fluazifop-p-butyl","Glyphosate (spot spray)"],products:["Fusilade II","Roundup (spot)"],google:"orchardgrass weed lawn",reddit:"https://reddit.com/r/lawncare/search?q=orchardgrass+weed",ext:"https://www.google.com/search?q=orchardgrass+weed+lawn+university+extension"},
+  {name:"Oxalis (Wood Sorrel)",noWiki:true,img:"./Oxalis%20wood_sorrel.jpg",img:"./Oxalis%20wood_sorrel.jpg",type:"Broadleaf Perennial",season:"Spring–Summer",conditions:"Thin turf, disturbed soil, full sun to partial shade",img:"./Oxalis%20wood_sorrel.jpg",desc:"Heart-shaped leaflets resembling clover with yellow flowers. Explosive seed pods. Very persistent.",herbicides:["Carfentrazone-ethyl","Fluroxypyr","Triclopyr"],products:["QuickSilver T&O","Surge","T-Zone SE"],google:"oxalis wood sorrel lawn",reddit:"https://reddit.com/r/lawncare/search?q=oxalis+sorrel",ext:"https://www.google.com/search?q=oxalis+wood+sorrel+lawn+control+university+extension"},
+  {name:"Plantain (Broadleaf)",noWiki:true,img:"./Plantain%20Broadleaf.jpg",img:"./Plantain%20Broadleaf.jpg",type:"Broadleaf Perennial",season:"Spring–Fall",conditions:"Compacted soil, high-traffic areas, moist disturbed ground",img:"./Plantain%20Broadleaf.jpg",desc:"Broad oval ribbed leaves in a basal rosette. Very tolerant of mowing and compaction. Indicates compacted soil — core aerate.",herbicides:["2,4-D","Dicamba","MCPP"],products:["SpeedZone","Trimec Classic","Weed Free Zone"],google:"broadleaf plantain lawn",reddit:"https://reddit.com/r/lawncare/search?q=broadleaf+plantain",ext:"https://www.google.com/search?q=broadleaf+plantain+lawn+control+university+extension"},
+  {name:"Plantain (Buckhorn)",noWiki:true,img:"./buckhorn-plantain.jpg",img:"./buckhorn-plantain.jpg",type:"Broadleaf Perennial",season:"Spring–Fall",conditions:"Compacted, dry soil, high-traffic areas",img:"./buckhorn-plantain.jpg",desc:"Narrow lance-shaped ribbed leaves and wiry seed head. Same habitat and control as broadleaf plantain.",herbicides:["2,4-D","Dicamba","MCPP"],products:["SpeedZone","T-Zone SE","Trimec Classic"],google:"buckhorn plantain lawn",reddit:"https://reddit.com/r/lawncare/search?q=buckhorn+plantain",ext:"https://www.google.com/search?q=buckhorn+plantain+lawn+control+university+extension"},
+  {name:"Purple Deadnettle",noWiki:true,img:"./Purple%20Dead%20Nettle.webp",img:"./Purple%20Dead%20Nettle.webp",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Thin or bare turf, disturbed soil, cool moist conditions",img:"./Purple%20Dead%20Nettle.webp",desc:"Reddish-purple leaf tips on upper stems. Square stems. Often found alongside henbit in the same lawn.",herbicides:["2,4-D","Dicamba","MCPP"],products:["SpeedZone","Trimec Classic","Weed Free Zone"],google:"purple deadnettle lawn",reddit:"https://reddit.com/r/lawncare/search?q=purple+deadnettle",ext:"https://www.google.com/search?q=purple+deadnettle+lawn+control+university+extension"},
+  {name:"Purple Nutsedge",noWiki:true,img:"./Purple%20Sedge.jpeg",img:"./Purple%20Sedge.jpeg",type:"Sedge",season:"Summer",conditions:"Warm humid climates, wet soil, tropical/subtropical regions",img:"./Purple%20Sedge.jpeg",desc:"Darker green than yellow nutsedge. Chains of tubers underground. More common in southern US. More difficult to eradicate.",herbicides:["Halosulfuron-methyl","Pyrimisulfan","Sulfentrazone"],products:["Dismiss South","Sedgehammer+","SurePyc IQ"],google:"purple nutsedge lawn",reddit:"https://reddit.com/r/lawncare/search?q=purple+nutsedge",ext:"https://www.google.com/search?q=purple+nutsedge+lawn+control+university+extension"},
+  {name:"Quackgrass",noWiki:true,img:"./Quackgrass.jpg",img:"./Quackgrass.jpg",type:"Grassy Perennial",season:"Cool–Warm",conditions:"Disturbed soils, gardens, cool-season lawns, fertile ground",img:"./Quackgrass.jpg",desc:"Aggressive perennial with deep rhizomes. Clasping auricles at leaf base. Non-selective herbicide then reseed is usually required.",herbicides:["Fluazifop-p-butyl","Glyphosate"],products:["Fusilade II","Roundup (non-selective)"],google:"quackgrass lawn",reddit:"https://reddit.com/r/lawncare/search?q=quackgrass",ext:"https://www.google.com/search?q=quackgrass+lawn+control+university+extension"},
+  {name:"Shepherd's Purse",noWiki:true,img:"./shepherds%20purse.jpg",img:"./shepherds%20purse.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Disturbed soil, thin turf, bare areas, cool weather",img:"./shepherds%20purse.jpg",desc:"Heart-shaped seed pods on branched stems. Treat before it sets seed in spring.",herbicides:["2,4-D","MCPP","Prodiamine (pre)"],products:["SpeedZone","Trimec Classic","Prodiamine 65 WDG"],google:"shepherds purse lawn",reddit:"https://reddit.com/r/lawncare/search?q=shepherds+purse",ext:"https://www.google.com/search?q=shepherds+purse+lawn+university+extension"},
+  {name:"Spurge (Prostrate)",noWiki:true,img:"./prostrate%20spurge.jpg",img:"./prostrate%20spurge.jpg",type:"Broadleaf Annual",season:"Summer",conditions:"Thin compacted turf, driveways, hot dry areas",img:"./prostrate%20spurge.jpg",desc:"Milky sap when stems are broken — key ID feature. Forms prostrate mats. Pre-emergent is most effective long-term strategy.",herbicides:["2,4-D","Carfentrazone-ethyl","Prodiamine (pre)"],products:["Prodiamine 65 WDG","QuickSilver T&O","SpeedZone"],google:"prostrate spurge lawn",reddit:"https://reddit.com/r/lawncare/search?q=prostrate+spurge",ext:"https://www.google.com/search?q=prostrate+spurge+lawn+control+university+extension"},
+  {name:"Spurge (Spotted)",noWiki:true,img:"./spotted%20spurge.jpg",img:"./spotted%20spurge.jpg",type:"Broadleaf Annual",season:"Summer",conditions:"Thin compacted turf, hot dry areas, pavement edges",img:"./spotted%20spurge.jpg",desc:"Red/purple spot on leaf center. Milky sap. Same control as prostrate spurge.",herbicides:["2,4-D","Carfentrazone-ethyl","Prodiamine (pre)"],products:["Prodiamine 65 WDG","QuickSilver T&O","SpeedZone"],google:"spotted spurge lawn",reddit:"https://reddit.com/r/lawncare/search?q=spotted+spurge",ext:"https://www.google.com/search?q=spotted+spurge+lawn+control+university+extension"},
+  {name:"Spurweed (Lawn Burweed)",noWiki:true,img:"./Spur%20weed.jpg",stretch:true,img:"./Spur%20weed.jpg",type:"Broadleaf Annual",season:"Winter–Spring",conditions:"Thin warm-season turf in winter, disturbed soil, full sun",img:"./Spur%20weed.jpg",desc:"Sharp spines form in late spring — a barefoot nightmare. Must be treated in LATE WINTER before spines develop.",herbicides:["2,4-D","Atrazine (warm-season)","MCPP"],products:["Bonus S","SpeedZone","Trimec Classic"],google:"lawn burweed spurweed",reddit:"https://reddit.com/r/lawncare/search?q=spurweed+burweed",ext:"https://www.google.com/search?q=spurweed+lawn+burweed+control+university+extension"},
+  {name:"Tall Fescue (clumps in Bermuda/Zoysia)",noWiki:true,img:"./Tall%20Fescue.jpg",img:"./Tall%20Fescue.jpg",type:"Grassy Perennial",season:"Cool–Warm",conditions:"Transition zone lawns, thin warm-season areas",img:"./Tall%20Fescue.jpg",desc:"Coarse clumping fescue in fine-textured warm-season lawns. Spot spray non-selective then reseed or patch with sod.",herbicides:["Glyphosate (spot spray — non-selective)"],products:["Roundup (spot spray only)"],google:"tall fescue clump bermuda lawn",reddit:"https://reddit.com/r/lawncare/search?q=tall+fescue+bermuda",ext:"https://www.google.com/search?q=tall+fescue+management+lawn+university+extension"},
+  {name:"Thistle (Bull/Common)",noWiki:true,img:"./Thistle%20%28Bull_Common%29.png",type:"Broadleaf Biennial",season:"Spring–Fall",conditions:"Disturbed soil, roadsides, thin turf, alkaline areas",img:"./Thistle%20%28Bull_Common%29.png",desc:"Deeply lobed spiny leaves, purple flowers. Biennial — rosette first year, flowers second year.",herbicides:["2,4-D","Dicamba","Triclopyr"],products:["SpeedZone","T-Zone SE","Trimec Classic"],google:"bull thistle lawn",reddit:"https://reddit.com/r/lawncare/search?q=thistle+lawn",ext:"https://www.google.com/search?q=bull+thistle+common+thistle+lawn+control+university+extension"},
+  {name:"Virginia Buttonweed",noWiki:true,img:"./Virgina%20Buttonweed.jpg",img:"./Virgina%20Buttonweed.jpg",type:"Broadleaf Perennial",season:"Summer",conditions:"Wet compacted soil, over-irrigated lawns, warm humid climates",img:"./Virgina%20Buttonweed.jpg",desc:"Opposite hairy leaves, white star flowers, distinctive button-like seed capsules. Thrives in wet compacted soil — fix drainage first.",herbicides:["Metsulfuron-methyl","Triclopyr","2,4-D + Dicamba"],products:["Manor MSM 60 DF","T-Zone SE","Trimec Classic"],google:"virginia buttonweed lawn",reddit:"https://reddit.com/r/lawncare/search?q=virginia+buttonweed",ext:"https://www.google.com/search?q=virginia+buttonweed+lawn+control+university+extension"},
+  {name:"Watergrass / Flatsedge",noWiki:true,img:"./watergrass_Flatsedge.jpg",img:"./watergrass_Flatsedge.jpg",type:"Sedge",season:"Summer",conditions:"Moist areas, drainage swales, over-irrigated zones",img:"./watergrass_Flatsedge.jpg",desc:"Flat seed clusters on branching stalks in moist areas. Triangular stem distinguishes sedges from grasses.",herbicides:["Bentazon","Halosulfuron-methyl"],products:["Basagran","Sedgehammer+"],google:"flatsedge lawn",reddit:"https://reddit.com/r/lawncare/search?q=flatsedge",ext:"https://www.google.com/search?q=watergrass+flatsedge+lawn+control+university+extension"},
+  {name:"White Clover",noWiki:true,img:"./Whtie%20Clover.webp",img:"./Whtie%20Clover.webp",type:"Broadleaf Perennial",season:"Spring–Fall",conditions:"Low-N lawns, moist soil, any turf type — thrives where N is deficient",img:"./Whtie%20Clover.webp",desc:"Three-leaflet leaves, white flowers. Nitrogen-fixing. Its presence is a clear signal your lawn needs nitrogen.",herbicides:["2,4-D","Dicamba","MCPP","Triclopyr"],products:["SpeedZone","T-Zone SE","Trimec Classic","Turflon Ester"],google:"white clover lawn",reddit:"https://reddit.com/r/lawncare/search?q=white+clover+lawn",ext:"https://www.google.com/search?q=white+clover+lawn+control+university+extension"},
+  {name:"Wild Bermudagrass (in cool-season lawns)",noWiki:true,img:"./bermuda%20grass.jpg",img:"./bermuda%20grass.jpg",type:"Grassy Perennial",season:"Summer (dormant winter)",conditions:"Transition zone cool-season lawns, thin or stressed turf",img:"./bermuda%20grass.jpg",desc:"Invasive warm-season grass in cool-season lawns. Turns brown in winter making it obvious. Very difficult to selectively control.",herbicides:["Fenoxaprop-p-ethyl","Fluazifop-p-butyl","Sethoxydim"],products:["Acclaim Extra","Fusilade II","Segment II"],google:"bermudagrass weed cool season lawn",reddit:"https://reddit.com/r/lawncare/search?q=bermuda+weed+fescue",ext:"https://www.google.com/search?q=wild+bermudagrass+cool+season+lawn+control+university+extension"},
+  {name:"Wild Garlic / Wild Onion",noWiki:true,img:"./wild%20garlic_wild%20onion.jpg",img:"./wild%20garlic_wild%20onion.jpg",type:"Broadleaf Perennial (Bulb)",season:"Winter–Spring",conditions:"Any lawn type, often in weak or thin turf areas",img:"./wild%20garlic_wild%20onion.jpg",desc:"Hollow leaves (garlic) or flat leaves (onion). Strong onion/garlic odor. Underground bulbs and bulblets — multiple seasons of control needed.",herbicides:["Metsulfuron-methyl","2,4-D + MCPP + Dicamba (repeated)"],products:["Manor MSM 60 DF","Trimec Classic"],google:"wild garlic wild onion lawn",reddit:"https://reddit.com/r/lawncare/search?q=wild+onion+garlic+lawn",ext:"https://www.google.com/search?q=wild+garlic+wild+onion+lawn+control+university+extension"},
+  {name:"Wild Violet",noWiki:true,img:"./Wild%20Violet.JPG",img:"./Wild%20Violet.JPG",type:"Broadleaf Perennial",season:"Spring",conditions:"Shaded moist areas, thin turf, organic-rich soil under trees",img:"./Wild%20Violet.JPG",desc:"Waxy heart-shaped leaves resist standard herbicides. Purple flowers. Deep rhizomes. Triclopyr at high rates is most effective.",herbicides:["Fluroxypyr","Metsulfuron-methyl","Triclopyr (high rate)"],products:["Blade MSM 60 DF","Surge","Turflon Ester"],google:"wild violet lawn",reddit:"https://reddit.com/r/lawncare/search?q=wild+violet+lawn",ext:"https://www.google.com/search?q=wild+violet+lawn+control+university+extension"},
+  {name:"Yellow Nutsedge",noWiki:true,img:"./Yellow%20Nutsedge.jpg",img:"./Yellow%20Nutsedge.jpg",type:"Sedge",season:"Summer",conditions:"Moist areas, over-irrigated lawns, poorly drained soil",img:"./Yellow%20Nutsedge.jpg",desc:"Triangular stem — 'sedges have edges'. Yellow-green, lighter than turf. Underground nutlets (tubers) persist for years. Apply SurePyc IQ or Sedgehammer+ while actively growing.",herbicides:["Bentazon","Halosulfuron-methyl","Pyrimisulfan","Sulfentrazone"],products:["Basagran","Dismiss South","Sedgehammer+","SurePyc IQ"],google:"yellow nutsedge lawn",reddit:"https://reddit.com/r/lawncare/search?q=yellow+nutsedge",ext:"https://www.google.com/search?q=yellow+nutsedge+lawn+control+university+extension"},
+];
+
+const FUNGI = [
+  {name:"Anthracnose",img:"./Anthracnose.jpg",noWiki:true,wiki:"Anthracnose",pathogen:"Colletotrichum cereale",season:"Summer",grass:"Bluegrass, Bentgrass, Poa annua",conditions:"Heat/drought stress, low nitrogen, compacted soil",img:"./Anthracnose.jpg",desc:"Irregular yellowing of stressed turf with black fungal fruiting bodies visible under a hand lens. Improve fertility and irrigation first — stress management is as important as fungicide.",fungicides:["Azoxystrobin","Chlorothalonil","Propiconazole","Trifloxystrobin"],products:["Compass 50 WG","Daconil Ultrex","Heritage G","Banner Maxx"],reddit:"https://reddit.com/r/lawncare/search?q=anthracnose+turf",ext:"https://www.google.com/search?q=anthracnose+turf+disease+university+extension"},
+  {name:"Brown Patch",img:"./Brown%20Patch.jpg",noWiki:true,wiki:"Brown patch disease",pathogen:"Rhizoctonia solani",season:"Summer",grass:"All types — esp. Tall Fescue, St. Augustine, Ryegrass",conditions:"Night temps above 70°F, humidity above 90%, poor drainage, excess nitrogen",img:"./Brown%20Patch.jpg",desc:"Circular patches with a darker smoke ring border visible in early morning. The most destructive summer disease. Hold off nitrogen during active outbreaks.",fungicides:["Azoxystrobin","Propiconazole","Thiophanate-methyl","Trifloxystrobin"],products:["Cleary's 3336","Heritage G","Banner Maxx","Compass 50 WG"],reddit:"https://reddit.com/r/lawncare/search?q=brown+patch",ext:"https://www.google.com/search?q=brown+patch+turf+disease+university+extension"},
+  {name:"Dollar Spot",img:"./Dollar%20Spot.jpg",noWiki:true,wiki:"Dollar spot",pathogen:"Sclerotinia homoeocarpa",season:"Spring–Fall",grass:"All types — esp. Bermuda, Bentgrass, Fescue",conditions:"Temps 60–90°F, morning dew, low nitrogen, drought stress",img:"./Dollar%20Spot.jpg",desc:"Silver dollar-sized bleached spots with white cobweb mycelium visible in early morning. Hourglass lesions on blades. Raise nitrogen levels — low N is the primary contributor.",fungicides:["Chlorothalonil","Iprodione","Propiconazole","Thiophanate-methyl"],products:["Banner Maxx","Chipco 26GT","Cleary's 3336","Daconil Ultrex"],reddit:"https://reddit.com/r/lawncare/search?q=dollar+spot",ext:"https://www.google.com/search?q=dollar+spot+turf+disease+university+extension"},
+  {name:"Fairy Ring",img:"./Fairy%20Ring.jpg",noWiki:true,wiki:"Fairy ring",pathogen:"Basidiomycete fungi (many species)",season:"Spring–Fall",grass:"All grass types",conditions:"Organic matter in soil, dry conditions, thick thatch layer",img:"./Fairy%20Ring.jpg",desc:"Dark green rings with or without mushrooms. Three types: dead zone (Type I), green ring only (Type II), or mushrooms only (Type III). Flutolanil (ProStar) is most effective. Wetting agents help penetrate the hydrophobic zone.",fungicides:["Azoxystrobin","Fenarimol","Flutolanil"],products:["Heritage G","Patchwork","ProStar WG"],tips:["Aerate inside the ring","Apply wetting agent","Remove mushrooms immediately"],reddit:"https://reddit.com/r/lawncare/search?q=fairy+ring",ext:"https://www.google.com/search?q=fairy+ring+lawn+disease+university+extension"},
+  {name:"Gray Leaf Spot",img:"./Gray%20Leaf%20Spot.jpg",noWiki:true,wiki:"Gray leaf spot",pathogen:"Pyricularia grisea",season:"Summer",grass:"St. Augustine (primary), Tall Fescue",conditions:"Temps 80–95°F, high humidity, lush over-fertilized growth",img:"./Gray%20Leaf%20Spot.jpg",desc:"Oblong tan-to-brown lesions with dark purple borders. Destroys blade tissue rapidly. Hold off nitrogen during active outbreaks — lush growth makes it worse.",fungicides:["Azoxystrobin","Mancozeb","Propiconazole","Trifloxystrobin"],products:["Compass 50 WG","Fore Granular","Heritage G","Banner Maxx"],reddit:"https://reddit.com/r/lawncare/search?q=gray+leaf+spot",ext:"https://www.google.com/search?q=gray+leaf+spot+turf+disease+university+extension"},
+  {name:"Large Patch",img:"./Large%20Patch.jpg",noWiki:true,wiki:"Rhizoctonia solani",pathogen:"Rhizoctonia solani AG 2-2LP",season:"Fall–Spring",grass:"Zoysia, St. Augustine, Centipede",conditions:"Cool temps 50–70°F, wet fall or spring weather, high nitrogen in fall",img:"./Large%20Patch.jpg",desc:"Large irregular patches reaching 20+ feet with orange-brown perimeter. Attacks warm-season grasses during transition seasons. Fall preventive applications are most effective.",fungicides:["Azoxystrobin","Flutolanil","Propiconazole","Thiophanate-methyl"],products:["Cleary's 3336","Heritage G","ProStar WG","Banner Maxx"],reddit:"https://reddit.com/r/lawncare/search?q=large+patch+zoysia",ext:"https://www.google.com/search?q=large+patch+lawn+university+extension"},
+  {name:"Powdery Mildew",img:"./Powdery%20Mildew.jpg",noWiki:true,wiki:"Powdery mildew",pathogen:"Blumeria graminis",season:"Spring–Fall",grass:"Kentucky Bluegrass, Fine Fescue (shaded areas)",conditions:"Dense shade, poor air circulation, moderate temps, high humidity",img:"./Powdery%20Mildew.jpg",desc:"White powdery coating on blades in shaded areas. Indicates excessive shade. Improving light penetration or switching to shade-tolerant species is often better than fungicide.",fungicides:["Myclobutanil","Propiconazole","Trifloxystrobin"],products:["Banner Maxx","Compass 50 WG","Eagle 20EW"],reddit:"https://reddit.com/r/lawncare/search?q=powdery+mildew+lawn",ext:"https://www.google.com/search?q=powdery+mildew+lawn+university+extension"},
+  {name:"Pythium Blight",img:"./Pythium%20Blight.jpg",noWiki:true,wiki:"Pythium blight",pathogen:"Pythium aphanidermatum",season:"Summer",grass:"All types — especially cool-season grasses",conditions:"Night temps above 68°F, standing water, poor drainage, high humidity",img:"./Pythium%20Blight.jpg",desc:"Greasy water-soaked patches with white cottony mycelium visible at night. Can completely destroy turf in 24–48 hours. The fastest-acting lawn disease. Improve drainage immediately.",fungicides:["Azoxystrobin","Fosetyl-Al","Mefenoxam","Propamocarb"],products:["Aliette WDG","Banol Turf","Heritage G","Subdue Maxx"],reddit:"https://reddit.com/r/lawncare/search?q=pythium+blight",ext:"https://www.google.com/search?q=pythium+blight+turf+disease+university+extension"},
+  {name:"Red Thread",img:"./Red%20Thread.jpg",noWiki:true,wiki:"Red thread",pathogen:"Laetisaria fuciformis",season:"Spring–Fall (cool wet)",grass:"Fine Fescue, Perennial Ryegrass, Bluegrass, Bentgrass",conditions:"Temps 40–70°F, wet weather, low nitrogen, slow growth periods",img:"./Red%20Thread.jpg",desc:"Pink-red thread-like fungal strands extending from blade tips. Tan irregular patches. Low N is the primary cause — improving fertility often eliminates recurrence without fungicide.",fungicides:["Chlorothalonil","Flutolanil","Iprodione","Propiconazole"],products:["Banner Maxx","Chipco 26GT","Daconil Ultrex","ProStar WG"],reddit:"https://reddit.com/r/lawncare/search?q=red+thread+lawn",ext:"https://www.google.com/search?q=red+thread+lawn+disease+university+extension"},
+  {name:"Rust",img:"./Rust.jpg",noWiki:true,wiki:"Rust (fungus)",pathogen:"Puccinia spp.",season:"Summer–Fall",grass:"Kentucky Bluegrass, Perennial Ryegrass, Zoysia",conditions:"Slow turf growth, moderate temps 70–85°F, morning dew",img:"./Rust.jpg",desc:"Orange-yellow powdery pustules on blades. Stains shoes orange. Indicates slow growth — improve fertility, mowing frequency, and irrigation to reduce severity.",fungicides:["Mancozeb","Myclobutanil","Propiconazole","Trifloxystrobin"],products:["Banner Maxx","Compass 50 WG","Eagle 20EW","Fore Granular"],reddit:"https://reddit.com/r/lawncare/search?q=lawn+rust+disease",ext:"https://www.google.com/search?q=rust+disease+turf+university+extension"},
+  {name:"Slime Mold",img:"./Slime%20Mold.jpg",noWiki:true,wiki:"Myxomycete",pathogen:"Physarum / Fuligo spp. (saprophytic)",season:"Spring–Fall",grass:"All grass types",conditions:"Moist weather, thatch accumulation, organic matter in soil",img:"./Slime%20Mold.jpg",desc:"Gray, black, or yellow crusty powder coating grass blades. NOT parasitic — feeds on decaying organic matter only. Washes off with water. No damage to turf.",fungicides:["None required — wash off with water or mow"],products:["No treatment needed — rinse with hose"],tips:["Hose off with water","Mow and bag clippings","Improve drainage and reduce thatch"],reddit:"https://reddit.com/r/lawncare/search?q=slime+mold+lawn",ext:"https://www.google.com/search?q=slime+mold+turfgrass+university+extension"},
+  {name:"Spring Dead Spot",img:"./Spring%20Dead%20Spot.jpg",noWiki:true,wiki:"Spring dead spot",pathogen:"Ophiosphaerella spp.",season:"Spring (symptoms at green-up)",grass:"Bermudagrass (primarily)",conditions:"Late fall infection, cold winter, high nitrogen applied in fall",img:"./Spring%20Dead%20Spot.jpg",desc:"Circular dead areas visible when Bermuda breaks dormancy in spring. Roots and stolons black and rotted. Apply fungicide preventively in fall (September–October) before infection occurs.",fungicides:["Azoxystrobin","Propiconazole","Thiophanate-methyl"],products:["Banner Maxx (fall)","Cleary's 3336 (fall)","Heritage G (fall)"],tips:["Apply fungicide Sept–Oct as a preventive","Avoid high nitrogen in fall","Core aerate in spring to speed recovery"],reddit:"https://reddit.com/r/lawncare/search?q=spring+dead+spot+bermuda",ext:"https://www.google.com/search?q=spring+dead+spot+lawn+university+extension"},
+  {name:"Summer Patch",img:"./Summer%20Patch.jpg",noWiki:true,wiki:"Summer patch",pathogen:"Magnaporthe poae",season:"Summer",grass:"Kentucky Bluegrass, Fine Fescue",conditions:"Soil temps above 65°F, drought stress, compacted soil",img:"./Summer%20Patch.jpg",desc:"Circular straw-colored patches up to 3 feet. Classic frog-eye pattern — green center island with dead ring. Apply fungicide preventively in spring before soil temps exceed 65°F.",fungicides:["Azoxystrobin","Fenarimol","Iprodione","Propiconazole"],products:["Banner Maxx","Chipco 26GT","Heritage G","Patchwork"],reddit:"https://reddit.com/r/lawncare/search?q=summer+patch+bluegrass",ext:"https://www.google.com/search?q=summer+patch+lawn+disease+university+extension"},
+  {name:"Take-All Root Rot (TARR)",img:"./Take%20All%20Root%20Rot.jpg",noWiki:true,wiki:"Gaeumannomyces graminis",pathogen:"Gaeumannomyces graminis var. graminis",season:"Spring–Fall",grass:"St. Augustine (primary), Bermuda, Zoysia",conditions:"Cool wet weather, high soil pH above 7.0, over-irrigation, alkaline soil",img:"./Take%20All%20Root%20Rot.jpg",desc:"Roots turn black and rot. Turf yellows and thins from the root system upward. Managing soil pH and reducing irrigation are as critical as fungicide. Apply elemental sulfur to lower pH.",fungicides:["Azoxystrobin","Propiconazole","Thiophanate-methyl"],products:["Banner Maxx","Cleary's 3336","Heritage G"],tips:["Acidify soil with elemental sulfur","Reduce irrigation frequency","Apply micronutrients (Mn, Fe)","Lower mowing height temporarily"],reddit:"https://reddit.com/r/lawncare/search?q=take+all+root+rot",ext:"https://www.google.com/search?q=take+all+root+rot+university+extension"},
+];
+
+
+const INSECTS = [
+  {name:"Armyworm (Fall)",noWiki:true,img:"./Fall_Armyworm.jpg",wiki:"Fall armyworm",season:"Summer–Fall",peaks:["Summer","Fall"],grass:"All types — especially bermuda, fescue, ryegrass",conditions:"Warm humid nights, lush over-fertilized turf, after drought breaks",desc:"Caterpillars that feed in large armies overnight, defoliating turf in days. Look for moths at dusk, bird activity, and irregular brown patches that seem to appear suddenly. Inspect at night with a flashlight.",insecticides:["Bifenthrin","Chlorantraniliprole","Spinosad","Indoxacarb"],products:[{name:"Talstar P (Bifenthrin)",dom:"https://www.domyown.com/search?q=talstar+p+bifenthrin",amz:"https://www.amazon.com/s?k=talstar+p+bifenthrin",s1:"https://www.siteone.com/en/search?q=talstar+bifenthrin"},{name:"Acelepryn (Chlorantraniliprole)",dom:"https://www.domyown.com/search?q=acelepryn+chlorantraniliprole",amz:"https://www.amazon.com/s?k=acelepryn",s1:"https://www.siteone.com/en/search?q=acelepryn"},{name:"Conserve SC (Spinosad)",dom:"https://www.domyown.com/search?q=conserve+spinosad",amz:"https://www.amazon.com/s?k=conserve+sc+spinosad"}],reddit:"https://reddit.com/r/lawncare/search?q=armyworm",ext:"https://www.google.com/search?q=fall+armyworm+lawn+university+extension"},
+  {name:"Chinch Bug",noWiki:true,img:"./Chinch%20Bug.jpg",wiki:"Blissus leucopterus",season:"Summer",peaks:["Summer"],grass:"St. Augustine (primary), Bermuda, Zoysia",conditions:"Hot dry weather, drought stress, thatch over 1/2 inch, full sun",desc:"Tiny black/white bugs that suck plant juices causing yellow patches that won't recover with water. Most common in St. Augustine. Check by parting grass near yellowing edge — visible to naked eye.",insecticides:["Bifenthrin","Carbaryl","Clothianidin","Imidacloprid"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+chinch+bug",amz:"https://www.amazon.com/s?k=talstar+p",s1:"https://www.siteone.com/en/search?q=talstar+p"},{name:"Merit 0.5G (Imidacloprid)",dom:"https://www.domyown.com/search?q=merit+imidacloprid",amz:"https://www.amazon.com/s?k=merit+0.5g+imidacloprid",s1:"https://www.siteone.com/en/search?q=merit+imidacloprid"}],reddit:"https://reddit.com/r/lawncare/search?q=chinch+bug",ext:"https://www.google.com/search?q=chinch+bug+lawn+university+extension"},
+  {name:"Grubs (White Grubs)",noWiki:true,img:"./White%20Grubs.jpg",wiki:"White grub",season:"Spring / Fall",peaks:["Spring","Fall"],grass:"All types",conditions:"Sandy/moist soil, stressed turf, Japanese beetle adults present in summer",desc:"C-shaped larvae of beetles (Japanese, June, Masked chafer) feeding on roots just below soil surface. Turf lifts like carpet. Birds and moles digging are a sign. Treat preventively June–August for best results.",insecticides:["Chlorantraniliprole","Imidacloprid","Thiamethoxam","Trichlorfon"],products:[{name:"GrubEx (Chlorantraniliprole)",dom:"https://www.domyown.com/search?q=grubex+scotts",amz:"https://www.amazon.com/s?k=grubex+grub+control",low:"https://www.lowes.com/search?searchTerm=grubex"},{name:"Acelepryn G",dom:"https://www.domyown.com/search?q=acelepryn+g+grub",amz:"https://www.amazon.com/s?k=acelepryn+g",s1:"https://www.siteone.com/en/search?q=acelepryn+g"},{name:"Merit 0.5G",dom:"https://www.domyown.com/search?q=merit+0.5g+grub",amz:"https://www.amazon.com/s?k=merit+imidacloprid+grub",s1:"https://www.siteone.com/en/search?q=merit+grub"}],reddit:"https://reddit.com/r/lawncare/search?q=white+grubs+lawn",ext:"https://www.google.com/search?q=white+grubs+lawn+university+extension"},
+  {name:"Sod Webworm",noWiki:true,img:"./Sod%20Webworm.jpg",wiki:"Crambus",season:"Summer",peaks:["Summer"],grass:"Kentucky Bluegrass, Bentgrass, Bermuda, Fescue",conditions:"Hot dry weather, drought stress, close-cut turf",desc:"Small tan moths lay eggs; caterpillars feed at night on grass blades creating ragged brown patches. Sawdust-like frass visible. Soap flush test confirms — pour soapy water and watch for caterpillars emerging.",insecticides:["Bifenthrin","Bacillus thuringiensis (Bt)","Carbaryl","Spinosad"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+sod+webworm",amz:"https://www.amazon.com/s?k=talstar+p+webworm",s1:"https://www.siteone.com/en/search?q=talstar+webworm"},{name:"Thuricide (Bt)",dom:"https://www.domyown.com/search?q=thuricide+bt+caterpillar",amz:"https://www.amazon.com/s?k=thuricide+bt"}],reddit:"https://reddit.com/r/lawncare/search?q=sod+webworm",ext:"https://www.google.com/search?q=sod+webworm+lawn+university+extension"},
+  {name:"Mole Cricket",noWiki:true,img:"./Mole%20Cricket.jpg",wiki:"Mole cricket",season:"Spring / Summer",peaks:["Spring","Summer"],grass:"Bermuda, St. Augustine, Bahia (Southeast US)",conditions:"Sandy soils, warm humid conditions, especially coastal plain Southeast",desc:"Subterranean crickets that tunnel through soil, uprooting turf and creating spongy areas. Soap flush test forces them to surface. Treat spring when young nymphs are present for best control.",insecticides:["Bifenthrin","Chlorantraniliprole","Fipronil","Imidacloprid"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+mole+cricket",amz:"https://www.amazon.com/s?k=bifenthrin+mole+cricket",s1:"https://www.siteone.com/en/search?q=talstar+mole+cricket"},{name:"Acelepryn",dom:"https://www.domyown.com/search?q=acelepryn+mole+cricket",amz:"https://www.amazon.com/s?k=acelepryn+mole+cricket",s1:"https://www.siteone.com/en/search?q=acelepryn+mole+cricket"},{name:"TopChoice (Fipronil)",dom:"https://www.domyown.com/search?q=topchoice+fipronil",amz:"https://www.amazon.com/s?k=topchoice+fipronil",s1:"https://www.siteone.com/en/search?q=topchoice+fipronil"}],reddit:"https://reddit.com/r/lawncare/search?q=mole+cricket",ext:"https://www.google.com/search?q=mole+cricket+lawn+university+extension"},
+  {name:"Billbug",noWiki:true,img:"./Billbug.jpg",wiki:"Sphenophorus",season:"Spring / Summer",peaks:["Spring","Summer"],grass:"Bluegrass, Zoysiagrass, Bermuda, Fescue",conditions:"Droughty turf, sandy soils, areas with heavy thatch",desc:"Adult weevils with snout damage crowns in spring; larvae eat roots by midsummer. Pull-test reveals roots severed at crown — turf lifts easily. Preventive insecticide in May–June most effective.",insecticides:["Bifenthrin","Clothianidin","Imidacloprid","Thiamethoxam"],products:[{name:"Meridian (Thiamethoxam)",dom:"https://www.domyown.com/search?q=meridian+thiamethoxam",amz:"https://www.amazon.com/s?k=meridian+thiamethoxam+lawn",s1:"https://www.siteone.com/en/search?q=meridian+thiamethoxam"},{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+billbug",amz:"https://www.amazon.com/s?k=talstar+bifenthrin"}],reddit:"https://reddit.com/r/lawncare/search?q=billbug",ext:"https://www.google.com/search?q=billbug+turf+university+extension"},
+  {name:"Fire Ant",noWiki:true,img:"./Fire%20Ant.jpg",wiki:"Fire ant",season:"Spring–Fall",peaks:["Spring","Summer","Fall"],grass:"All warm-season grasses — mounds in lawn",conditions:"Warm humid regions (Southeast, Texas), moist soil, disturbed areas",desc:"Aggressive stinging ants building soil mounds. Not a turf feeder but a human safety hazard. Two-step method: broadcast bait then treat individual mounds. Bait works slowly — 4–6 weeks.",insecticides:["Hydramethylnon (bait)","Indoxacarb (bait)","Bifenthrin","Spinosad"],products:[{name:"Amdro Fire Ant Bait",dom:"https://www.domyown.com/search?q=amdro+fire+ant+bait",amz:"https://www.amazon.com/s?k=amdro+fire+ant+bait",low:"https://www.lowes.com/search?searchTerm=amdro+fire+ant"},{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+fire+ant",amz:"https://www.amazon.com/s?k=talstar+p+fire+ant",s1:"https://www.siteone.com/en/search?q=talstar+fire+ant"},{name:"Advion Fire Ant Bait",dom:"https://www.domyown.com/search?q=advion+fire+ant+bait",amz:"https://www.amazon.com/s?k=advion+fire+ant+bait"}],reddit:"https://reddit.com/r/lawncare/search?q=fire+ant",ext:"https://www.google.com/search?q=fire+ant+lawn+university+extension"},
+  {name:"Aphids (Greenbug)",noWiki:true,img:"./Aphids.jpg",wiki:"Schizaphis graminum",season:"Spring / Fall",peaks:["Spring","Fall"],grass:"Kentucky Bluegrass, Bermuda, Sorghum",conditions:"Cool weather, over-fertilized lawns, natural predator absence",desc:"Tiny pear-shaped insects clustering on grass blades, sucking sap. Yellow-orange patches similar to drought stress. Natural predators (ladybugs, lacewings) often control them — avoid broad-spectrum insecticides if possible.",insecticides:["Imidacloprid","Insecticidal Soap","Malathion","Pyrethrins"],products:[{name:"Bayer Tree & Shrub (Imidacloprid)",dom:"https://www.domyown.com/search?q=imidacloprid+aphid",amz:"https://www.amazon.com/s?k=imidacloprid+aphid+control"},{name:"Malathion 50 EC",dom:"https://www.domyown.com/search?q=malathion+50+ec",amz:"https://www.amazon.com/s?k=malathion+50+insecticide"}],reddit:"https://reddit.com/r/lawncare/search?q=greenbug+aphid+lawn",ext:"https://www.google.com/search?q=greenbug+aphid+lawn+university+extension"},
+  {name:"Hunting Billbug / Annual Bluegrass Weevil",noWiki:true,img:"./Annual%20Bluegrass%20Weevil.jpg",wiki:"Listronotus maculicollis",season:"Spring",peaks:["Spring"],grass:"Golf turf, Poa annua, closely mowed Bermuda",conditions:"Well-maintained low-cut turf, spring warm-up, sandy soils",desc:"Tiny weevil larvae destroy Poa annua crowns in spring. Most destructive on golf courses and closely mowed turf. Preventive chlorpyrifos or chlorantraniliprole applied at forsythia bloom (50–75 GDD) most effective.",insecticides:["Chlorpyrifos","Chlorantraniliprole","Thiamethoxam"],products:[{name:"Acelepryn",dom:"https://www.domyown.com/search?q=acelepryn+weevil",amz:"https://www.amazon.com/s?k=acelepryn+weevil",s1:"https://www.siteone.com/en/search?q=acelepryn"}],reddit:"https://reddit.com/r/lawncare/search?q=annual+bluegrass+weevil",ext:"https://www.google.com/search?q=annual+bluegrass+weevil+university+extension"},
+  {name:"Ticks (Deer Tick / Black-legged)",noWiki:true,img:"./Deer_Tick.jpg",wiki:"Ixodes scapularis",season:"Spring / Fall",peaks:["Spring","Fall"],grass:"Edge turf near wooded areas, tall grass, leaf litter",conditions:"Wooded edges, humidity above 85%, deer present, leaf litter accumulation",desc:"Disease-vectoring ectoparasites. Deer ticks transmit Lyme disease. Treat perimeter zone where lawn meets woods. Granular insecticides with long residual are best. Remove leaf litter and keep grass short.",insecticides:["Bifenthrin","Deltamethrin","Permethrin"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+tick",amz:"https://www.amazon.com/s?k=talstar+tick+control",s1:"https://www.siteone.com/en/search?q=talstar+tick"},{name:"Temprid SC",dom:"https://www.domyown.com/search?q=temprid+sc+tick",amz:"https://www.amazon.com/s?k=temprid+sc"}],reddit:"https://reddit.com/r/lawncare/search?q=tick+control+yard",ext:"https://www.google.com/search?q=ticks+lawn+yard+university+extension"},
+  {name:"Fleas",noWiki:true,img:"./Fleas.jpg",wiki:"Flea",season:"Summer–Fall",peaks:["Summer","Fall"],grass:"All lawns — especially shaded areas, pet traffic zones",conditions:"Warm humid conditions, pet activity, shaded moist turf",desc:"Parasitic insects breeding in shaded turf. Treat yard and pet simultaneously or reinfestation is guaranteed. Focus on shaded areas under decks, bushes, along fences where pets rest.",insecticides:["Bifenthrin","Fipronil","Imidacloprid + Pyriproxyfen"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+flea",amz:"https://www.amazon.com/s?k=talstar+flea+yard",s1:"https://www.siteone.com/en/search?q=talstar+flea"},{name:"Taurus SC (Fipronil)",dom:"https://www.domyown.com/search?q=taurus+sc+fipronil",amz:"https://www.amazon.com/s?k=taurus+sc+fipronil"}],reddit:"https://reddit.com/r/lawncare/search?q=flea+yard+treatment",ext:"https://www.google.com/search?q=fleas+lawn+yard+university+extension"},
+  {name:"Spittlebug",noWiki:true,img:"./Spittlebug.jpg",wiki:"Cercopidae",season:"Spring–Summer",peaks:["Spring","Summer"],grass:"Centipede (primary), St. Augustine, Bermuda, Fescue",conditions:"Moist conditions, heavy thatch, warm humid Southeast",desc:"Nymphs produce white foamy spittle mass on stems. Adults are leafhoppers that cause yellowing and wilting. Most damaging to centipede. Insecticide most effective at nymph stage when spittle masses visible.",insecticides:["Bifenthrin","Carbaryl","Malathion"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+spittlebug",amz:"https://www.amazon.com/s?k=talstar+bifenthrin+spittlebug"},{name:"Sevin (Carbaryl)",dom:"https://www.domyown.com/search?q=sevin+carbaryl+lawn",amz:"https://www.amazon.com/s?k=sevin+carbaryl+insecticide",low:"https://www.lowes.com/search?searchTerm=sevin+insecticide"}],reddit:"https://reddit.com/r/lawncare/search?q=spittlebug+lawn",ext:"https://www.google.com/search?q=spittlebug+lawn+university+extension"},
+  {name:"Crane Fly (European)",noWiki:true,img:"./Crane%20Fly.jpg",wiki:"Tipula paludosa",season:"Fall / Spring",peaks:["Fall","Spring"],grass:"Cool-season grasses — especially fescue, bluegrass, ryegrass",conditions:"Pacific Northwest, cool humid climates, overwintered larvae feed on roots in spring",desc:"Larvae (leatherjackets) feed on grass roots and crowns in spring. Adults are large harmless mosquito-like flies. Damage looks like drought stress in early spring. Soap flush reveals gray-brown larvae. Most damaging in Pacific Northwest.",insecticides:["Chlorantraniliprole","Imidacloprid","Spinosad"],products:[{name:"Acelepryn",dom:"https://www.domyown.com/search?q=acelepryn+crane+fly",amz:"https://www.amazon.com/s?k=acelepryn+crane+fly",s1:"https://www.siteone.com/en/search?q=acelepryn"},{name:"Merit 0.5G",dom:"https://www.domyown.com/search?q=merit+0.5g+crane+fly",amz:"https://www.amazon.com/s?k=merit+0.5g+imidacloprid"}],reddit:"https://reddit.com/r/lawncare/search?q=crane+fly+lawn",ext:"https://www.google.com/search?q=european+crane+fly+lawn+university+extension"},
+  {name:"Cutworm (Black/Variegated)",noWiki:true,img:"./Cutworm.jpg",wiki:"Agrotis ipsilon",season:"Spring–Fall",peaks:["Spring","Fall"],grass:"All types — especially close-cut turf, golf, sports fields",conditions:"Nocturnal feeders, attracted to lush turf, most active after rain or irrigation",desc:"Fat gray-brown caterpillars that cut grass at the crown at night, leaving circular dead spots. Birds pecking at turf is a telltale sign. Check with soap flush after dark. Damage appears suddenly.",insecticides:["Bifenthrin","Chlorantraniliprole","Indoxacarb","Spinosad"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+cutworm",amz:"https://www.amazon.com/s?k=talstar+bifenthrin+cutworm"},{name:"Acelepryn",dom:"https://www.domyown.com/search?q=acelepryn+cutworm",amz:"https://www.amazon.com/s?k=acelepryn+cutworm"},{name:"Conserve SC",dom:"https://www.domyown.com/search?q=conserve+spinosad+cutworm",amz:"https://www.amazon.com/s?k=conserve+sc+spinosad"}],reddit:"https://reddit.com/r/lawncare/search?q=cutworm+lawn",ext:"https://www.google.com/search?q=cutworm+lawn+university+extension"},
+  {name:"Japanese Beetle (Adult)",noWiki:true,img:"./Japanese%20Beetle.jpg",wiki:"Popillia japonica",season:"Summer",peaks:["Summer"],grass:"All types — skeletonizes ornamentals, adults on turf edges",conditions:"Eastern US, sunny areas, roses/ornamentals nearby, peak July–August",desc:"Metallic green/copper adults skeletonize plant leaves and lay eggs in turf that become white grubs. Adults aggregate and cause social feeding pressure. Use pheromone traps away from lawn — they attract more beetles. Treat adults on contact.",insecticides:["Bifenthrin","Carbaryl","Cyfluthrin","Zeta-cypermethrin"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+p+japanese+beetle",amz:"https://www.amazon.com/s?k=talstar+japanese+beetle"},{name:"Sevin (Carbaryl)",dom:"https://www.domyown.com/search?q=sevin+carbaryl+japanese+beetle",amz:"https://www.amazon.com/s?k=sevin+japanese+beetle",low:"https://www.lowes.com/search?searchTerm=sevin+japanese+beetle"}],reddit:"https://reddit.com/r/lawncare/search?q=japanese+beetle+lawn",ext:"https://www.google.com/search?q=japanese+beetle+adult+lawn+university+extension"},
+  {name:"Ground Pearl",noWiki:true,img:"./Ground_Pearl.jpg",wiki:"Margarodes",season:"Summer",peaks:["Summer"],grass:"Centipede, Bermuda, Zoysia, St. Augustine (Southeast US)",conditions:"Sandy acidic soils, Southeast US, no effective chemical control available",desc:"Tiny scale insects that attach to grass roots, sucking sap and causing irregular yellowing. Resembles drought or fertility deficiency. No effective insecticide registered — manage through turf health, irrigation, and patience. One of the hardest pests to control.",insecticides:["No effective chemical control — management only"],products:[],reddit:"https://reddit.com/r/lawncare/search?q=ground+pearl+lawn",ext:"https://www.google.com/search?q=ground+pearl+lawn+pest+university+extension"},
+  {name:"Masked Chafer (Grub)",noWiki:true,img:"./Masked_Chafer.jpg",wiki:"Cyclocephala",season:"Summer",peaks:["Summer"],grass:"All cool and warm-season grasses",conditions:"Adults active at night June–July, eggs laid in moist turf, larvae feed roots Aug–Oct",desc:"One of the most common white grub species in home lawns. Adults are tan beetles active at night. Larvae are indistinguishable from Japanese beetle grubs. Apply preventive insecticide June–July before eggs hatch.",insecticides:["Chlorantraniliprole","Clothianidin","Imidacloprid","Thiamethoxam"],products:[{name:"GrubEx",dom:"https://www.domyown.com/search?q=grubex+masked+chafer",amz:"https://www.amazon.com/s?k=grubex+grub+control"},{name:"Acelepryn G",dom:"https://www.domyown.com/search?q=acelepryn+g+chafer",amz:"https://www.amazon.com/s?k=acelepryn+g+grub",s1:"https://www.siteone.com/en/search?q=acelepryn+g"}],reddit:"https://reddit.com/r/lawncare/search?q=masked+chafer+grub",ext:"https://www.google.com/search?q=masked+chafer+grub+lawn+university+extension"},
+  {name:"Bermudagrass Mite",noWiki:true,img:"./Bermudagrass%20Mite.jpg",wiki:"Eriophyes cynodoniensis",season:"Spring–Fall",peaks:["Spring","Summer"],grass:"Bermudagrass (primary), Zoysia",conditions:"Hot dry conditions, stressed bermuda, southern US, drought stress amplifies damage",desc:"Microscopic eriophyid mites feeding inside leaf sheaths causing 'witches broom' — tight tufted rosette growth. Patches look stunted and off-color. Not visible to naked eye; damage pattern is diagnostic.",insecticides:["Abamectin","Chlorpyrifos","Diazinon"],products:[{name:"Avid 0.15EC (Abamectin)",dom:"https://www.domyown.com/search?q=avid+abamectin+bermudagrass+mite",amz:"https://www.amazon.com/s?k=avid+abamectin+mite"}],reddit:"https://reddit.com/r/lawncare/search?q=bermudagrass+mite",ext:"https://www.google.com/search?q=bermudagrass+mite+eriophyid+university+extension"},
+  {name:"Two-lined Spittlebug",noWiki:true,img:"./Two_Lined_Spittlebug.jpg",wiki:"Prosapia bicincta",season:"Summer",peaks:["Summer"],grass:"Centipede (primary), St. Augustine, Bermuda",conditions:"Humid Southeast US, heavy thatch, moist conditions",desc:"Distinct from common spittlebug — two orange-red lines on dark body. Most damaging to centipede. Adults and nymphs both feed, causing yellow-orange wilting. More destructive than common spittlebug.",insecticides:["Bifenthrin","Carbaryl","Pyrethroids"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+two-lined+spittlebug",amz:"https://www.amazon.com/s?k=talstar+bifenthrin"},{name:"Sevin",dom:"https://www.domyown.com/search?q=sevin+spittlebug",amz:"https://www.amazon.com/s?k=sevin+carbaryl+lawn",low:"https://www.lowes.com/search?searchTerm=sevin+lawn"}],reddit:"https://reddit.com/r/lawncare/search?q=two+lined+spittlebug",ext:"https://www.google.com/search?q=two+lined+spittlebug+centipede+university+extension"},
+  {name:"Nuisance Ants (Pavement/Odorous)",noWiki:true,img:"./Nuisance%20Ants.jpg",wiki:"Tetramorium caespitum",season:"Spring–Fall",peaks:["Spring","Summer","Fall"],grass:"All types — mounds in turf, hills along walkways",conditions:"Disturbed soil, lawn edges, cracks in pavement, warm weather",desc:"Pavement and odorous house ants create mounds that smother grass and damage root zones. Unlike fire ants they don't sting aggressively but mounds disrupt turf. Bait products work better than contact sprays for elimination.",insecticides:["Fipronil (bait)","Hydramethylnon (bait)","Bifenthrin (perimeter)"],products:[{name:"Ant bait stations",dom:"https://www.domyown.com/search?q=ant+bait+lawn",amz:"https://www.amazon.com/s?k=ant+bait+outdoor+lawn"},{name:"Talstar P (perimeter)",dom:"https://www.domyown.com/search?q=talstar+p+ants",amz:"https://www.amazon.com/s?k=talstar+p+ant+control"}],reddit:"https://reddit.com/r/lawncare/search?q=ants+lawn+mounds",ext:"https://www.google.com/search?q=pavement+ants+lawn+university+extension"},
+  {name:"Striped Earwig",noWiki:true,img:"./Striped%20Earwig.jpg",wiki:"Labidura riparia",season:"Summer",peaks:["Summer"],grass:"All warm-season grasses — shaded areas, mulched beds",conditions:"Warm humid Southeast, moist conditions, organic mulch nearby",desc:"Nocturnal scavengers that occasionally damage tender grass crowns and seedlings. Usually minor pests but can injure newly seeded areas. Remove thatch and organic debris. Most damage occurs in newly seeded lawns.",insecticides:["Bifenthrin","Carbaryl"],products:[{name:"Talstar P",dom:"https://www.domyown.com/search?q=talstar+earwig",amz:"https://www.amazon.com/s?k=talstar+bifenthrin"},{name:"Sevin",dom:"https://www.domyown.com/search?q=sevin+earwig",amz:"https://www.amazon.com/s?k=sevin+earwig+lawn",low:"https://www.lowes.com/search?searchTerm=sevin+insecticide"}],reddit:"https://reddit.com/r/lawncare/search?q=earwig+lawn",ext:"https://www.google.com/search?q=earwig+lawn+pest+university+extension"}
+];
+
+const SAND_TYPES=[
+  {name:"USGA-Spec Sand",desc:"Precisely graded for golf and sports turf. Highest quality available. Best root zone drainage and performance.",quality:"best"},
+  {name:"Mason Sand (Washed)",desc:"Coarse uniform particles with excellent drainage. Recommended for most lawns. Widely available at masonry suppliers.",quality:"best"},
+  {name:"Concrete Sand",desc:"Similar to mason sand but may contain some fines. Acceptable alternative when mason sand is not available.",quality:"good"},
+  {name:"River Sand",desc:"Rounded particles, decent drainage. Available at landscaping suppliers. Acceptable for topdressing.",quality:"good"},
+  {name:"Play Sand",desc:"Fine-grained. NOT recommended — compacts easily and drains poorly. Avoid for lawn leveling.",quality:"avoid"},
+];
+const PRODUCT_ACTIVE_MAP={
+  "Banner Maxx (Propiconazole)":"Propiconazole",
+  "Heritage G (Azoxystrobin)":"Azoxystrobin",
+  "Cleary 3336 (Thiophanate-methyl)":"Thiophanate-methyl",
+  "Daconil Ultrex (Chlorothalonil)":"Chlorothalonil",
+  "ProStar WG (Flutolanil)":"Flutolanil",
+  "Subdue Maxx (Mefenoxam)":"Mefenoxam",
+  "Compass 50 WG (Trifloxystrobin)":"Trifloxystrobin",
+  "Eagle 20EW (Myclobutanil)":"Myclobutanil",
+  "Fore Granular (Mancozeb)":"Mancozeb",
+  "Chipco 26GT (Iprodione)":"Iprodione",
+  "Aliette WDG (Fosetyl-Al)":"Fosetyl-Al",
+  "Banol Turf (Propamocarb)":"Propamocarb",
+  "Patchwork (Fenarimol)":"Fenarimol",
+  "Talstar P (Bifenthrin)":"Bifenthrin",
+  "Acelepryn (Chlorantraniliprole)":"Chlorantraniliprole",
+  "Merit 0.5G (Imidacloprid)":"Imidacloprid",
+  "GrubEx (Chlorantraniliprole)":"Chlorantraniliprole",
+  "TopChoice (Fipronil)":"Fipronil",
+  "Meridian (Thiamethoxam)":"Thiamethoxam",
+  "Conserve SC (Spinosad)":"Spinosad",
+  "Thuricide (Bt)":"Bacillus thuringiensis (Bt)",
+  "Sevin (Carbaryl)":"Carbaryl",
+  "Amdro Fire Ant Bait":"Hydramethylnon",
+  "Advion Fire Ant Bait":"Indoxacarb",
+  "Avid 0.15EC (Abamectin)":"Abamectin",
+  "Malathion 50 EC":"Malathion",
+  "Temprid SC":"Imidacloprid + Cyfluthrin",
+  "Taurus SC (Fipronil)":"Fipronil",
+  "Prodiamine 65 WDG":"Prodiamine",
+  "Dimension 2EW":"Dithiopyr",
+  "Tenacity Herbicide":"Mesotrione",
+  "SurePyc IQ":"Pyrimisulfan",
+  "Sedgehammer+":"Halosulfuron-methyl",
+  "Celsius WG":"Thiencarbazone-methyl + Iodosulfuron + Dicamba",
+  "T-Zone SE":"Triclopyr + 2,4-D + Dicamba + Sulfentrazone",
+  "SpeedZone Southern EW":"2,4-D + Mecoprop + Dicamba + Carfentrazone",
+  "Drive XLR8":"Quinclorac",
+  "Dismiss South":"Sulfentrazone",
+  "Trimec Classic":"2,4-D + MCPP + Dicamba",
+  "QuickSilver T&O":"Carfentrazone-ethyl",
+  "Manor MSM 60 DF":"Metsulfuron-methyl",
+};
+
+
+
+// ── WEATHER HOOK ──────────────────────────────────────────────
+function useWeather(zip) {
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const retryFn = () => setRetry(r=>r+1);
+
+  useEffect(() => {
+    const digits = (zip||"").replace(/\D/g,"");
+    if (digits.length < 5) return;
+    setLoading(true); setErr(null); setData(null);
+
+    // Step 1: ZIP → lat/lng via zippopotam.us (true US ZIP database, CORS-open, no key)
+    fetch(`https://api.zippopotam.us/us/${digits}`)
+      .then(r => { if(!r.ok) throw new Error("ZIP code not found — check that your ZIP is a valid 5-digit US ZIP code in Settings."); return r.json(); })
+      .then(geo => {
+        const place = (geo.places || [])[0];
+        if (!place) throw new Error("ZIP code not found — check Settings.");
+        const lat = parseFloat(place.latitude);
+        const lng = parseFloat(place.longitude);
+        const city = place["place name"] || "";
+        const region = place["state"] || "";
+
+        // Step 2: Open-Meteo forecast with real soil temp + moisture + ET
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}`
+          + `&daily=precipitation_sum,precipitation_probability_max,temperature_2m_max,temperature_2m_min,et0_fao_evapotranspiration`
+          + `&hourly=soil_temperature_0cm,soil_temperature_6cm,soil_moisture_0_1cm,soil_moisture_1_3cm,soil_moisture_3_9cm`
+          + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,soil_temperature_0cm,soil_moisture_0_1cm`
+          + `&temperature_unit=fahrenheit&precipitation_unit=inch`
+          + `&timezone=auto&past_days=2&forecast_days=4`;
+
+        return fetch(url)
+          .then(r => { if(!r.ok) throw new Error("Weather data unavailable"); return r.json(); })
+          .then(w => {
+            const daily = w.daily || {};
+            const times = daily.time || [];
+            const precip = daily.precipitation_sum || [];
+            const probMax = daily.precipitation_probability_max || [];
+            const tempMax = daily.temperature_2m_max || [];
+            const tempMin = daily.temperature_2m_min || [];
+            const cur = w.current || {};
+
+            const today = new Date().toISOString().slice(0,10);
+            const todayIdx = times.findIndex(t => t === today);
+            const splitIdx = todayIdx >= 0 ? todayIdx : times.length - 4;
+
+            const past7Rain = precip
+              .slice(Math.max(0, splitIdx - 7), splitIdx)
+              .reduce((sum, v) => sum + (v || 0), 0);
+            const next3Rain = precip
+              .slice(splitIdx + 1, splitIdx + 4)
+              .reduce((sum, v) => sum + (v || 0), 0);
+            const maxProb = Math.max(0, ...probMax.slice(splitIdx + 1, splitIdx + 4).map(v => v || 0));
+
+            const curTempF = cur.temperature_2m || 0;
+            const curTempC = +((curTempF - 32) * 5/9).toFixed(1);
+            const humidity = cur.relative_humidity_2m || 0;
+
+            const hourly = w.hourly || {};
+            const hTimes = hourly.time || [];
+            const soilTemp0h = hourly.soil_temperature_0cm || [];
+            const soilTemp6h = hourly.soil_temperature_6cm || [];
+            const soilMoist0h = hourly.soil_moisture_0_1cm || [];
+            const soilMoist3h = hourly.soil_moisture_3_9cm || [];
+
+            // Find closest hourly index to now — compare date+hour robustly
+            const nowLocal = new Date();
+            const nowDateStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth()+1).padStart(2,'0')}-${String(nowLocal.getDate()).padStart(2,'0')}`;
+            const nowHour = nowLocal.getHours();
+            // Find today's entries then pick closest hour
+            let hIdx = -1;
+            let bestDiff = 9999;
+            hTimes.forEach((t, i) => {
+              if (t.startsWith(nowDateStr)) {
+                const tHour = parseInt(t.slice(11,13), 10);
+                const diff = Math.abs(tHour - nowHour);
+                if (diff < bestDiff) { bestDiff = diff; hIdx = i; }
+              }
+            });
+            // Fallback: use middle of available data (not the end which could be far future)
+            if (hIdx < 0) hIdx = Math.floor(hTimes.length / 2);
+
+            // Open-Meteo returns soil temps in °F when temperature_unit=fahrenheit
+            // Average all of today's hourly readings — they are already in °F, no conversion needed
+            const todayIndices = hTimes.reduce((acc,t,i)=>{ if(t.startsWith(nowDateStr)) acc.push(i); return acc; },[]);
+            function avgArr(arr, idxs){ const vals=idxs.map(i=>arr[i]).filter(v=>v!=null); return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null; }
+            const avgSoilF_raw = todayIndices.length ? avgArr(soilTemp0h, todayIndices) : (cur.soil_temperature_0cm ?? null);
+            const avgSoil6F_raw = todayIndices.length ? avgArr(soilTemp6h, todayIndices) : null;
+            const soilTempF_0 = avgSoilF_raw != null ? +avgSoilF_raw.toFixed(1) : null;
+            const soilTempF_6 = avgSoil6F_raw != null ? +avgSoil6F_raw.toFixed(1) : null;
+            const avgSoilF = soilTempF_0 ?? soilTempF_6 ?? curTempF - 8;
+            // Store Celsius for metric display
+            const avgSoil = avgSoilF != null ? +((avgSoilF - 32) * 5/9).toFixed(1) : null;
+
+            const soilMoisture = soilMoist0h[hIdx] != null ? +soilMoist0h[hIdx].toFixed(3) : null;
+            const soilMoisture3 = soilMoist3h[hIdx] != null ? +soilMoist3h[hIdx].toFixed(3) : null;
+            const moistureStatus = soilMoisture == null ? 'Unknown'
+              : soilMoisture < 0.1 ? 'Very Dry — irrigate now'
+              : soilMoisture < 0.2 ? 'Dry — consider watering'
+              : soilMoisture < 0.35 ? 'Adequate moisture'
+              : 'Saturated — skip irrigation';
+            const moistureColor = soilMoisture == null ? '#888'
+              : soilMoisture < 0.1 ? '#ef4444'
+              : soilMoisture < 0.2 ? '#f97316'
+              : soilMoisture < 0.35 ? '#4ade80'
+              : '#60a5fa';
+
+            const et0 = daily.et0_fao_evapotranspiration || [];
+            const todayET = et0[splitIdx] != null ? +et0[splitIdx].toFixed(2) : null;
+
+            const forecast3 = [];
+            for(let i = splitIdx+1; i <= splitIdx+3 && i < times.length; i++){
+              forecast3.push({date:times[i],precip:precip[i]||0,prob:probMax[i]||0,high:tempMax[i]||0,low:tempMin[i]||0});
+            }
+
+            setData({past7Rain,next3Rain,maxProb,avgSoil,avgSoilF,soilTempF_0,soilTempF_6,soilMoisture,soilMoisture3,moistureStatus,moistureColor,todayET,curTempF,curTempC,humidity,city:city||"",region:region||"",forecast3});
+            setLoading(false); setErr(null);
+          });
+      })
+      .catch(e => {
+        const msg = e.message || "";
+        const isSandbox = msg.includes("Load failed") || msg.includes("Failed to fetch") || msg.includes("NetworkError");
+        setErr(isSandbox
+          ? "Network blocked — weather will work when opened in a real browser."
+          : msg || "Weather unavailable — check your ZIP code in Settings.");
+        setLoading(false);
+      });
+  }, [zip, retry]);
+
+  return {data, err, loading, retry: retryFn};
+}
+
+// ── LEAFLET MAP COMPONENT ─────────────────────────────────────
+function LeafletMap({zip,segments,activeSegment,onMapClick}) {
+  const canvasRef=useRef(null);
+  const INIT={lat:39.5,lng:-98.35,zoom:4};
+  const [center,setCenter]=useState(INIT);
+  const [satellite,setSatellite]=useState(false);
+  const satelliteRef=useRef(false);
+  useEffect(()=>{ satelliteRef.current=satellite; tilesRef.current={}; setCenter(c=>({...c})); },[satellite]);
+  const tilesRef=useRef({});
+  const cRef=useRef(INIT);
+  const drawRef=useRef(null);
+  const dragRef=useRef(null);
+  const pinchRef=useRef(null);
+
+  /* ── tile math ── */
+  function lat2t(lat,z){return (1-Math.log(Math.tan(lat*Math.PI/180)+1/Math.cos(lat*Math.PI/180))/Math.PI)/2*Math.pow(2,z);}
+  function lng2t(lng,z){return (lng+180)/360*Math.pow(2,z);}
+  function t2lat(y,z){const n=Math.PI-2*Math.PI*y/Math.pow(2,z);return 180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n)));}
+  function t2lng(x,z){return x/Math.pow(2,z)*360-180;}
+
+  function canvasPxToLatLng(px,py,ctr){
+    const canvas=canvasRef.current; if(!canvas) return null;
+    const {lat,lng,zoom}=ctr;
+    const cx=lng2t(lng,zoom), cy=lat2t(lat,zoom);
+    return {lat:t2lat(cy+(py-canvas.height/2)/256,zoom), lng:t2lng(cx+(px-canvas.width/2)/256,zoom)};
+  }
+
+  /* ── snap to ZIP from settings ── */
+  useEffect(()=>{
+    if(!zip||zip.length<5) return;
+    const digits=zip.replace(/\D/g,"").substring(0,5);
+    fetch(`https://api.zippopotam.us/us/${digits}`)
+      .then(r=>r.json()).then(d=>{
+        const p=d.places&&d.places[0];
+        if(p){
+          const nc={lat:parseFloat(p.latitude),lng:parseFloat(p.longitude),zoom:13};
+          setCenter(nc); cRef.current=nc;
+        }
+      })
+      .catch(()=>{
+        // fallback to open-meteo geocoding
+        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${digits}&count=5&language=en&format=json`)
+          .then(r=>r.json()).then(gd=>{
+            const p=(gd.results||[]).find(r=>r.country_code==="US")||(gd.results||[])[0];
+            if(p){const nc={lat:p.latitude,lng:p.longitude,zoom:13};setCenter(nc);cRef.current=nc;}
+          }).catch(()=>{});
+      });
+  },[zip]);
+
+  /* ── init canvas size once visible ── */
+  useEffect(()=>{
+    const canvas=canvasRef.current; if(!canvas) return;
+    const ro=new ResizeObserver(()=>{
+      if(canvas.offsetWidth>0){
+        canvas.width=canvas.offsetWidth;
+        canvas.height=320;
+        setCenter(c=>({...c}));
+        ro.disconnect();
+      }
+    });
+    ro.observe(canvas);
+    return ()=>ro.disconnect();
+  },[]);
+
+  /* ── draw ── */
+  useEffect(()=>{
+    const canvas=canvasRef.current; if(!canvas) return;
+    const desiredW=canvas.offsetWidth>0?canvas.offsetWidth:(canvas.parentElement?.offsetWidth||360);
+    if(canvas.width!==desiredW) canvas.width=desiredW;
+    if(canvas.height!==320) canvas.height=320;
+    const W=canvas.width, H=canvas.height;
+    const ctx=canvas.getContext("2d");
+
+    function paint(ctr){
+      const {lat,lng,zoom}=ctr;
+      const cx=lng2t(lng,zoom), cy=lat2t(lat,zoom);
+      const cols=Math.ceil(W/256)+2, rows=Math.ceil(H/256)+2;
+      const startX=Math.floor(cx-cols/2), startY=Math.floor(cy-rows/2);
+      const offX=W/2-(cx-startX)*256, offY=H/2-(cy-startY)*256;
+      const off=document.createElement("canvas"); off.width=W; off.height=H;
+      const octx=off.getContext("2d");
+      octx.fillStyle="#1a2030"; octx.fillRect(0,0,W,H);
+      for(let dy=0;dy<rows;dy++){
+        for(let dx=0;dx<cols;dx++){
+          const tx=startX+dx, ty=startY+dy;
+          const px=Math.round(offX+dx*256), py=Math.round(offY+dy*256);
+          const key=`${zoom}/${tx}/${ty}`;
+          const sub=["a","b","c"][(tx+ty)%3];
+          const cached=tilesRef.current[key]; if(cached instanceof HTMLImageElement){
+            octx.drawImage(cached,px,py,256,256);
+          } else if(!tilesRef.current[key]){
+            tilesRef.current[key]="loading";
+            const img=new Image(); img.crossOrigin="anonymous";
+            img.onload=()=>{ tilesRef.current[key]=img; if(drawRef.current) drawRef.current(); };
+            img.onerror=()=>{ delete tilesRef.current[key]; };  // allow retry on next draw
+            const tileUrl=satelliteRef.current
+              ? `https://mt1.google.com/vt/lyrs=s&x=${tx}&y=${ty}&z=${zoom}`
+              : `https://${sub}.tile.openstreetmap.org/${zoom}/${tx}/${ty}.png`;
+            img.src=tileUrl;
+          }
+        }
+      }
+      drawOverlay(octx,W,H,ctr);
+      ctx.drawImage(off,0,0);
+    }
+    drawRef.current=()=>paint(cRef.current);
+    paint(center);
+  },[center,segments,activeSegment]);
+
+  function drawOverlay(ctx,W,H,ctr){
+    const {lat,lng,zoom}=ctr;
+    const cx=lng2t(lng,zoom), cy=lat2t(lat,zoom);
+    function llToPx(la,ln){return {x:W/2+(lng2t(ln,zoom)-cx)*256, y:H/2+(lat2t(la,zoom)-cy)*256};}
+    segments.forEach(seg=>{
+      if(!seg.latlngs||seg.latlngs.length<3) return;
+      const drawColor=seg.exclude?"#ef4444":seg.color;
+      ctx.beginPath();
+      seg.latlngs.forEach((ll,i)=>{const p=llToPx(ll.lat,ll.lng);i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);});
+      ctx.closePath(); ctx.fillStyle=drawColor+"44"; ctx.fill();
+      ctx.strokeStyle=drawColor; ctx.lineWidth=seg.exclude?3:2;
+      if(seg.exclude){ctx.setLineDash([10,4]);}
+      ctx.stroke(); ctx.setLineDash([]);
+      const pts=seg.latlngs.map(ll=>llToPx(ll.lat,ll.lng));
+      const mx=pts.reduce((a,p)=>a+p.x,0)/pts.length, my=pts.reduce((a,p)=>a+p.y,0)/pts.length;
+      ctx.fillStyle="rgba(0,0,0,0.75)"; ctx.beginPath();
+      (function(c,x,y,w,h,r){c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);})(ctx,mx-42,my-20,84,38,6);
+      ctx.fill();
+      ctx.fillStyle="#fff"; ctx.font="bold 11px sans-serif"; ctx.textAlign="center";
+      ctx.fillText((seg.exclude?"⊖ ":"")+seg.name,mx,my-6); ctx.fillStyle=seg.exclude?"#f87171":"#6ee87b"; ctx.font="10px sans-serif";
+      ctx.fillText(`${seg.exclude?"−":""}${(seg.sqft||0).toLocaleString()} sq ft`,mx,my+8);
+    });
+    if(activeSegment&&activeSegment.latlngs.length>0){
+      const pts=activeSegment.latlngs.map(ll=>llToPx(ll.lat,ll.lng));
+      ctx.beginPath(); pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+      ctx.strokeStyle=activeSegment.color; ctx.lineWidth=2; ctx.setLineDash([8,5]); ctx.stroke(); ctx.setLineDash([]);
+      pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,7,0,Math.PI*2);ctx.fillStyle=activeSegment.color;ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke();});
+    }
+  }
+
+  /* ── zoom helper — zooms toward a canvas pixel point ── */
+  function applyZoom(delta, pivotPx, pivotPy){
+    const ctr=cRef.current;
+    const canvas=canvasRef.current;
+    const W=canvas?canvas.width:360, H=canvas?canvas.height:320;
+    const newZoom=Math.max(2,Math.min(21,ctr.zoom+delta));
+    if(newZoom===ctr.zoom) return;
+    // Keep the pixel under the cursor/pinch fixed
+    const cx=lng2t(ctr.lng,ctr.zoom), cy=lat2t(ctr.lat,ctr.zoom);
+    const tileX=cx+(pivotPx-W/2)/256;
+    const tileY=cy+(pivotPy-H/2)/256;
+    const scale=Math.pow(2,newZoom-ctr.zoom);
+    const newCx=tileX*scale-(pivotPx-W/2)/256;
+    const newCy=tileY*scale-(pivotPy-H/2)/256;
+    const nc={lat:t2lat(newCy,newZoom),lng:t2lng(newCx,newZoom),zoom:newZoom};
+    setCenter(nc); cRef.current=nc;
+  }
+
+  /* ── mouse wheel zoom ── */
+  useEffect(()=>{
+    const canvas=canvasRef.current; if(!canvas) return;
+    function onWheel(e){
+      e.preventDefault();
+      const rect=canvas.getBoundingClientRect();
+      const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const px=(e.clientX-rect.left)*sx, py=(e.clientY-rect.top)*sy;
+      applyZoom(e.deltaY<0?1:-1, px, py);
+    }
+    canvas.addEventListener("wheel",onWheel,{passive:false});
+    return ()=>canvas.removeEventListener("wheel",onWheel);
+  },[]);
+
+  /* ── drag to pan ── */
+  function handlePointerDown(e){
+    e.preventDefault();
+    dragRef.current={startX:e.clientX,startY:e.clientY,origCenter:{...cRef.current},moved:false};
+    canvasRef.current.setPointerCapture(e.pointerId);
+  }
+  function handlePointerMove(e){
+    if(!dragRef.current) return;
+    e.preventDefault();
+    const dx=e.clientX-dragRef.current.startX, dy=e.clientY-dragRef.current.startY;
+    if(Math.abs(dx)>3||Math.abs(dy)>3) dragRef.current.moved=true;
+    const {lat,lng,zoom}=dragRef.current.origCenter;
+    const canvas=canvasRef.current;
+    const rect=canvas.getBoundingClientRect();
+    const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+    // Pan: dragging right moves map right → lng decreases; dragging down moves map down → lat increases
+    const dLng=(dx*sx/256)*360/Math.pow(2,zoom)*(-1);
+    const newTileY=lat2t(lat,zoom)-(dy*sy/256);   // FIX: subtract dy so drag-up moves north
+    const nc={lat:t2lat(newTileY,zoom),lng:lng+dLng,zoom};
+    setCenter(nc); cRef.current=nc;
+  }
+  function handlePointerUp(e){
+    if(!dragRef.current) return;
+    if(!dragRef.current.moved&&onMapClick){
+      const canvas=canvasRef.current;
+      const rect=canvas.getBoundingClientRect();
+      const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const px=(e.clientX-rect.left)*sx, py=(e.clientY-rect.top)*sy;
+      const ll=canvasPxToLatLng(px,py,cRef.current);
+      if(ll) onMapClick(ll);
+    }
+    dragRef.current=null;
+  }
+
+  /* ── pinch to zoom ── */
+  function getTouchDist(t1,t2){return Math.hypot(t1.clientX-t2.clientX,t1.clientY-t2.clientY);}
+  function handleTouchStart(e){
+    if(e.touches.length===2){
+      e.preventDefault();
+      const canvas=canvasRef.current;
+      const rect=canvas.getBoundingClientRect();
+      const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const midX=((e.touches[0].clientX+e.touches[1].clientX)/2-rect.left)*sx;
+      const midY=((e.touches[0].clientY+e.touches[1].clientY)/2-rect.top)*sy;
+      pinchRef.current={dist:getTouchDist(e.touches[0],e.touches[1]),startZoom:cRef.current.zoom,midX,midY};
+      dragRef.current=null;
+    } else if(e.touches.length===1){
+      e.preventDefault();
+      dragRef.current={startX:e.touches[0].clientX,startY:e.touches[0].clientY,origCenter:{...cRef.current},moved:false};
+      pinchRef.current=null;
+    }
+  }
+  function handleTouchMove(e){
+    e.preventDefault();
+    if(e.touches.length===2&&pinchRef.current){
+      const newDist=getTouchDist(e.touches[0],e.touches[1]);
+      const rawZoom=pinchRef.current.startZoom+Math.log2(newDist/pinchRef.current.dist);
+      const newZoom=Math.max(2,Math.min(21,Math.round(rawZoom)));
+      if(newZoom!==cRef.current.zoom){
+        applyZoom(newZoom-cRef.current.zoom, pinchRef.current.midX, pinchRef.current.midY);
+        pinchRef.current.dist=newDist; // update so each step is incremental
+        pinchRef.current.startZoom=cRef.current.zoom;
+      }
+    } else if(e.touches.length===1&&dragRef.current){
+      const dx=e.touches[0].clientX-dragRef.current.startX;
+      const dy=e.touches[0].clientY-dragRef.current.startY;
+      if(Math.abs(dx)>3||Math.abs(dy)>3) dragRef.current.moved=true;
+      const {lat,lng,zoom}=dragRef.current.origCenter;
+      const canvas=canvasRef.current;
+      const rect=canvas.getBoundingClientRect();
+      const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const dLng=(dx*sx/256)*360/Math.pow(2,zoom)*(-1);
+      const newTileY=lat2t(lat,zoom)-(dy*sy/256);
+      const nc={lat:t2lat(newTileY,zoom),lng:lng+dLng,zoom};
+      setCenter(nc); cRef.current=nc;
+    }
+  }
+  function handleTouchEnd(e){
+    if(e.changedTouches.length===1&&dragRef.current&&!dragRef.current.moved&&onMapClick){
+      const t=e.changedTouches[0];
+      const canvas=canvasRef.current;
+      const rect=canvas.getBoundingClientRect();
+      const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const ll=canvasPxToLatLng((t.clientX-rect.left)*sx,(t.clientY-rect.top)*sy,cRef.current);
+      if(ll) onMapClick(ll);
+    }
+    dragRef.current=null; pinchRef.current=null;
+  }
+
+  function handleZoom(delta){
+    const canvas=canvasRef.current;
+    applyZoom(delta, canvas?canvas.width/2:180, canvas?canvas.height/2:160);
+  }
+
+  return(
+    <div style={{borderRadius:12,overflow:"hidden",border:"1px solid #334c6a",position:"relative",background:"#1a2030",touchAction:"none"}}>
+      <canvas ref={canvasRef}
+        style={{width:"100%",height:320,display:"block",cursor:activeSegment?"crosshair":"grab"}}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={()=>{dragRef.current=null;}}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      />
+      <div style={{position:"absolute",top:8,right:8,display:"flex",flexDirection:"column",gap:2,zIndex:10}}>
+        <button onClick={()=>handleZoom(1)} style={{width:36,height:36,background:"rgba(10,13,20,0.92)",border:"1px solid #334c6a",borderRadius:6,color:"#fff",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>+</button>
+        <button onClick={()=>handleZoom(-1)} style={{width:36,height:36,background:"rgba(10,13,20,0.92)",border:"1px solid #334c6a",borderRadius:6,color:"#fff",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>−</button>
+      </div>
+      <div style={{position:"absolute",bottom:8,left:8,zIndex:10}}>
+        <button onClick={()=>setSatellite(s=>!s)}
+          style={{background:satellite?"#1a3a1a":"rgba(10,13,20,0.92)",border:`1px solid ${satellite?"#4ade80":"#334c6a"}`,borderRadius:6,color:satellite?"#4ade80":"#aaa",fontSize:11,cursor:"pointer",padding:"4px 10px",fontWeight:satellite?700:400}}>
+          {satellite?"🛰 Satellite":"🗺 Map"}
+        </button>
+      </div>
+      {activeSegment&&<div style={{position:"absolute",top:8,left:"50%",transform:"translateX(-50%)",background:"rgba(10,13,20,0.9)",color:"#fff",fontSize:12,padding:"5px 16px",borderRadius:20,pointerEvents:"none",zIndex:10,whiteSpace:"nowrap",border:"1px solid #556"}}>Tap to place points · {activeSegment.latlngs.length} placed</div>}
+    </div>
+  );
+}
+
+
+
+// ── SHARED STYLES ─────────────────────────────────────────────
+const BG="#0e1016",CARD="#161a24",BORDER="#252c3e",ACC="#4a9da8",ACCBR="#6cc8d8",MUT="#8c96a8",FAINT="#404858",WARN="#1a1f10",ERR="#1e0a0a";
+const Sty={
+  card:{background:CARD,border:`1px solid ${BORDER}`,borderRadius:14,padding:"16px 16px",marginBottom:10},
+  input:{width:"100%",background:"#13161e",border:`1px solid ${BORDER}`,borderRadius:10,padding:"12px 14px",color:"#e0e4ec",fontSize:16,fontFamily:"Georgia,serif",boxSizing:"border-box",outline:"none"},
+  btn:{background:"#1a2e42",border:`1px solid #2a4a66`,borderRadius:10,padding:"12px 18px",color:"#7cc8dc",fontSize:15,cursor:"pointer",fontFamily:"Georgia,serif"},
+  pill:(a)=>({background:a?"#1a2e42":"transparent",border:`1px solid ${a?"#3a5a7a":BORDER}`,borderRadius:20,padding:"7px 16px",color:a?"#7cc8dc":MUT,fontSize:14,cursor:"pointer",fontFamily:"Georgia,serif",flexShrink:0}),
+  label:{color:MUT,fontSize:14,marginBottom:6,display:"block",fontFamily:"Georgia,serif"},
+  h2:{color:"#e8edf5",fontWeight:700,fontSize:20,marginBottom:14,fontFamily:"Palatino Linotype,Georgia,serif"},
+  h3:{color:ACCBR,fontWeight:700,fontSize:17,marginBottom:10,fontFamily:"Palatino Linotype,Georgia,serif"},
+  info:{background:"#141a20",border:`1px solid #2a3a4a`,borderRadius:12,padding:14,color:MUT,fontSize:14,lineHeight:1.8},
+  warn:{background:"#1a1f10",border:"1px solid #3a4a18",borderRadius:12,padding:14,color:"#c8d870",fontSize:14,lineHeight:1.8,marginBottom:10},
+  sectionTitle:{color:"#e8edf5",fontWeight:700,fontSize:19,marginBottom:5,fontFamily:"Palatino Linotype,Georgia,serif"},
+  sideTab:(a)=>({background:a?"#1a2a3e":"transparent",border:`1px solid ${a?"#3a5a8a":BORDER}`,borderRadius:10,padding:"14px 6px",color:a?"#8ccce0":MUT,fontSize:12,cursor:"pointer",fontFamily:"Georgia,serif",textAlign:"center",lineHeight:1.4,fontWeight:a?700:400}),
+};
+
+function Toggle({value,onChange,label}){
+  return(
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${BORDER}`}}>
+      <span style={{color:MUT,fontSize:14,fontFamily:"Georgia,serif"}}>{label}</span>
+      <div onClick={()=>onChange(!value)} style={{width:46,height:25,borderRadius:13,background:value?"#2a7a2a":"#222",position:"relative",cursor:"pointer",transition:"background .2s",border:`1px solid ${value?"#3a9a3a":"#333"}`}}>
+        <div style={{width:19,height:19,borderRadius:"50%",background:"#fff",position:"absolute",top:2,left:value?24:2,transition:"left .2s"}}/>
+      </div>
+    </div>
+  );
+}
+
+function PhotoUpload({label,onImage,fileRef,compact}){
+  return(
+    <div>
+      <input type="file" accept="image/*" ref={fileRef} style={{display:"none"}}
+        onChange={e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>onImage(ev.target.result);r.readAsDataURL(f);e.target.value="";}}/>
+      <button style={{...Sty.btn,width:"100%",marginBottom:6}} onClick={()=>fileRef.current?.click()}>
+        {compact?label:`Take or Upload Photo — ${label}`}
+      </button>
+    </div>
+  );
+}
+
+function useWikiImg(name, directUrl, wikiTitle, noWiki){
+  const [fetched,setFetched]=useState(null);
+  useEffect(()=>{
+    if(!name) return;
+    if(noWiki){ setFetched(directUrl||false); return; }
+    const q = wikiTitle || name.replace(/\s*\(.*?\)\s*/g,"").trim().split(/\s+/).slice(0,3).join(" ");
+    fetch("https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=600&origin=*&titles="+encodeURIComponent(q))
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{
+        const pg=Object.values(d?.query?.pages||{})[0];
+        const src=pg?.thumbnail?.source||null;
+        setFetched(src||directUrl||false);
+      })
+      .catch(()=>setFetched(directUrl||false));
+  },[name,directUrl,wikiTitle,noWiki]);
+  return fetched;
+}
+
+function WeedCard({item}){
+  const [open,setOpen]=useState(false);
+  const [imgErr,setImgErr]=useState(false);
+  const img=useWikiImg(item.name, item.img||null, item.wiki||null, item.noWiki||false);
+  const photoUrl=`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(item.name+" weed lawn")}`;
+  const showImg=img&&!imgErr;
+  return(
+    <div style={{...Sty.card,padding:0,overflow:"hidden",marginBottom:12}}>
+      <div onClick={()=>setOpen(o=>!o)} style={{cursor:"pointer",position:"relative",height:180,background:showImg?"#0a1a0a":"linear-gradient(135deg,#0d2a0d,#0a1a0a)"}}>
+        {showImg&&<img src={img} alt="" onError={()=>setImgErr(true)} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:item.stretch?"fill":"cover"}}/>}
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.0) 100%)"}}/>
+        {!showImg&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:48,opacity:0.25}}>🌿</div>}
+        <a href={photoUrl} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
+          style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,.8)",color:ACCBR,borderRadius:12,padding:"7px 18px",fontSize:13,textDecoration:"none",border:`1px solid ${ACCBR}66`,fontFamily:"Palatino Linotype,Georgia,serif",fontWeight:700,zIndex:5}}>
+          View Photos
+        </a>
+        <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"14px 16px 12px"}}>
+          <div style={{color:"#fff",fontWeight:700,fontSize:19,fontFamily:"Palatino Linotype,Georgia,serif",textShadow:"0 2px 8px rgba(0,0,0,1)",lineHeight:1.2}}>{item.name}</div>
+          <div style={{color:"#9de09d",fontSize:13,marginTop:5,fontWeight:700,textShadow:"0 1px 6px rgba(0,0,0,1)"}}>{item.type}</div>
+        </div>
+        <div style={{position:"absolute",bottom:14,right:16,color:"rgba(255,255,255,0.6)",fontSize:16,textShadow:"0 1px 4px #000"}}>{open?"▲":"▼"}</div>
+      </div>
+      {open&&(
+        <div style={{padding:"12px 14px",background:"#111a11"}}>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+            <span style={{background:"#1a2a0a",color:"#c8e880",borderRadius:6,padding:"2px 10px",fontSize:12,border:"1px solid #2a4a0a"}}>Season: {item.season}</span>
+            <span style={{background:"#1a1a2a",color:"#a0c0ff",borderRadius:6,padding:"2px 10px",fontSize:12,border:"1px solid #2a2a4a"}}>Type: {item.type}</span>
+          </div>
+          <div style={{...Sty.info,marginBottom:8}}>
+            <strong style={{color:ACCBR}}>Conditions:</strong> {item.conditions}
+          </div>
+          <p style={{color:MUT,fontSize:14,margin:"0 0 10px",lineHeight:1.7,fontFamily:"Georgia,serif"}}>{item.desc}</p>
+          <div style={{fontSize:13,color:ACCBR,fontWeight:700,marginBottom:6}}>Herbicides for Treatment</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+            {item.herbicides.map((a,i)=><span key={i} style={{background:"#1a3a1a",color:"#9ee09e",borderRadius:7,padding:"3px 10px",fontSize:12,border:"1px solid #2a5a2a"}}>{a}</span>)}
+          </div>
+          <div style={{fontSize:13,color:ACCBR,fontWeight:700,marginBottom:6}}>Commercial Products</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+            {item.products.map((p,i)=>(
+              <a key={i} href={`https://www.google.com/search?q=${encodeURIComponent(p+" herbicide buy")}`} target="_blank" rel="noreferrer"
+                style={{background:"#0d200d",color:"#aaa",borderRadius:7,padding:"3px 10px",fontSize:12,textDecoration:"none",border:`1px solid ${BORDER}`}}>
+                {p}
+              </a>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <a href={item.reddit} target="_blank" rel="noreferrer" style={{color:"#ff7a3d",fontSize:12,textDecoration:"none",border:"1px solid #3a2a1a",borderRadius:7,padding:"3px 10px",background:"#1a1208"}}>Reddit Discussion</a>
+            <a href={item.ext} target="_blank" rel="noreferrer" style={{color:"#60a5fa",fontSize:12,textDecoration:"none",border:"1px solid #1a2a3a",borderRadius:7,padding:"3px 10px",background:"#080e18"}}>University Extension</a>
+            <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(item.name+" lawn")}`} target="_blank" rel="noreferrer" style={{color:"#ff4444",fontSize:12,textDecoration:"none",border:"1px solid #3a0808",borderRadius:7,padding:"3px 10px",background:"#1a0000"}}>YouTube</a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FungusCard({item}){
+  const [open,setOpen]=useState(false);
+  const [imgErr,setImgErr]=useState(false);
+  const img=useWikiImg(item.name, item.img||null, item.wiki||null, item.noWiki||false);
+  const photoUrl=`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(item.name+" lawn disease fungus")}`;
+  const showImg=img&&!imgErr;
+  return(
+    <div style={{...Sty.card,padding:0,overflow:"hidden",marginBottom:12}}>
+      <div onClick={()=>setOpen(o=>!o)} style={{cursor:"pointer",position:"relative",height:180,background:showImg?"#1a0e04":"linear-gradient(135deg,#2a1a08,#1a0e04)"}}>
+        {showImg&&<img src={img} alt="" onError={()=>setImgErr(true)} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>}
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.0) 100%)"}}/>
+        {!showImg&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:48,opacity:0.25}}>🍄</div>}
+        <a href={photoUrl} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
+          style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,.8)",color:ACCBR,borderRadius:12,padding:"7px 18px",fontSize:13,textDecoration:"none",border:`1px solid ${ACCBR}66`,fontFamily:"Palatino Linotype,Georgia,serif",fontWeight:700,zIndex:5}}>
+          View Photos
+        </a>
+        <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"14px 16px 12px"}}>
+          <div style={{color:"#fff",fontWeight:700,fontSize:19,fontFamily:"Palatino Linotype,Georgia,serif",textShadow:"0 2px 8px rgba(0,0,0,1)",lineHeight:1.2}}>{item.name}</div>
+          <div style={{color:"#e0b87e",fontSize:13,marginTop:5,fontStyle:"italic",textShadow:"0 1px 6px rgba(0,0,0,1)"}}>{item.pathogen}</div>
+        </div>
+        <div style={{position:"absolute",bottom:14,right:16,color:"rgba(255,255,255,0.6)",fontSize:16,textShadow:"0 1px 4px #000"}}>{open?"▲":"▼"}</div>
+      </div>
+      {open&&(
+        <div style={{padding:"12px 14px",background:"#120f08"}}>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+            <span style={{background:"#201408",color:"#fbbf24",borderRadius:6,padding:"2px 9px",fontSize:12,border:"1px solid #3a2808"}}>Season: {item.season}</span>
+            <span style={{background:"#1a0a1a",color:"#d8a0f8",borderRadius:6,padding:"2px 9px",fontSize:12,border:"1px solid #3a183a"}}>Grass: {item.grass}</span>
+          </div>
+          <div style={{...Sty.info,background:"#180f04",border:"1px solid #3a2808",marginBottom:8,color:"#e0c080"}}>
+            <strong style={{color:"#fbbf24"}}>Conditions:</strong> {item.conditions}
+          </div>
+          <p style={{color:MUT,fontSize:14,margin:"0 0 10px",lineHeight:1.7,fontFamily:"Georgia,serif"}}>{item.desc}</p>
+          <div style={{fontSize:13,color:"#e0b87e",fontWeight:700,marginBottom:6}}>Fungicide Active Ingredients</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:8}}>
+            {item.fungicides.map((f,i)=><span key={i} style={{background:"#200e00",color:"#fbbf24",borderRadius:7,padding:"3px 10px",fontSize:12,border:"1px solid #3a2000"}}>{f}</span>)}
+          </div>
+          <div style={{fontSize:13,color:"#e0b87e",fontWeight:700,marginBottom:6}}>Commercial Products</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+            {item.products.map((p,i)=>(
+              <a key={i} href={`https://www.domyown.com/search?q=${encodeURIComponent(p)}`} target="_blank" rel="noreferrer"
+                style={{background:"#160a00",color:"#aaa",borderRadius:7,padding:"3px 10px",fontSize:12,textDecoration:"none",border:"1px solid #2a1800"}}>
+                {p}
+              </a>
+            ))}
+          </div>
+          {item.tips&&<div style={{...Sty.warn,marginBottom:8}}><strong>Tips:</strong> {item.tips.join(" · ")}</div>}
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <a href={item.reddit} target="_blank" rel="noreferrer" style={{color:"#ff7a3d",fontSize:12,textDecoration:"none",border:"1px solid #3a2a1a",borderRadius:7,padding:"3px 10px",background:"#1a1208"}}>Reddit Discussion</a>
+            <a href={item.ext} target="_blank" rel="noreferrer" style={{color:"#60a5fa",fontSize:12,textDecoration:"none",border:"1px solid #1a2a3a",borderRadius:7,padding:"3px 10px",background:"#080e18"}}>University Extension</a>
+            <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(item.name+" lawn")}`} target="_blank" rel="noreferrer" style={{color:"#ff4444",fontSize:12,textDecoration:"none",border:"1px solid #3a0808",borderRadius:7,padding:"3px 10px",background:"#1a0000"}}>YouTube</a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InsectCard({item}){
+  const [open,setOpen]=useState(false);
+  const [imgErr,setImgErr]=useState(false);
+  const month=new Date().getMonth();
+  const thisSeason=month>=2&&month<=4?"Spring":month>=5&&month<=7?"Summer":month>=8&&month<=10?"Fall":"Winter";
+  const isThisSeason=item.peaks&&item.peaks.some(p=>p===thisSeason);
+  const img=useWikiImg(item.name, item.img||null, item.wiki||null, item.noWiki||false);
+  const [imgSrc,setImgSrc]=useState(null);
+  useEffect(()=>{setImgSrc(img||null);setImgErr(false);},[img]);
+  const handleImgErr=()=>{
+    if(!imgSrc)return;
+    const alt=imgSrc.includes('%20')?imgSrc.replace(/%20/g,'_'):imgSrc.replace(/_/g,'%20');
+    if(alt!==imgSrc){setImgSrc(alt);}else{setImgErr(true);}
+  };
+  const showImg=imgSrc&&!imgErr;
+  const photoUrl=`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(item.name+" lawn insect")}`;
+  return(
+    <div style={{...Sty.card,padding:0,overflow:"hidden",marginBottom:12,borderColor:isThisSeason?"#6ee87b":undefined}}>
+      <div onClick={()=>setOpen(o=>!o)} style={{cursor:"pointer",position:"relative",height:180,background:showImg?"#100800":"linear-gradient(135deg,#1a1008,#100800)"}}>
+        {showImg&&<img src={imgSrc||img} alt="" onError={handleImgErr} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>}
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.0) 100%)"}}/>
+        {!showImg&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:48,opacity:0.25}}>🐛</div>}
+        {isThisSeason&&<div style={{position:"absolute",top:12,left:12,background:"#1a5a1a",color:"#6ee87b",borderRadius:6,padding:"3px 10px",fontSize:11,fontWeight:700,border:"1px solid #2a7a2a",zIndex:5}}>⚡ Active Now</div>}
+        <a href={photoUrl} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
+          style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,.8)",color:ACCBR,borderRadius:12,padding:"7px 18px",fontSize:13,textDecoration:"none",border:`1px solid ${ACCBR}66`,fontFamily:"Palatino Linotype,Georgia,serif",fontWeight:700,zIndex:5}}>
+          View Photos
+        </a>
+        <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"14px 16px 12px"}}>
+          <div style={{color:"#fff",fontWeight:700,fontSize:19,fontFamily:"Palatino Linotype,Georgia,serif",textShadow:"0 2px 8px rgba(0,0,0,1)",lineHeight:1.2}}>{item.name}</div>
+          <div style={{color:"#f59e0b",fontSize:13,marginTop:5,fontWeight:700,textShadow:"0 1px 6px rgba(0,0,0,1)"}}>Season: {item.season}</div>
+        </div>
+        <div style={{position:"absolute",bottom:14,right:16,color:"rgba(255,255,255,0.6)",fontSize:16,textShadow:"0 1px 4px #000"}}>{open?"▲":"▼"}</div>
+      </div>
+      {open&&(
+        <div style={{padding:"12px 14px",background:"#1a130a"}}>
+          <div style={{...Sty.info,marginBottom:8}}><strong style={{color:"#f59e0b"}}>Grass types affected:</strong> {item.grass}</div>
+          <div style={{...Sty.info,marginBottom:8}}><strong style={{color:"#f59e0b"}}>Conditions:</strong> {item.conditions}</div>
+          <p style={{color:MUT,fontSize:14,margin:"0 0 10px",lineHeight:1.7,fontFamily:"Georgia,serif"}}>{item.desc}</p>
+          <div style={{fontSize:13,color:"#f59e0b",fontWeight:700,marginBottom:6}}>Insecticide Active Ingredients</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+            {item.insecticides.map((a,i)=><span key={i} style={{background:"#2a1a00",color:"#fbbf24",borderRadius:7,padding:"3px 10px",fontSize:12,border:"1px solid #4a3000"}}>{a}</span>)}
+          </div>
+          <div style={{fontSize:13,color:"#f59e0b",fontWeight:700,marginBottom:6}}>Commercial Products</div>
+          {item.products.map((p,i)=>(
+            <div key={i} style={{...Sty.card,marginBottom:6,padding:"10px 12px"}}>
+              <div style={{color:"#fff",fontSize:13,fontWeight:600,marginBottom:6}}>{p.name}</div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                {p.dom&&<a href={p.dom} target="_blank" rel="noreferrer" style={{color:"#9de09d",fontSize:11,textDecoration:"none",border:`1px solid ${BORDER}`,borderRadius:6,padding:"2px 8px",background:"#0d1e0d"}}>DoMyOwn</a>}
+                {p.amz&&<a href={p.amz} target="_blank" rel="noreferrer" style={{color:"#f59e0b",fontSize:11,textDecoration:"none",border:"1px solid #2a1e00",borderRadius:6,padding:"2px 8px",background:"#100900"}}>Amazon</a>}
+                {p.s1&&<a href={p.s1} target="_blank" rel="noreferrer" style={{color:"#60a5fa",fontSize:11,textDecoration:"none",border:"1px solid #1a2838",borderRadius:6,padding:"2px 8px",background:"#080e18"}}>SiteOne</a>}
+                {p.low&&<a href={p.low} target="_blank" rel="noreferrer" style={{color:"#818cf8",fontSize:11,textDecoration:"none",border:"1px solid #201a38",borderRadius:6,padding:"2px 8px",background:"#080812"}}>Lowe&#39;s</a>}
+              </div>
+            </div>
+          ))}
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginTop:4}}>
+            <a href={item.reddit} target="_blank" rel="noreferrer" style={{color:"#ff7a3d",fontSize:12,textDecoration:"none",border:"1px solid #3a2a1a",borderRadius:7,padding:"3px 10px",background:"#1a1208"}}>Reddit</a>
+            <a href={item.ext} target="_blank" rel="noreferrer" style={{color:"#60a5fa",fontSize:12,textDecoration:"none",border:"1px solid #1a2a3a",borderRadius:7,padding:"3px 10px",background:"#080e18"}}>University Extension</a>
+            <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(item.name+" lawn")}`} target="_blank" rel="noreferrer" style={{color:"#ff4444",fontSize:12,textDecoration:"none",border:"1px solid #3a0808",borderRadius:7,padding:"3px 10px",background:"#1a0000"}}>YouTube</a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
+function TestApp() {
+  return <div style={{color:"#4ade80",fontSize:20,padding:20}}>OK: data+weather+leaflet+helpers</div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(TestApp));
+</script>
+</body>
+</html>
