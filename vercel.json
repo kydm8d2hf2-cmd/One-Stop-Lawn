@@ -2,10 +2,10 @@
   "version": 2,
   "builds": [
     { "src": "api/ask.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" }
+    { "src": "OneStopLawn.html", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/ask", "dest": "/api/ask.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/(.*)", "dest": "/OneStopLawn.html" }
   ]
 }
