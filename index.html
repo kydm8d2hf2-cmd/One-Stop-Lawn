@@ -500,6 +500,67 @@ function generateCustomerReportPDF(yard,settings,soilEntries,journalEntries,opts
 // becomes: generateTaskListPDFBlob() → Filesystem.writeFile({path, data: base64}) → get
 // the resulting Uri → Share.share({title, text, url:fileUri, dialogTitle}). Search the
 // codebase for "CAPACITOR WRAP TODO" to find every site that needs this swap.
+function generateReportsPDF(blocks,opts){
+  var JSPDF=_getJsPDF();
+  if(!JSPDF){alert("PDF library failed to load. Please check your internet connection and try again.");return null;}
+  var doc=new JSPDF({unit:"mm",format:"a4"});
+  var o=opts||{};
+  var y;
+  if(o.branded){
+    var hAlign=(o.logoAlign==="center"||o.logoAlign==="right")?o.logoAlign:"left";
+    doc.setFillColor(21,128,61);
+    doc.rect(0,0,210,22,"F");
+    if(o.logo){
+      try{
+        var logoH=o.logoSize==="L"?16:(o.logoSize==="S"?9:13);
+        var asp=(typeof o.logoAspect==="number"&&o.logoAspect>0)?o.logoAspect:1;
+        var logoW=logoH*asp; if(logoW>80){logoW=80;logoH=logoW/asp;}
+        var lx=hAlign==="center"?(210-logoW)/2:(hAlign==="right"?(210-14-logoW):14);
+        var ly=(22-logoH)/2; if(ly<1)ly=1;
+        doc.addImage(o.logo,"PNG",lx,ly,logoW,logoH);
+      }catch(e){}
+    }
+    doc.setTextColor(0,0,0);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(16);
+    var nx=hAlign==="center"?105:(hAlign==="right"?196:14);
+    doc.text(o.business||"Lawn Care Report",nx,30,{align:hAlign});
+    doc.setFontSize(14);
+    doc.text("Lawn Report",14,40);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+    doc.setTextColor(80,80,80);
+    doc.text((o.yard||"")+(o.tfLabel?(" \u2022 "+o.tfLabel):"")+" \u2022 "+new Date().toLocaleDateString(),14,46);
+    doc.setTextColor(0,0,0);
+    y=56;
+  }else{
+    y=_pdfHeader(doc,"Lawn Report",(o.yard||"")+(o.tfLabel?(" \u2022 "+o.tfLabel):"")+" \u2022 "+new Date().toLocaleDateString());
+  }
+  (blocks||[]).forEach(function(b){
+    if(!b||!b.lines||!b.lines.length)return;
+    if(y>262){doc.addPage();y=20;}
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(13);
+    doc.setTextColor(21,128,61);
+    doc.text(String(b.heading||""),14,y);y+=2;
+    doc.setDrawColor(21,128,61);
+    doc.line(14,y,196,y);y+=6;
+    doc.setTextColor(0,0,0);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+    b.lines.forEach(function(ln){
+      var wrapped=doc.splitTextToSize(String(ln),182);
+      wrapped.forEach(function(wl){
+        if(y>278){doc.addPage();y=20;}
+        doc.text(wl,14,y);y+=5;
+      });
+    });
+    y+=6;
+  });
+  var pages=doc.internal.getNumberOfPages();
+  for(var p=1;p<=pages;p++){doc.setPage(p);_pdfFooter(doc,p,pages);}
+  return doc;
+}
 function generateTaskListPDFBlob(tasks,season,scheduleNotes,yard,settings){
   const JSPDF=_getJsPDF();
   if(!JSPDF){alert("PDF library failed to load. Please check your internet connection and try again.");return null;}
@@ -1757,6 +1818,8 @@ function OneStopLawn(){
   const [fieldGuideSection,setFieldGuideSection]=useState("weeds");
   const [overviewSub,setOverviewSub]=useState("weather");
   const [reportsSub,setReportsSub]=useState("summary");
+  const [reportTF,setReportTF]=useState("season");
+  const [rptOpen,setRptOpen]=useState({summary:true,tasks:true,products:true,soil:true});
   const [showScrollTop,setShowScrollTop]=useState(false);
   const [headerHeight,setHeaderHeight]=useState(62);
   const headerRef=useRef(null);
@@ -2188,7 +2251,6 @@ function OneStopLawn(){
   // confusion). subTierPick = which tier the user is changing to (transient).
   // subPendingBilling = which billing cycle they've selected but not yet confirmed.
   const [subTierPick,setSubTierPick]=useState(null);
-  const [brandedReportPrompt,setBrandedReportPrompt]=useState(null);
   const [subPendingBilling,setSubPendingBilling]=useState(null);
   useEffect(function(){setSubPendingBilling(null);},[subTierPick]);
   // v207: Transient sub-view selection. User taps Annual or Monthly card to SELECT (sets
@@ -2833,6 +2895,12 @@ function OneStopLawn(){
     var lawnName=sel.name||"My Lawn";
     var lawnAddr=sel.address||"";
     var lawnZip=sel.zip||settings.zip||"";
+    var bizOn=!!(curTier&&curTier.id==="enterprise");
+    var bizName=bizOn?(settings.businessName||""):"";
+    var bizLogo=bizOn?(settings.businessLogo||""):"";
+    var bizAlign=settings.logoAlign||"left";
+    var bizMax=settings.logoSize==="L"?80:(settings.logoSize==="S"?40:60);
+    var safeBiz=bizName.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     var w=window.open("","_blank");
     if(!w){alert("Your browser blocked the new window. Please allow popups for this site.");return;}
     var safeBody=lines.join("\n").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -2841,6 +2909,7 @@ function OneStopLawn(){
     var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+safeName+' \u2014 '+title+'</title>';
     html+='<style>body{font-family:Georgia,serif;font-size:14px;padding:24px;max-width:720px;margin:0 auto;color:#1a1a1a;background:#fff;}h1{font-size:22px;margin:0 0 4px;color:#1a3a2a;font-family:"Palatino Linotype",Georgia,serif;}h2{font-size:13px;margin:0 0 14px;color:#5a5a5a;font-weight:400;letter-spacing:0.5px;text-transform:uppercase;}.meta{color:#5a5a5a;font-size:12px;margin-bottom:18px;border-bottom:1px solid #ddd;padding-bottom:14px;line-height:1.55;}pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;white-space:pre-wrap;line-height:1.55;}@media print{body{padding:0;}}</style>';
     html+='</head><body>';
+    if(bizLogo||safeBiz){html+='<div style="text-align:'+bizAlign+';border-bottom:2px solid #15803d;padding-bottom:10px;margin-bottom:14px;">'+(bizLogo?'<img src="'+bizLogo+'" style="max-height:'+bizMax+'px;max-width:60%;object-fit:contain;display:block;margin:'+(bizAlign==="center"?"0 auto":(bizAlign==="right"?"0 0 0 auto":"0"))+';">':'')+(safeBiz?'<div style="font-weight:800;font-size:20px;color:#15803d;margin-top:6px;font-family:Georgia,serif;">'+safeBiz+'</div>':'')+'</div>';}
     html+='<h1>'+safeName+'</h1>';
     html+='<h2>'+title+'</h2>';
     if(safeAddr||lawnZip)html+='<div class="meta">'+(safeAddr?safeAddr+(lawnZip?" \u00b7 ":""):"")+lawnZip+'</div>';
@@ -7827,9 +7896,25 @@ function OneStopLawn(){
     const isPremium=isTrialing||(curTier&&["premium","pro","enterprise"].includes(curTier.id));
     const rptYardId=(selectedYard()||{}).id||null;
     const rptInYard=function(r){return rptYardId==null||(r&&r.yardId===rptYardId);};
-    const rptJE=journalEntries.filter(rptInYard);
-    const rptST=soilTests.filter(rptInYard);
-    const rptPH=(photos||[]).filter(rptInYard);
+    const _rptToday=new Date();
+    const _rptY=_rptToday.getFullYear();
+    const _rptCM=_rptToday.getMonth();
+    function _rptIso(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
+    const tfLabel=({month:"This Month",season:"This Season",ytd:"Year to Date","12mo":"Last 12 Months",all:"All Time"})[reportTF]||"This Season";
+    const tfRange=(function(){
+      var to=_rptIso(_rptToday);
+      if(reportTF==="month")return{from:_rptIso(new Date(_rptY,_rptCM,1)),to:to};
+      if(reportTF==="ytd")return{from:_rptY+"-01-01",to:to};
+      if(reportTF==="12mo"){var f=new Date(_rptToday);f.setFullYear(f.getFullYear()-1);return{from:_rptIso(f),to:to};}
+      if(reportTF==="season"){var sm=_rptCM>=2&&_rptCM<=4?2:(_rptCM>=5&&_rptCM<=7?5:(_rptCM>=8&&_rptCM<=10?8:11));var sy=_rptY;if(sm===11&&_rptCM<2)sy=_rptY-1;return{from:_rptIso(new Date(sy,sm,1)),to:to};}
+      return{from:"0000-01-01",to:"9999-12-31"};
+    })();
+    const inTF=function(r){if(reportTF==="all")return true;if(!r||!r.date)return true;var d=String(r.date).slice(0,10);return d>=tfRange.from&&d<=tfRange.to;};
+    const rptInYardTF=function(r){return rptInYard(r)&&inTF(r);};
+    const rptJE=journalEntries.filter(rptInYardTF);
+    const rptST=soilTests.filter(rptInYardTF);
+    const rptPH=(photos||[]).filter(rptInYardTF);
+    const myAllSoil=soilTests.filter(rptInYard);
     const seasons=["Spring","Summer","Fall","Winter"];
     const years=[...new Set(rptJE.map(function(e){return e.date?e.date.slice(0,4):"";}).filter(Boolean))].sort().reverse();
     const allYears=years.length>0?years:[new Date().getFullYear().toString()];
@@ -7843,6 +7928,7 @@ function OneStopLawn(){
 
     function buildReportText(){
       var lines=[];
+      if(curTier&&curTier.id==="enterprise"&&settings.businessName){lines.push(settings.businessName);lines.push("");}
       lines.push("ONE STOP LAWN - SEASON REPORT");
       lines.push("Grass: "+settings.grassType+(settings.mixedGrassTypes?" ("+settings.mixedGrassTypes+")":""));
       lines.push("Zone: "+zone+" | Size: "+(settings.sqft||3000).toLocaleString()+" sq ft");
@@ -7889,11 +7975,7 @@ function OneStopLawn(){
     }
 
     function printReport(){
-      var txt=buildReportText();
-      var w=window.open("","_blank");
-      if(!w)return;
-      w.document.write("<html><head><title>Lawn Report</title><style>body{font-family:monospace;font-size:13px;padding:20px;white-space:pre-wrap;}</style></head><body>"+txt.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</body></html>");
-      w.document.close();w.focus();w.print();
+      renderReportInNewWindow("Season Report",buildReportText().split("\n"),true);
     }
 
     function saveReport(){
@@ -7915,11 +7997,138 @@ function OneStopLawn(){
     const curMonth=new Date().getMonth();
     const curSeasonName=curMonth>=2&&curMonth<=4?"Spring":curMonth>=5&&curMonth<=7?"Summer":curMonth>=8&&curMonth<=10?"Fall":"Winter";
     const tasks=TASK_TEMPLATES[curSeasonName]||[];
+    function _byDateDesc(a,b){return String((b&&b.date)||"").localeCompare(String((a&&a.date)||""));}
+    function _summaryBlock(){
+      return {heading:"Season Summary",lines:["Timeframe: "+tfLabel,"Entries: "+rptJE.length,"Mows: "+mows.length,"Applications: "+appEntries.length,"Waterings: "+waters.length,"Soil Tests: "+rptST.length,"Photos: "+rptPH.length]};
+    }
+    function _productBlock(){
+      var L=[];
+      if(!appEntries.length){L.push("No product applications logged for this timeframe.");}
+      else{appEntries.slice().sort(_byDateDesc).forEach(function(e){
+        if(e.fertiApplied&&e.fertProduct)L.push((e.date||"")+" | Fertilizer | "+e.fertProduct+(e.fertRate?" @ "+e.fertRate+" "+(e.fertUnit||""):""));
+        if(e.herbApplied&&e.herbProduct)L.push((e.date||"")+" | Herbicide | "+e.herbProduct+(e.herbRate?" @ "+e.herbRate+" "+(e.herbUnit||""):""));
+        if(e.fungicideApplied&&e.fungiProduct)L.push((e.date||"")+" | Fungicide | "+e.fungiProduct+(e.fungiRate?" @ "+e.fungiRate+" "+(e.fungiUnit||""):""));
+        if(e.insectApplied&&e.insectProduct)L.push((e.date||"")+" | Insecticide | "+e.insectProduct+(e.insectRate?" @ "+e.insectRate+" "+(e.insectUnit||""):""));
+      });}
+      return {heading:"Product Log",lines:L};
+    }
+    function _soilBlock(){
+      var L=[];
+      if(!rptST.length){L.push("No soil tests for this timeframe.");}
+      else{rptST.slice().sort(_byDateDesc).forEach(function(t){
+        L.push((t.name||"Test")+" | "+(t.season||"")+" "+(t.year||""));
+        L.push("pH:"+(t.ph||"\u2014")+" P:"+(t.p||"\u2014")+" K:"+(t.k||"\u2014")+" Ca:"+(t.ca||"\u2014")+" Mg:"+(t.mg||"\u2014")+" CEC:"+(t.cec||"\u2014"));
+        if(t.recommendations)L.push("Notes: "+t.recommendations);
+      });}
+      return {heading:"Soil Test History",lines:L};
+    }
+    function _taskBlock(){
+      var L=[];
+      tasks.forEach(function(t,idx){
+        var done=!!scheduleNotes["task_"+curSeasonName+"_"+idx+"_"+rptYardId];
+        var d=scheduleNotes["taskDate_"+curSeasonName+"_"+idx+"_"+rptYardId]||"";
+        var c=scheduleNotes["taskComp_"+curSeasonName+"_"+idx+"_"+rptYardId]||"";
+        var meta=[];if(d)meta.push("due "+d);if(c)meta.push("done "+c);
+        L.push((done?"[x] ":"[ ] ")+t+(meta.length?(" ("+meta.join(", ")+")"):""));
+      });
+      return {heading:curSeasonName+" Task List",lines:L};
+    }
+    function _allBlocks(){return [_summaryBlock(),_taskBlock(),_productBlock(),_soilBlock()];}
+    function _reportPdfOpts(){
+      var sel=selectedYard()||{};
+      var ent=!!(curTier&&curTier.id==="enterprise");
+      var branded=ent&&!!(((settings.businessName||"").trim())||settings.businessLogo);
+      return {branded:branded,business:(settings.businessName||""),logo:(ent?(settings.businessLogo||""):""),logoAlign:(settings.logoAlign||"left"),logoSize:(settings.logoSize||"M"),logoAspect:(settings.logoAspect||1),yard:((sel.name||"My Lawn")),tfLabel:tfLabel};
+    }
+    function _reportFname(){
+      var sel=selectedYard()||{};
+      var nm=((sel.name||"lawn")+"").replace(/[^a-z0-9]+/gi,"-").replace(/^-+|-+$/g,"").toLowerCase()||"lawn";
+      return "osl-report-"+nm+"-"+new Date().toISOString().slice(0,10)+".pdf";
+    }
+    function saveReportsPDF(blocks){var doc=generateReportsPDF(blocks,_reportPdfOpts());if(doc)doc.save(_reportFname());}
+    async function emailReportsPDF(blocks){
+      var doc=generateReportsPDF(blocks,_reportPdfOpts());if(!doc)return;
+      var fname=_reportFname();
+      var title=(_reportPdfOpts().yard)+" \u2014 Lawn Report ("+tfLabel+")";
+      try{
+        var blob=doc.output("blob");
+        var file=new File([blob],fname,{type:"application/pdf"});
+        if(navigator.canShare&&navigator.canShare({files:[file]})){
+          await navigator.share({title:title,text:title,files:[file]});
+          return;
+        }
+      }catch(e){}
+      doc.save(fname);
+    }
+    function printReportsPDF(blocks){
+      var doc=generateReportsPDF(blocks,_reportPdfOpts());if(!doc)return;
+      try{var url=doc.output("bloburl");var w=window.open(url,"_blank");if(!w)doc.save(_reportFname());}
+      catch(e){doc.save(_reportFname());}
+    }
+    function rptCollapsed(title,ckey){
+      return(
+        <div style={{...Sty.card,marginBottom:10,cursor:"pointer"}} onClick={function(){setRptOpen(function(o){var n={...o};n[ckey]=true;return n;});}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{...Sty.h3,margin:0}}>{title}</div>
+            <span style={{color:MUT,fontSize:13}}>Show &#9656;</span>
+          </div>
+        </div>
+      );
+    }
 
     return(
       <div>
         {/* Phase 1.5b: page-level "Reports & Tasks" h2 removed — drawer header carries navigation context. */}
 
+        {curTier&&curTier.id==="enterprise"&&(
+          <div style={{...Sty.card,marginBottom:12}}>
+            <div style={{...Sty.h3,marginBottom:6}}>Business Branding</div>
+            <div style={{color:MUT,fontSize:12,marginBottom:10,lineHeight:1.5}}>Add your business name and logo to the company-branded PDF reports you send for client properties.</div>
+            <input value={settings.businessName||""} onChange={function(e){var v=e.target.value;setSettings(function(s){return{...s,businessName:v};});}} placeholder="Business name (e.g., Green Acres Lawn Care)" style={{width:"100%",boxSizing:"border-box",padding:"10px",borderRadius:8,border:"1px solid "+BORDER,background:darkMode?"#0a1410":"#fff",color:darkMode?"#fff":"#111",fontSize:14,fontFamily:"Georgia,serif",marginBottom:10}}/>
+            <label style={{display:"block",textAlign:"center",background:darkMode?"#0a1a2a":"#e6f0fa",border:"1px solid "+(darkMode?"#2a4a6a":"#7aa0c8"),borderRadius:8,color:darkMode?"#7cc8dc":"#1a3a5a",fontSize:13,fontWeight:700,padding:"10px 12px",cursor:"pointer",fontFamily:"Georgia,serif",boxSizing:"border-box"}}>
+              {settings.businessLogo?"Replace Logo":"Upload Logo"}
+              <input type="file" accept="image/*" style={{display:"none"}} onChange={function(e){var f=e.target.files&&e.target.files[0];handleBusinessLogo(f);e.target.value="";}}/>
+            </label>
+            <div style={{color:MUT,fontSize:11,marginTop:6,lineHeight:1.45}}>Square PNG or JPG works best (a transparent-background PNG looks cleanest). We resize it automatically &mdash; about 512&times;512 px is plenty.</div>
+            {settings.businessLogo&&(
+              <button onClick={function(){setSettings(function(s){return{...s,businessLogo:null};});}} style={{background:"none",border:"none",color:darkMode?"#f87171":"#c04040",fontSize:12,cursor:"pointer",marginTop:6,padding:0,fontFamily:"Georgia,serif"}}>Remove logo</button>
+            )}
+            <div style={{color:MUT,fontSize:12,fontWeight:700,marginTop:12,marginBottom:6}}>Logo position</div>
+            <div style={{display:"flex",gap:6,marginBottom:10}}>
+              {["left","center","right"].map(function(a){var on=(settings.logoAlign||"left")===a;return <button key={a} onClick={function(){setSettings(function(s){return{...s,logoAlign:a};});}} style={{flex:1,padding:"8px",borderRadius:8,border:"1.5px solid "+(on?(darkMode?"#4ade80":"#15803d"):BORDER),background:on?(darkMode?"#1e3a1e":"#e8f4e0"):"transparent",color:on?(darkMode?"#4ade80":"#15803d"):MUT,fontSize:12,fontWeight:700,cursor:"pointer",textTransform:"capitalize",fontFamily:"Georgia,serif"}}>{a}</button>;})}
+            </div>
+            <div style={{color:MUT,fontSize:12,fontWeight:700,marginBottom:6}}>Logo size</div>
+            <div style={{display:"flex",gap:6,marginBottom:12}}>
+              {[["S","Small"],["M","Medium"],["L","Large"]].map(function(p){var on=(settings.logoSize||"M")===p[0];return <button key={p[0]} onClick={function(){setSettings(function(s){return{...s,logoSize:p[0]};});}} style={{flex:1,padding:"8px",borderRadius:8,border:"1.5px solid "+(on?(darkMode?"#4ade80":"#15803d"):BORDER),background:on?(darkMode?"#1e3a1e":"#e8f4e0"):"transparent",color:on?(darkMode?"#4ade80":"#15803d"):MUT,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"Georgia,serif"}}>{p[1]}</button>;})}
+            </div>
+            <div style={{color:MUT,fontSize:12,fontWeight:700,marginBottom:6}}>Preview</div>
+            <div style={{borderRadius:8,overflow:"hidden",border:"1px solid "+BORDER}}>
+              <div style={{background:"#15803d",padding:"10px 12px",display:"flex",minHeight:24,alignItems:"center",justifyContent:(settings.logoAlign==="center"?"center":(settings.logoAlign==="right"?"flex-end":"flex-start"))}}>
+                {settings.businessLogo?<img src={settings.businessLogo} alt="logo" style={{height:(settings.logoSize==="L"?44:(settings.logoSize==="S"?24:34)),objectFit:"contain"}}/>:<span style={{color:"#fff",opacity:0.7,fontSize:12}}>Your logo here</span>}
+              </div>
+              <div style={{padding:"8px 12px",background:darkMode?"#0d1a0d":"#fff",textAlign:(settings.logoAlign||"left")}}>
+                <div style={{fontWeight:800,fontSize:15,color:darkMode?"#fff":"#111"}}>{settings.businessName||"Your Business Name"}</div>
+                <div style={{fontSize:11,color:MUT,marginTop:2}}>Lawn Care Report</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isPremium&&(
+        <div style={{marginBottom:10}}>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:8}}>
+            {[["month","This Month"],["season","This Season"],["ytd","Year to Date"],["12mo","Last 12 Months"],["all","All Time"]].map(function(tf){
+              var on=reportTF===tf[0];
+              return <button key={tf[0]} onClick={function(){setReportTF(tf[0]);}} style={{padding:"6px 12px",borderRadius:16,border:"1.5px solid "+(on?(darkMode?"#4ade80":"#15803d"):BORDER),background:on?(darkMode?"#1e3a1e":"#e8f4e0"):"transparent",color:on?(darkMode?"#4ade80":"#15803d"):MUT,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"Georgia,serif",touchAction:"manipulation"}}>{tf[1]}</button>;
+            })}
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={function(){saveReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Save</button>
+            <button onClick={function(){emailReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Email</button>
+            <button onClick={function(){printReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Print</button>
+          </div>
+        </div>
+        )}
         {/* Phase 1.5b: Reports sub-tab pills hidden — drawer drives sub-state. */}
         {false&&(
         <div style={{display:"flex",flexWrap:"wrap",gap:4,justifyContent:"center",padding:"6px 0 8px",position:"sticky",top:headerHeight,zIndex:100,background:darkMode?BG:"#f5f5f0",borderBottom:`1px solid ${darkMode?BORDER:"#c0d4c0"}`,marginBottom:8}}>
@@ -7934,14 +8143,14 @@ function OneStopLawn(){
         {/* v155: Reports sections previously gated by `reportsSub` (sub-tab pills hidden in v152).
             All 4 sections now render stacked on the Reports screen — the screen is the report. */}
         {(function(){
-          var canSee=canSeeReport("summary");
+          var canSee=canSeeReport("summary");          if(!rptOpen.summary)return rptCollapsed("Season Summary","summary");
           var data=canSee?
             [["Entries",rptJE.length],["Mows",mows.length],["Applications",appEntries.length],["Waterings",waters.length],["Soil Tests",rptST.length],["Photos",rptPH.length]]:
             [["Entries",SAMPLE_REPORT_DATA.entries],["Mows",SAMPLE_REPORT_DATA.mows],["Applications",SAMPLE_REPORT_DATA.applications],["Waterings",SAMPLE_REPORT_DATA.waterings],["Soil Tests",SAMPLE_REPORT_DATA.soilTests],["Photos",SAMPLE_REPORT_DATA.photos]];
           return(
             <div style={{...Sty.card,border:darkMode?"1px solid #3a6a80":"1px solid #b0c4b0",marginBottom:10,position:"relative"}}>
               {!canSee&&<div style={{background:darkMode?"#1a2a3a":"#fff7e0",border:"1px solid "+(darkMode?"#3a5a7a":"#d4b878"),borderRadius:6,padding:"6px 10px",marginBottom:10,fontSize:12,color:darkMode?"#fbbf24":"#8a5a00",fontWeight:600}}>🔒 Sample data — <span style={{textDecoration:"underline"}}>Upgrade to Premium to track your own →</span></div>}
-              <div style={{...Sty.h3}}>Season Summary{!canSee&&<span style={{color:MUT,fontSize:12,fontWeight:400,marginLeft:8}}>(for {SAMPLE_REPORT_DATA.lawn})</span>}</div>
+              <div style={{...Sty.h3,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}} onClick={function(){setRptOpen(function(o){return{...o,summary:false};});}}><span>Season Summary{!canSee&&<span style={{color:MUT,fontSize:12,fontWeight:400,marginLeft:8}}>(for {SAMPLE_REPORT_DATA.lawn})</span>}</span><span style={{color:MUT,fontSize:13,fontWeight:400}}>Hide &#9662;</span></div>
               <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:14}}>
                 {data.map(function(item){
                   return(
@@ -7974,11 +8183,11 @@ function OneStopLawn(){
         })()}
 
         {(function(){
-          var canSee=canSeeReport("taskList");
+          var canSee=canSeeReport("taskList");          if(!rptOpen.tasks)return rptCollapsed(curSeasonName+" Task List","tasks");
           if(canSee){
             return(
         <div style={{...Sty.card,border:darkMode?"1px solid #3a6a80":"1px solid #b0c4b0",marginBottom:10}}>
-          <div style={{...Sty.h3}}>{curSeasonName} Task List</div>
+          <div style={{...Sty.h3,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}} onClick={function(){setRptOpen(function(o){return{...o,tasks:false};});}}><span>{curSeasonName} Task List</span><span style={{color:MUT,fontSize:13,fontWeight:400}}>Hide &#9662;</span></div>
           <div style={{color:MUT,fontSize:12,marginBottom:10}}>Suggested tasks for {settings.grassType} in Zone {zone}. Tap the circle to mark complete. Tap the date to reschedule.</div>
           <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
               {/* v218: Save Report — opens in a new window like Print PDF, with proper UTF-8
@@ -8173,11 +8382,11 @@ function OneStopLawn(){
 
         {/* Product Log — always visible; gated to Lawn Premium and above */}
         {(function(){
-          var canSeeProductLog=canSeeReport("productLog");
+          var canSeeProductLog=canSeeReport("productLog");          if(!rptOpen.products)return rptCollapsed("Product Log","products");
           return(
             <div style={{...Sty.card,border:darkMode?"1px solid #3a6a80":"1px solid #b0c4b0",marginBottom:10}}>
               {!canSeeProductLog&&<div style={{background:darkMode?"#1a2a3a":"#fff7e0",border:"1px solid "+(darkMode?"#3a5a7a":"#d4b878"),borderRadius:6,padding:"6px 10px",marginBottom:10,fontSize:12,color:darkMode?"#fbbf24":"#8a5a00",fontWeight:600}}>🔒 Sample data — <span style={{textDecoration:"underline"}}>Upgrade to Premium to track your own →</span></div>}
-              <div style={{...Sty.h3}}>Product Log{!canSeeProductLog&&<span style={{color:MUT,fontSize:12,fontWeight:400,marginLeft:8}}>(for {SAMPLE_REPORT_DATA.lawn})</span>}</div>
+              <div style={{...Sty.h3,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}} onClick={function(){setRptOpen(function(o){return{...o,products:false};});}}><span>Product Log{!canSeeProductLog&&<span style={{color:MUT,fontSize:12,fontWeight:400,marginLeft:8}}>(for {SAMPLE_REPORT_DATA.lawn})</span>}</span><span style={{color:MUT,fontSize:13,fontWeight:400}}>Hide &#9662;</span></div>
               {!canSeeProductLog?(
                 <div>
                   <div style={{color:MUT,fontSize:12,marginBottom:10,lineHeight:1.5}}>The Product Log tracks every fertilizer, herbicide, fungicide, and insecticide application &mdash; a compliance-ready history with exportable reports.</div>
@@ -8267,9 +8476,9 @@ function OneStopLawn(){
         })()}
 
         {(function(){
-          var canSee=canSeeReport("soilTests");
+          var canSee=canSeeReport("soilTests");          if(!rptOpen.soil)return rptCollapsed("Soil Test History","soil");
           // Show sample if user is not subscribed to this report OR is subscribed but has no soil tests yet
-          var showSample=!canSee||rptST.length===0;
+          var showSample=!canSee||myAllSoil.length===0;
           if(showSample){
             return(
               <div style={{...Sty.card,border:darkMode?"1px solid #3a6a80":"1px solid #b0c4b0"}}>
@@ -8320,7 +8529,7 @@ function OneStopLawn(){
           return(
           <div style={{...Sty.card,border:darkMode?"1px solid #3a6a80":"1px solid #b0c4b0"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
-              <div style={{...Sty.h3}}>Soil Test History</div>
+              <div style={{...Sty.h3,cursor:"pointer"}} onClick={function(){setRptOpen(function(o){return{...o,soil:false};});}}>Soil Test History <span style={{color:MUT,fontSize:13,fontWeight:400}}>&#9662;</span></div>
               <div style={{display:"flex",gap:6}}>
                 <button style={{...Sty.btn,fontSize:11,padding:"3px 10px",color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}} onClick={function(){
                   var lines=["Grass: "+(settings.grassType||""),"Generated: "+new Date().toLocaleDateString(),""];
@@ -9157,33 +9366,6 @@ function OneStopLawn(){
                         setDataStatus("Exported journal PDF");
                       }} style={{...Sty.btn,width:"100%",padding:"10px",fontSize:13,marginTop:8,background:darkMode?"#0a1a2a":"#e6f0fa",color:darkMode?"#7cc8dc":"#1a3a5a",border:"1px solid "+(darkMode?"#2a4a6a":"#7aa0c8"),touchAction:"manipulation",fontWeight:700}}>📄 Download Journal PDF Report</button>
                     )}
-                    {curTier&&curTier.id==="enterprise"&&(
-                      <button onClick={function(){
-                        const sel=selectedYard();
-                        if(!sel){setDataStatus("No lawn selected.");return;}
-                        setBrandedReportPrompt({name:sel.name||""});
-                      }} style={{...Sty.btn,width:"100%",padding:"10px",fontSize:13,marginTop:8,background:darkMode?"#0d1a0d":"#f0faf0",color:darkMode?"#4ade80":"#15803d",border:"1px solid "+(darkMode?"#2a5a2a":"#86c682"),touchAction:"manipulation",fontWeight:700}}>🏢 Generate Branded Customer Report</button>
-                    )}
-                    {brandedReportPrompt&&(
-                      <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",zIndex:10002,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={function(){setBrandedReportPrompt(null);}}>
-                        <div onClick={function(e){e.stopPropagation();}} style={{background:darkMode?"#0d1a0d":"#fff",border:"1px solid "+(darkMode?BORDER:"#b0c4b0"),borderRadius:12,padding:"16px",maxWidth:400,width:"100%",boxSizing:"border-box",fontFamily:"Georgia,serif"}}>
-                          <div style={{color:darkMode?ACCBR:"#1a3a5a",fontSize:16,fontWeight:800,marginBottom:4}}>Branded Customer Report</div>
-                          <div style={{color:MUT,fontSize:12,marginBottom:12,lineHeight:1.5}}>Generates a company-branded PDF for the currently selected lawn. Edit the property or customer name if needed.</div>
-                          <input value={brandedReportPrompt.name} onChange={function(e){var v=e.target.value;setBrandedReportPrompt(function(p){return p?{...p,name:v}:p;});}} placeholder="Property / customer name" style={{width:"100%",boxSizing:"border-box",padding:"10px",borderRadius:8,border:"1px solid "+BORDER,background:darkMode?"#0a1410":"#fff",color:darkMode?"#fff":"#111",fontSize:14,fontFamily:"Georgia,serif",marginBottom:12}}/>
-                          <button onClick={function(){
-                            const sel=selectedYard();
-                            if(!sel){setDataStatus("No lawn selected.");setBrandedReportPrompt(null);return;}
-                            const yardId=sel.id;
-                            const jentries=(journalEntries||[]).filter(function(e){return!yardId||!e.yardId||e.yardId===yardId;});
-                            const sentries=(soilTests||[]).filter(function(t){return!yardId||!t.yardId||t.yardId===yardId;});
-                            generateCustomerReportPDF(sel,settings,sentries,jentries,{customerName:(brandedReportPrompt.name||sel.name||"Customer"),businessName:(settings.businessName||""),logo:(settings.businessLogo||""),logoAlign:(settings.logoAlign||"left"),logoSize:(settings.logoSize||"M"),logoAspect:(settings.logoAspect||1)});
-                            setDataStatus("Generated branded report");
-                            setBrandedReportPrompt(null);
-                          }} style={{...Sty.btn,width:"100%",fontSize:14,padding:"12px",fontWeight:800,background:darkMode?"#1e3a1e":"#15803d",color:darkMode?"#4ade80":"#fff",border:"none",marginBottom:8}}>Generate PDF</button>
-                          <button onClick={function(){setBrandedReportPrompt(null);}} style={{width:"100%",fontSize:13,padding:"10px",background:"none",border:"1px solid "+BORDER,color:MUT,borderRadius:8,cursor:"pointer",fontFamily:"Georgia,serif"}}>Cancel</button>
-                        </div>
-                      </div>
-                    )}
                     {!hasMany?null:(
                       <button onClick={function(){
                         const allKeys=sectionDefs.map(function(s){return s.key;});
@@ -9392,39 +9574,7 @@ function OneStopLawn(){
           <div style={{color:MUT,fontSize:11,marginTop:6,lineHeight:1.4}}>Already subscribed on this account? Restore it here.</div>
         </div>
         
-        {curTier&&curTier.id==="enterprise"&&(
-          <div style={{...Sty.card,marginBottom:12}}>
-            <div style={{...Sty.h3,marginBottom:6}}>Business Branding</div>
-            <div style={{color:MUT,fontSize:12,marginBottom:10,lineHeight:1.5}}>Add your business name and logo to the company-branded PDF reports you send for client properties.</div>
-            <input value={settings.businessName||""} onChange={function(e){var v=e.target.value;setSettings(function(s){return{...s,businessName:v};});}} placeholder="Business name (e.g., Green Acres Lawn Care)" style={{width:"100%",boxSizing:"border-box",padding:"10px",borderRadius:8,border:"1px solid "+BORDER,background:darkMode?"#0a1410":"#fff",color:darkMode?"#fff":"#111",fontSize:14,fontFamily:"Georgia,serif",marginBottom:10}}/>
-            <label style={{display:"block",textAlign:"center",background:darkMode?"#0a1a2a":"#e6f0fa",border:"1px solid "+(darkMode?"#2a4a6a":"#7aa0c8"),borderRadius:8,color:darkMode?"#7cc8dc":"#1a3a5a",fontSize:13,fontWeight:700,padding:"10px 12px",cursor:"pointer",fontFamily:"Georgia,serif",boxSizing:"border-box"}}>
-              {settings.businessLogo?"Replace Logo":"Upload Logo"}
-              <input type="file" accept="image/*" style={{display:"none"}} onChange={function(e){var f=e.target.files&&e.target.files[0];handleBusinessLogo(f);e.target.value="";}}/>
-            </label>
-            <div style={{color:MUT,fontSize:11,marginTop:6,lineHeight:1.45}}>Square PNG or JPG works best (a transparent-background PNG looks cleanest). We resize it automatically &mdash; about 512&times;512 px is plenty.</div>
-            {settings.businessLogo&&(
-              <button onClick={function(){setSettings(function(s){return{...s,businessLogo:null};});}} style={{background:"none",border:"none",color:darkMode?"#f87171":"#c04040",fontSize:12,cursor:"pointer",marginTop:6,padding:0,fontFamily:"Georgia,serif"}}>Remove logo</button>
-            )}
-            <div style={{color:MUT,fontSize:12,fontWeight:700,marginTop:12,marginBottom:6}}>Logo position</div>
-            <div style={{display:"flex",gap:6,marginBottom:10}}>
-              {["left","center","right"].map(function(a){var on=(settings.logoAlign||"left")===a;return <button key={a} onClick={function(){setSettings(function(s){return{...s,logoAlign:a};});}} style={{flex:1,padding:"8px",borderRadius:8,border:"1.5px solid "+(on?(darkMode?"#4ade80":"#15803d"):BORDER),background:on?(darkMode?"#1e3a1e":"#e8f4e0"):"transparent",color:on?(darkMode?"#4ade80":"#15803d"):MUT,fontSize:12,fontWeight:700,cursor:"pointer",textTransform:"capitalize",fontFamily:"Georgia,serif"}}>{a}</button>;})}
-            </div>
-            <div style={{color:MUT,fontSize:12,fontWeight:700,marginBottom:6}}>Logo size</div>
-            <div style={{display:"flex",gap:6,marginBottom:12}}>
-              {[["S","Small"],["M","Medium"],["L","Large"]].map(function(p){var on=(settings.logoSize||"M")===p[0];return <button key={p[0]} onClick={function(){setSettings(function(s){return{...s,logoSize:p[0]};});}} style={{flex:1,padding:"8px",borderRadius:8,border:"1.5px solid "+(on?(darkMode?"#4ade80":"#15803d"):BORDER),background:on?(darkMode?"#1e3a1e":"#e8f4e0"):"transparent",color:on?(darkMode?"#4ade80":"#15803d"):MUT,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"Georgia,serif"}}>{p[1]}</button>;})}
-            </div>
-            <div style={{color:MUT,fontSize:12,fontWeight:700,marginBottom:6}}>Preview</div>
-            <div style={{borderRadius:8,overflow:"hidden",border:"1px solid "+BORDER}}>
-              <div style={{background:"#15803d",padding:"10px 12px",display:"flex",minHeight:24,alignItems:"center",justifyContent:(settings.logoAlign==="center"?"center":(settings.logoAlign==="right"?"flex-end":"flex-start"))}}>
-                {settings.businessLogo?<img src={settings.businessLogo} alt="logo" style={{height:(settings.logoSize==="L"?44:(settings.logoSize==="S"?24:34)),objectFit:"contain"}}/>:<span style={{color:"#fff",opacity:0.7,fontSize:12}}>Your logo here</span>}
-              </div>
-              <div style={{padding:"8px 12px",background:darkMode?"#0d1a0d":"#fff",textAlign:(settings.logoAlign||"left")}}>
-                <div style={{fontWeight:800,fontSize:15,color:darkMode?"#fff":"#111"}}>{settings.businessName||"Your Business Name"}</div>
-                <div style={{fontSize:11,color:MUT,marginTop:2}}>Lawn Care Report</div>
-              </div>
-            </div>
-          </div>
-        )}
+
         {/* v165: Diagnostics & analytics toggle. Privacy policy §3.10 / §8 commits to this
             being available. Default true. Currently forward-looking — Sentry and Plausible
             aren't yet wired. When they are (Phase: Capacitor wrapper), they MUST gate behind
