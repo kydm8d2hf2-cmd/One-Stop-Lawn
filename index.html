@@ -1078,7 +1078,7 @@ function useWeather(zip) {
             // Find first hour with meaningful rain in next 24h
             let rainStartMsg = null;
             for(let ri=hIdx+1; ri<Math.min(hIdx+25,hTimes.length); ri++){
-              if((hPrecip[ri]||0)>0.01){
+              if((hPrecip[ri]||0)>0.01 && (hPrecipProb[ri]||0)>=50){
                 const rDate = new Date(hTimes[ri].replace('T',' '));
                 const rHour = rDate.getHours();
                 const rAmPm = rHour>=12?'PM':'AM';
@@ -1819,7 +1819,7 @@ function OneStopLawn(){
   const [overviewSub,setOverviewSub]=useState("weather");
   const [reportsSub,setReportsSub]=useState("summary");
   const [reportTF,setReportTF]=useState("season");
-  const [rptOpen,setRptOpen]=useState({summary:true,tasks:true,products:true,soil:true});
+  const [rptOpen,setRptOpen]=useState({summary:true,tasks:true,products:true,soil:true,branding:true});
   const [showScrollTop,setShowScrollTop]=useState(false);
   const [headerHeight,setHeaderHeight]=useState(62);
   const headerRef=useRef(null);
@@ -4134,7 +4134,7 @@ function OneStopLawn(){
             <button onClick={()=>setJournalBlurbCollapsed(!journalBlurbCollapsed)}
               style={{background:"transparent",border:"none",color:darkMode?"#7cc8dc":"#1e66b5",fontFamily:"Georgia,serif",fontSize:13,fontWeight:600,padding:"10px 12px",cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",textAlign:"left"}}>
               <span style={{display:"inline-flex",alignItems:"center"}}><ICON name="books" size={32} style={{marginRight:6}}/>About journal storage &amp; backups</span>
-              <span style={{fontSize:20,fontWeight:700,color:darkMode?"#7cc8dc":"#1e66b5",marginLeft:8}}>{journalBlurbCollapsed?"▸":"▾"}</span>
+              <span style={{fontSize:13,fontWeight:400,color:MUT,marginLeft:8}}>{journalBlurbCollapsed?"Show ▸":"Hide ▾"}</span>
             </button>
             {!journalBlurbCollapsed&&(
               <div style={{padding:"4px 14px 12px",color:MUT,fontSize:13,lineHeight:1.55}}>
@@ -5269,7 +5269,7 @@ function OneStopLawn(){
               <div style={{color:darkMode?"#e0e8ff":"#1a3a5a",fontWeight:700,fontSize:15,fontFamily:"Palatino Linotype,Georgia,serif"}}>Herbicide Quick Reference</div>
               <div style={{color:MUT,fontSize:12,marginTop:2}}>Active ingredient, common product, what it treats, and HRAC group</div>
             </div>
-            <span style={{color:MUT,fontSize:16,flexShrink:0,marginLeft:8}}>{herbPrimerOpen?"▲":"▼"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400,flexShrink:0,marginLeft:8}}>{herbPrimerOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {herbPrimerOpen&&(
           <div>
@@ -5431,7 +5431,7 @@ function OneStopLawn(){
               <div style={{color:darkMode?"#e0e8ff":"#1a3a5a",fontWeight:700,fontSize:15,fontFamily:"Palatino Linotype,Georgia,serif"}}>PGR Quick Reference</div>
               <div style={{color:MUT,fontSize:12,marginTop:2}}>Active ingredient, common product, what it does, and PGR class</div>
             </div>
-            <span style={{color:MUT,fontSize:16,flexShrink:0,marginLeft:8}}>{pgrPrimerOpen?"▲":"▼"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400,flexShrink:0,marginLeft:8}}>{pgrPrimerOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {pgrPrimerOpen&&(
           <div>
@@ -5662,7 +5662,7 @@ function OneStopLawn(){
               <div style={{color:darkMode?"#e0e8ff":"#1a3a5a",fontWeight:700,fontSize:15,fontFamily:"Palatino Linotype,Georgia,serif"}}>Insecticide Quick Reference</div>
               <div style={{color:MUT,fontSize:12,marginTop:2}}>Active ingredient, common product, what it treats, and IRAC group</div>
             </div>
-            <span style={{color:MUT,fontSize:16,flexShrink:0,marginLeft:8}}>{iracPrimerOpen?"▲":"▼"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400,flexShrink:0,marginLeft:8}}>{iracPrimerOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {iracPrimerOpen&&(
           <div>
@@ -5834,7 +5834,7 @@ function OneStopLawn(){
               <div style={{color:darkMode?"#e0e8ff":"#1a3a5a",fontWeight:700,fontSize:15,fontFamily:"Palatino Linotype,Georgia,serif"}}>Fungicide Quick Reference</div>
               <div style={{color:MUT,fontSize:12,marginTop:2}}>Active ingredient, common product, what it treats, and FRAC group</div>
             </div>
-            <span style={{color:MUT,fontSize:16,flexShrink:0,marginLeft:8}}>{fracPrimerOpen?"▲":"▼"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400,flexShrink:0,marginLeft:8}}>{fracPrimerOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {fracPrimerOpen&&(
           <div>
@@ -6509,7 +6509,7 @@ function OneStopLawn(){
                 <div onClick={()=>setTunaHowToOpen(!tunaHowToOpen)} style={{...Sty.h3,marginBottom:tunaHowToOpen?6:0,display:"flex",alignItems:"center",gap:6,cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",userSelect:"none"}}>
                   <span style={{fontSize:18}}>🐟</span>
                   <span style={{flex:1}}>Tuna Can Test (How-To)</span>
-                  <span style={{color:MUT,fontSize:20,fontWeight:700}}>{tunaHowToOpen?"▾":"▸"}</span>
+                  <span style={{color:MUT,fontSize:13,fontWeight:400}}>{tunaHowToOpen?"Hide ▾":"Show ▸"}</span>
                 </div>
                 {tunaHowToOpen&&(
                   <div style={{fontSize:13,lineHeight:1.6,color:darkMode?"#ccd8e0":"#333"}}>
@@ -8017,7 +8017,7 @@ function OneStopLawn(){
       if(!rptST.length){L.push("No soil tests for this timeframe.");}
       else{rptST.slice().sort(_byDateDesc).forEach(function(t){
         L.push((t.name||"Test")+" | "+(t.season||"")+" "+(t.year||""));
-        L.push("pH:"+(t.ph||"\u2014")+" P:"+(t.p||"\u2014")+" K:"+(t.k||"\u2014")+" Ca:"+(t.ca||"\u2014")+" Mg:"+(t.mg||"\u2014")+" CEC:"+(t.cec||"\u2014"));
+        var _sp=[["pH",t.ph],["P",t.p],["K",t.k],["Ca",t.ca],["Mg",t.mg],["CEC",t.cec]].filter(function(x){return x[1]!=null&&String(x[1]).trim()!=="";}).map(function(x){return x[0]+":"+x[1];});L.push(_sp.length?_sp.join("   "):"(no values recorded)");
         if(t.recommendations)L.push("Notes: "+t.recommendations);
       });}
       return {heading:"Soil Test History",lines:L};
@@ -8076,13 +8076,25 @@ function OneStopLawn(){
       );
     }
 
+    function rptFoot(k){
+      return(
+        <div style={{textAlign:"center",marginTop:10}}>
+          <button onClick={function(e){e.stopPropagation();setRptOpen(function(o){var n={...o};n[k]=false;return n;});}} style={{background:"none",border:"1px solid #2a3a4a",borderRadius:6,color:darkMode?"#7cc8dc":"#111",fontWeight:darkMode?400:700,fontSize:13,cursor:"pointer",padding:"3px 16px"}}>&#9650; Collapse</button>
+        </div>
+      );
+    }
+
     return(
       <div>
         {/* Phase 1.5b: page-level "Reports & Tasks" h2 removed — drawer header carries navigation context. */}
 
         {curTier&&curTier.id==="enterprise"&&(
           <div style={{...Sty.card,marginBottom:12}}>
-            <div style={{...Sty.h3,marginBottom:6}}>Business Branding</div>
+            <div onClick={function(){setRptOpen(function(o){return{...o,branding:!o.branding};});}} style={{...Sty.h3,marginBottom:rptOpen.branding?6:0,display:"flex",alignItems:"center",gap:6,cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",userSelect:"none"}}>
+              <span style={{flex:1}}>Business Branding</span>
+              <span style={{color:MUT,fontSize:13,fontWeight:400}}>{rptOpen.branding?"Hide ▾":"Show ▸"}</span>
+            </div>
+            {rptOpen.branding&&(<>
             <div style={{color:MUT,fontSize:12,marginBottom:10,lineHeight:1.5}}>Add your business name and logo to the company-branded PDF reports you send for client properties.</div>
             <input value={settings.businessName||""} onChange={function(e){var v=e.target.value;setSettings(function(s){return{...s,businessName:v};});}} placeholder="Business name (e.g., Green Acres Lawn Care)" style={{width:"100%",boxSizing:"border-box",padding:"10px",borderRadius:8,border:"1px solid "+BORDER,background:darkMode?"#0a1410":"#fff",color:darkMode?"#fff":"#111",fontSize:14,fontFamily:"Georgia,serif",marginBottom:10}}/>
             <label style={{display:"block",textAlign:"center",background:darkMode?"#0a1a2a":"#e6f0fa",border:"1px solid "+(darkMode?"#2a4a6a":"#7aa0c8"),borderRadius:8,color:darkMode?"#7cc8dc":"#1a3a5a",fontSize:13,fontWeight:700,padding:"10px 12px",cursor:"pointer",fontFamily:"Georgia,serif",boxSizing:"border-box"}}>
@@ -8111,11 +8123,16 @@ function OneStopLawn(){
                 <div style={{fontSize:11,color:MUT,marginTop:2}}>Lawn Care Report</div>
               </div>
             </div>
+              {rptFoot("branding")}
+            </>)}
           </div>
         )}
 
         {isPremium&&(
         <div style={{marginBottom:10}}>
+          <div style={{...Sty.h3,marginBottom:4}}>Full Report</div>
+          <div style={{color:MUT,fontSize:12,marginBottom:10,lineHeight:1.5}}>Save, email, or print all sections below as one combined PDF for the timeframe you pick. (Task List always uses the current season.)</div>
+          <div style={{color:MUT,fontSize:12,fontWeight:700,marginBottom:6}}>Timeframe</div>
           <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:8}}>
             {[["month","This Month"],["season","This Season"],["ytd","Year to Date"],["12mo","Last 12 Months"],["all","All Time"]].map(function(tf){
               var on=reportTF===tf[0];
@@ -8123,9 +8140,9 @@ function OneStopLawn(){
             })}
           </div>
           <div style={{display:"flex",gap:8}}>
-            <button onClick={function(){saveReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Save</button>
-            <button onClick={function(){emailReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Email</button>
-            <button onClick={function(){printReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Print</button>
+            <button onClick={function(){saveReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Save All</button>
+            <button onClick={function(){emailReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Email All</button>
+            <button onClick={function(){printReportsPDF(_allBlocks());}} style={{...Sty.btn,flex:1,padding:"10px",fontWeight:700,fontSize:13,color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}}>Print All</button>
           </div>
         </div>
         )}
@@ -8178,6 +8195,7 @@ function OneStopLawn(){
                   <button style={{...Sty.btn,width:"100%",background:"#1e3a1e",border:"1.5px solid #4ade80",color:"#4ade80",fontWeight:700,fontSize:13,padding:"10px"}} onClick={function(e){e.stopPropagation();setShowPaywall(true);}}>🔒 Upgrade to unlock Season Summary</button>
                 </div>
               )}
+            {rptFoot("summary")}
             </div>
           );
         })()}
@@ -8376,6 +8394,7 @@ function OneStopLawn(){
                 </div>
                 <button style={{...Sty.btn,width:"100%",background:"#1e3a1e",border:"1.5px solid #4ade80",color:"#4ade80",fontWeight:700,fontSize:13,padding:"10px"}} onClick={function(e){e.stopPropagation();setShowPaywall(true);}}>🔒 Upgrade to unlock Task List</button>
               </div>
+            {rptFoot("tasks")}
             </div>
           );
         })()}
@@ -8471,6 +8490,7 @@ function OneStopLawn(){
                   )}
                 </div>
               )}
+            {rptFoot("products")}
             </div>
           );
         })()}
@@ -8535,7 +8555,7 @@ function OneStopLawn(){
                   var lines=["Grass: "+(settings.grassType||""),"Generated: "+new Date().toLocaleDateString(),""];
                   rptST.forEach(function(t){
                     lines.push((t.name||"Test")+" | "+t.season+" "+t.year);
-                    lines.push("pH:"+t.ph+" P:"+t.p+" K:"+t.k+" Ca:"+t.ca+" Mg:"+t.mg+" CEC:"+t.cec);
+                    var _sp=[["pH",t.ph],["P",t.p],["K",t.k],["Ca",t.ca],["Mg",t.mg],["CEC",t.cec]].filter(function(x){return x[1]!=null&&String(x[1]).trim()!=="";}).map(function(x){return x[0]+":"+x[1];});lines.push(_sp.length?_sp.join("   "):"(no values recorded)");
                     if(t.recommendations)lines.push("Notes: "+t.recommendations);
                     lines.push("");
                   });
@@ -8543,13 +8563,13 @@ function OneStopLawn(){
                 }}>Save Report</button>
                 <button style={{...Sty.btn,fontSize:11,padding:"3px 10px",color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}} onClick={function(){
                   var lines=["ONE STOP LAWN - SOIL TEST HISTORY","Grass: "+settings.grassType,""];
-                  rptST.forEach(function(t){lines.push((t.name||"Test")+" | "+t.season+" "+t.year);lines.push("pH:"+t.ph+" P:"+t.p+" K:"+t.k+" Ca:"+t.ca);if(t.recommendations)lines.push("Notes: "+t.recommendations);lines.push("");});
+                  rptST.forEach(function(t){lines.push((t.name||"Test")+" | "+t.season+" "+t.year);var _sp=[["pH",t.ph],["P",t.p],["K",t.k],["Ca",t.ca]].filter(function(x){return x[1]!=null&&String(x[1]).trim()!=="";}).map(function(x){return x[0]+":"+x[1];});lines.push(_sp.length?_sp.join("   "):"(no values recorded)");if(t.recommendations)lines.push("Notes: "+t.recommendations);lines.push("");});
                   if(navigator.share){navigator.share({title:"Soil Tests",text:lines.join("\n")}).catch(function(){});}
                   else{var el=document.createElement("textarea");el.value=lines.join("\n");document.body.appendChild(el);el.select();document.execCommand("copy");document.body.removeChild(el);alert("Copied!");}
                 }}>Share / Email</button>
                 <button style={{...Sty.btn,fontSize:11,padding:"3px 10px",color:darkMode?"#7cc8dc":"#1e66b5",borderColor:darkMode?"#2a4a66":"#1e66b5"}} onClick={function(){
                   var lines=["Grass: "+(settings.grassType||""),""];
-                  rptST.forEach(function(t){lines.push((t.name||"Test")+" | "+t.season+" "+t.year);lines.push("pH:"+t.ph+" P:"+t.p+" K:"+t.k+" Ca:"+t.ca);if(t.recommendations)lines.push("Notes: "+t.recommendations);lines.push("");});
+                  rptST.forEach(function(t){lines.push((t.name||"Test")+" | "+t.season+" "+t.year);var _sp=[["pH",t.ph],["P",t.p],["K",t.k],["Ca",t.ca]].filter(function(x){return x[1]!=null&&String(x[1]).trim()!=="";}).map(function(x){return x[0]+":"+x[1];});lines.push(_sp.length?_sp.join("   "):"(no values recorded)");if(t.recommendations)lines.push("Notes: "+t.recommendations);lines.push("");});
                   renderReportInNewWindow("Soil Test History",lines,true);
                 }}>Print PDF</button>
               </div>
@@ -8576,6 +8596,7 @@ function OneStopLawn(){
                 </div>
               );
             })}
+          {rptFoot("soil")}
           </div>
           );
         })()}
@@ -8603,7 +8624,7 @@ function OneStopLawn(){
           {/* v153: Your Lawn collapsible. Default open. Tap header (top) to toggle; bottom Collapse button. */}
           <div onClick={()=>setYourLawnOpen(!yourLawnOpen)} style={{...Sty.h3,marginBottom:yourLawnOpen?undefined:0,display:"flex",alignItems:"center",gap:6,cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",userSelect:"none"}}>
             <span style={{flex:1}}>Your Lawn</span>
-            <span style={{color:MUT,fontSize:20,fontWeight:700}}>{yourLawnOpen?"▾":"▸"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400}}>{yourLawnOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {yourLawnOpen&&(<>
           <label style={Sty.label}>ZIP Code</label>
@@ -8802,7 +8823,7 @@ function OneStopLawn(){
           <div onClick={()=>setSmartSprinklerOpen(!smartSprinklerOpen)} style={{...Sty.h3,marginBottom:smartSprinklerOpen?undefined:0,display:"flex",alignItems:"center",gap:6,cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",userSelect:"none"}}>
             <ICON name="sprinkler-spray" size={32} style={{marginRight:0}}/>
             <span style={{flex:1}}>Smart Sprinkler Sync</span>
-            <span style={{color:MUT,fontSize:20,fontWeight:700}}>{smartSprinklerOpen?"▾":"▸"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400}}>{smartSprinklerOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {smartSprinklerOpen&&(<>
           {!(curTier&&["premium","pro","enterprise"].includes(curTier.id))&&!isTrialing?(
@@ -9028,7 +9049,7 @@ function OneStopLawn(){
           <div onClick={()=>setWeatherStationOpen(!weatherStationOpen)} style={{...Sty.h3,marginBottom:weatherStationOpen?undefined:0,display:"flex",alignItems:"center",gap:6,cursor:"pointer",WebkitTapHighlightColor:"rgba(255,255,255,0.1)",touchAction:"manipulation",userSelect:"none"}}>
             <ICON name="weather-station" size={32} style={{marginRight:0}}/>
             <span style={{flex:1}}>Weather Station</span>
-            <span style={{color:MUT,fontSize:20,fontWeight:700}}>{weatherStationOpen?"▾":"▸"}</span>
+            <span style={{color:MUT,fontSize:13,fontWeight:400}}>{weatherStationOpen?"Hide ▾":"Show ▸"}</span>
           </div>
           {weatherStationOpen&&(<>
           {selectedYard()?(()=>{
