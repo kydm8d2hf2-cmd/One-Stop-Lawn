@@ -5993,6 +5993,7 @@ function OneStopLawn(){
         </div>
         {/* v120: single unified list — highlighted in-season ones get the ✓ badge; off-season still show shop links */}
         <div style={{marginBottom:10}}>
+          <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:10,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
           {FERTS.map((f,i)=>{
             const inSeason=f.season.some(s=>s.toLowerCase().includes(highlightSeason.toLowerCase()));
             return(
@@ -7715,6 +7716,7 @@ function OneStopLawn(){
       <div>
         <div style={{...Sty.h2,color:darkMode?"#e0e8ff":"#111"}}>Shop Products</div>
         <input style={{...Sty.input,marginBottom:8}} placeholder="Search products..." value={shopSearch} onChange={e=>setShopSearch(e.target.value)}/>
+        <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:10,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
         {/* v192: Category pills moved to the drawer. Show the active filter as a header pill so
             the user knows what's filtered, with a tap to switch back to All. */}
         {!shopSearch&&(
