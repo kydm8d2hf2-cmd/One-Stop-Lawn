@@ -2152,6 +2152,13 @@ function OneStopLawn(){
   const [subBilling,setSubBilling]=useState(()=>{const d=load();return d.subBilling||"annual";});
   const [trialStart,setTrialStart]=useState(()=>{const d=load();return d.trialStart||null;});
   const [subExpiry,setSubExpiry]=useState(()=>{const d=load();return d.subExpiry||null;});
+  // Reviewer / access-code unlock. Persisted so it survives relaunch and so rcSyncFromStore()
+  // does not overwrite the granted tier on the next launch. Holds a tier id (e.g. "enterprise")
+  // or null. Granted only via a server-validated code (see redeemAccessCode).
+  const [reviewerUnlock,setReviewerUnlock]=useState(()=>{const d=load();return d.reviewerUnlock||null;});
+  const [accCodeOpen,setAccCodeOpen]=useState(false);
+  const [accCode,setAccCode]=useState("");
+  const [accMsg,setAccMsg]=useState("");
   const [aiQueryCount,setAiQueryCount]=useState(()=>{const d=load();return d.aiQueryCount||0;});
   const [aiQueryMonth,setAiQueryMonth]=useState(()=>{const d=load();return d.aiQueryMonth||"";});
   const [showPaywall,setShowPaywall]=useState(false);
@@ -2517,7 +2524,7 @@ function OneStopLawn(){
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[stationsSelectedView,settings.selectedYardId]);
 
-  useEffect(()=>{save({settings,soilTests,photos,mapSegs,mapZones,journalEntries,darkMode,scheduleNotes,subTier,subBilling,trialStart,subExpiry,aiQueryCount,aiQueryMonth,userTasks,rachioDeviceId,rachioZones,rachioZonesEnabled,rachioSyncedEventIds,disclaimerAccepted,welcomePopupSeen,themePopupSeen,stationsSelectedView,tunaCanSaves,gddAlerts,gddBannerDismissed,wallOfFame,journalBlurbCollapsed,journalSearchCollapsed,journalBackupCollapsed,setupWizardSeen,setupWizardSuspended});},[settings,soilTests,photos,mapSegs,mapZones,journalEntries,scheduleNotes,subTier,subBilling,trialStart,subExpiry,aiQueryCount,aiQueryMonth,rachioDeviceId,rachioZones,rachioZonesEnabled,rachioSyncedEventIds,disclaimerAccepted,welcomePopupSeen,themePopupSeen,stationsSelectedView,tunaCanSaves,gddAlerts,gddBannerDismissed,wallOfFame,journalBlurbCollapsed,journalSearchCollapsed,journalBackupCollapsed,setupWizardSeen,setupWizardSuspended]);
+  useEffect(()=>{save({settings,soilTests,photos,mapSegs,mapZones,journalEntries,darkMode,scheduleNotes,subTier,subBilling,trialStart,subExpiry,reviewerUnlock,aiQueryCount,aiQueryMonth,userTasks,rachioDeviceId,rachioZones,rachioZonesEnabled,rachioSyncedEventIds,disclaimerAccepted,welcomePopupSeen,themePopupSeen,stationsSelectedView,tunaCanSaves,gddAlerts,gddBannerDismissed,wallOfFame,journalBlurbCollapsed,journalSearchCollapsed,journalBackupCollapsed,setupWizardSeen,setupWizardSuspended});},[settings,soilTests,photos,mapSegs,mapZones,journalEntries,scheduleNotes,subTier,subBilling,trialStart,subExpiry,reviewerUnlock,aiQueryCount,aiQueryMonth,rachioDeviceId,rachioZones,rachioZonesEnabled,rachioSyncedEventIds,disclaimerAccepted,welcomePopupSeen,themePopupSeen,stationsSelectedView,tunaCanSaves,gddAlerts,gddBannerDismissed,wallOfFame,journalBlurbCollapsed,journalSearchCollapsed,journalBackupCollapsed,setupWizardSeen,setupWizardSuspended]);
 
   // ---- RevenueCat sync (native only) ----------------------------------------
   // On native launch: configure RC, read entitlements, and make RC the source of
@@ -2526,6 +2533,7 @@ function OneStopLawn(){
   // swallowed so we never wipe a known tier on a transient error.
   async function rcSyncFromStore(){
     try{
+      if(reviewerUnlock)return; // reviewer access overrides store sync; keep the granted tier
       var P=rcPlugin(); if(!P)return;
       await rcConfigure();
       var res=await P.getCustomerInfo();
@@ -2551,6 +2559,28 @@ function OneStopLawn(){
       setSubExpiry(t.expiry);
       alert(t.tier?("Restored: "+t.tier.charAt(0).toUpperCase()+t.tier.slice(1)+" tier."):"No active subscription found to restore.");
     }catch(e){ alert("Couldn't restore purchases. Please try again in a moment."); }
+  }
+  // Reviewer / access-code unlock. Sends the entered code to the Vercel proxy, which compares
+  // it server-side to the REVIEW_CODE env var (the code never ships in the client bundle). On
+  // success we record reviewerUnlock + grant the returned tier locally; rcSyncFromStore() then
+  // skips overwriting it on later launches. Used to give app-store reviewers full access without
+  // a purchase, trial, or account.
+  async function redeemAccessCode(code){
+    code=(code||"").trim();
+    if(!code)return {ok:false,msg:"Enter a code."};
+    try{
+      var r=await fetch("https://one-stop-lawn.vercel.app/api/review",{method:"POST",headers:proxyHeaders(),body:JSON.stringify({code:code})});
+      var d=null; try{ d=await r.json(); }catch(e){ d=null; }
+      if(r.ok&&d&&d.ok&&d.tier){
+        var far=new Date(Date.now()+3650*24*60*60*1000).toISOString();
+        setReviewerUnlock(d.tier);
+        setSubTier(d.tier);
+        setSubBilling("annual");
+        setSubExpiry(far);
+        return {ok:true,tier:d.tier};
+      }
+      return {ok:false,msg:"Invalid code."};
+    }catch(e){ return {ok:false,msg:"Could not verify code. Check your connection."}; }
   }
   // Buy a tier+billing package. Resolves true on success/owned, false on cancel/fail.
   // On web (no native plugin) it falls back to the existing local-preview behavior so
@@ -9636,6 +9666,26 @@ function OneStopLawn(){
         <div style={{...Sty.card,marginBottom:12,textAlign:"center"}}>
           <button onClick={restorePurchases} style={{background:darkMode?"none":"#fff",border:"1px solid "+(darkMode?"#2a4a5a":"#8aacbc"),borderRadius:8,color:darkMode?"#6cc8d8":"#1a5a7a",fontSize:13,cursor:"pointer",padding:"10px 16px",fontFamily:"Georgia,serif",fontWeight:600,width:"100%"}}>Restore Purchases</button>
           <div style={{color:MUT,fontSize:11,marginTop:6,lineHeight:1.4}}>Already subscribed on this account? Restore it here.</div>
+        </div>
+        {/* Access-code unlock. The code is validated server-side (api/review.js) against the
+            REVIEW_CODE env var; nothing secret ships in this bundle. Used for app-store review. */}
+        <div style={{...Sty.card,marginBottom:12}}>
+          {!accCodeOpen?(
+            <div style={{textAlign:"center"}}>
+              <button onClick={()=>{setAccCodeOpen(true);setAccMsg("");}} style={{background:"none",border:"none",color:MUT,fontSize:12,cursor:"pointer",fontFamily:"Georgia,serif",textDecoration:"underline",padding:0}}>Have an access code?</button>
+            </div>
+          ):(
+            <div>
+              <div style={{...Sty.h3,marginBottom:6}}>Access code</div>
+              <div style={{color:MUT,fontSize:12,marginBottom:8,lineHeight:1.5}}>Enter an access code to unlock the app.</div>
+              <input value={accCode} onChange={e=>setAccCode(e.target.value)} placeholder="Enter code" style={{width:"100%",boxSizing:"border-box",padding:"10px 12px",borderRadius:8,border:"1px solid "+(darkMode?"#2a4a5a":"#8aacbc"),background:darkMode?"#0d1a2a":"#fff",color:darkMode?"#cfe8f0":"#1a3a5a",fontSize:14,fontFamily:"Georgia,serif",marginBottom:8}}/>
+              {accMsg?<div style={{color:accMsg.indexOf("Unlocked")>=0?(darkMode?"#6cc86c":"#15803d"):"#b04040",fontSize:12,marginBottom:8,lineHeight:1.4}}>{accMsg}</div>:null}
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={async()=>{setAccMsg("Checking...");var res=await redeemAccessCode(accCode);if(res.ok){setAccMsg("Unlocked: "+res.tier.charAt(0).toUpperCase()+res.tier.slice(1)+" access.");setAccCode("");}else{setAccMsg(res.msg||"Invalid code.");}}} style={{flex:1,background:darkMode?"#1e3a1e":"#15803d",border:"none",borderRadius:8,color:"#fff",fontSize:13,cursor:"pointer",padding:"10px 16px",fontFamily:"Georgia,serif",fontWeight:700}}>Apply</button>
+                <button onClick={()=>{setAccCodeOpen(false);setAccMsg("");}} style={{background:darkMode?"none":"#fff",border:"1px solid "+(darkMode?"#2a4a5a":"#8aacbc"),borderRadius:8,color:MUT,fontSize:13,cursor:"pointer",padding:"10px 16px",fontFamily:"Georgia,serif",fontWeight:600}}>Cancel</button>
+              </div>
+            </div>
+          )}
         </div>
         
 
