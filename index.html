@@ -1576,6 +1576,7 @@ function WeedCard({item,thisSeason,nextSeason,darkMode}){
             {item.herbicides.map((a,i)=><span key={i} style={{background:darkMode?"#2a1a00":"#fff7ed",color:darkMode?"#fbbf24":"#c2410c",borderRadius:7,padding:"3px 10px",fontSize:12,border:darkMode?"1px solid #4a3000":"1px solid #fed7aa"}}>{a}</span>)}
           </div>
           <div style={{fontSize:13,color:darkMode?ACCBR:"#f97316",fontWeight:700,marginBottom:8}}>Commercial Products / Where to Buy</div>
+          <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
           {(item.products||[]).map(function(p,i){
             var name = typeof p==="string" ? p : (p&&p.name)||"";
             var dom = typeof p==="string" ? "https://www.domyown.com/search?w="+encodeURIComponent(p)+"&search=" : (p&&p.dom);
@@ -1657,6 +1658,7 @@ function FungusCard({item,thisSeason,nextSeason,darkMode}){
             {item.fungicides.map((f,i)=><span key={i} style={{background:darkMode?"#2a1a00":"#fff7ed",color:darkMode?"#fbbf24":"#c2410c",borderRadius:7,padding:"3px 10px",fontSize:12,border:darkMode?"1px solid #4a3000":"1px solid #fed7aa"}}>{f}</span>)}
           </div>
           <div style={{fontSize:13,color:darkMode?"#e0b87e":"#f97316",fontWeight:700,marginBottom:8}}>Commercial Products / Where to Buy</div>
+          <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
           {(item.products||[]).map(function(p,i){
             var name = typeof p==="string" ? p : (p&&p.name)||"";
             var dom = typeof p==="string" ? "https://www.domyown.com/search?w="+encodeURIComponent(p)+"&search=" : (p&&p.dom);
@@ -1739,6 +1741,7 @@ function InsectCard({item,darkMode}){
             {item.insecticides.map((a,i)=><span key={i} style={{background:"#2a1a00",color:"#fbbf24",borderRadius:7,padding:"3px 10px",fontSize:12,border:"1px solid #4a3000"}}>{a}</span>)}
           </div>
           <div style={{fontSize:13,color:"#f59e0b",fontWeight:700,marginBottom:8}}>Commercial Products / Where to Buy</div>
+          <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
           {(item.products||[]).map(function(p,i){
             var name = typeof p==="string" ? p : (p&&p.name)||"";
             var dom = typeof p==="string" ? "https://www.domyown.com/search?w="+encodeURIComponent(p)+"&search=" : (p&&p.dom);
@@ -5212,6 +5215,7 @@ function OneStopLawn(){
                 </div>
               )}
               <div style={{color:darkMode?ACCBR:"#0b3d80",fontSize:13,fontWeight:700,marginBottom:6}}>Where to Buy</div>
+              <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
                 {item.products.map((p,pi)=>(
                   <span key={pi}>
@@ -5410,6 +5414,7 @@ function OneStopLawn(){
                 </div>
               )}
               <div style={{color:darkMode?ACCBR:"#0b3d80",fontSize:13,fontWeight:700,marginBottom:6}}>Where to Buy</div>
+              <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
                 {(item.products||[]).map(function(p,pi){
                   return(
@@ -5621,6 +5626,7 @@ function OneStopLawn(){
                 </div>
               )}
               <div style={{color:darkMode?ACCBR:"#0b3d80",fontSize:13,fontWeight:700,marginBottom:6}}>Where to Buy</div>
+              <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
                 {(item.products||[]).map(function(p,pi){
                   return(
@@ -5806,6 +5812,7 @@ function OneStopLawn(){
                 </div>
               )}
               <div style={{color:darkMode?ACCBR:"#0b3d80",fontSize:13,fontWeight:700,marginBottom:6}}>Where to Buy</div>
+              <div style={{fontSize:11,color:darkMode?"#9aa0a6":"#9ca3af",marginBottom:8,lineHeight:1.4}}>Some links below are affiliate links — we may earn a commission at no extra cost to you. This never affects our recommendations.</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
                 {(item.products||[]).map(function(p,pi){
                   return(
@@ -9668,6 +9675,7 @@ function OneStopLawn(){
             <p style={{margin:"0 0 10px 0"}}><strong>No warranty.</strong> The app is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of any kind, whether express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, non-infringement, accuracy, or uninterrupted availability.</p>
             <p style={{margin:"0 0 10px 0"}}><strong>Limitation of liability.</strong> To the maximum extent permitted by law, One Stop Lawn, LLC shall not be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, or for any loss of profits, revenue, data, use, or goodwill, arising out of or related to your use of the app, even if advised of the possibility of such damages.</p>
             <p style={{margin:"0 0 10px 0"}}><strong>Pesticide and chemical products.</strong> Any product mentioned in the app is subject to federal, state, and local laws governing its sale, use, and application. Pesticide labels are the law &mdash; always read and follow the product label. The app may display products or active ingredients that are restricted-use, unavailable, or illegal in your jurisdiction. You are solely responsible for verifying legality and appropriate use.</p>
+            <p style={{margin:"0 0 10px 0"}}><strong>Affiliate disclosure.</strong> One Stop Lawn earns commissions from some product and retailer links in the app, including as an Amazon Associate, through which we earn from qualifying purchases. These commissions come at no extra cost to you and never influence which products the app or its AI recommends.</p>
             <p style={{margin:"0 0 10px 0"}}><strong>Governing law.</strong> These terms are governed by the laws of the State of South Carolina, without regard to conflict-of-law principles. Any disputes shall be resolved in the state or federal courts located in South Carolina.</p>
             <p style={{margin:"10px 0 0 0",fontSize:12,color:darkMode?"#fff":"#555"}}>By continuing to use the app, you acknowledge that you have read, understood, and agreed to this disclaimer.</p>
           </div>
