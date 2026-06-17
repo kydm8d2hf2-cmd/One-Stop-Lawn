@@ -10846,6 +10846,28 @@ function OneStopLawn(){
             {!curTier&&!tierBillingPick&&(
               <div style={{color:darkMode?"#fbbf24":"#8a5a00",fontSize:12,fontWeight:600,textAlign:"center",padding:"6px 4px",lineHeight:1.5}}>Pick a tier above to continue</div>
             )}
+            {/* Reviewer / access-code unlock, surfaced on the subscription step so a fresh install
+                (and app-store reviewers) can unlock without a purchase. Same server-validated code
+                + redeemAccessCode as the Settings entry; hidden once a tier is active. */}
+            {!curTier&&(
+              <div style={{marginTop:8,paddingTop:8,borderTop:`1px solid ${BORDER}`}}>
+                {!accCodeOpen?(
+                  <div style={{textAlign:"center"}}>
+                    <button onClick={()=>{setAccCodeOpen(true);setAccMsg("");}} style={{background:"none",border:"none",color:MUT,fontSize:12,cursor:"pointer",fontFamily:"Georgia,serif",textDecoration:"underline",padding:0}}>Have an access code?</button>
+                  </div>
+                ):(
+                  <div>
+                    <div style={{color:MUT,fontSize:12,marginBottom:8,lineHeight:1.5}}>Enter an access code to unlock the app.</div>
+                    <input value={accCode} onChange={e=>setAccCode(e.target.value)} placeholder="Enter code" style={{width:"100%",boxSizing:"border-box",padding:"10px 12px",borderRadius:8,border:`1px solid ${BORDER}`,background:darkMode?"#0a1018":"#fff",color:darkMode?"#cfe8f0":"#1a3a5a",fontSize:14,fontFamily:"Georgia,serif",marginBottom:8}}/>
+                    {accMsg?<div style={{color:accMsg.indexOf("Unlocked")>=0?(darkMode?"#6cc86c":"#15803d"):"#b04040",fontSize:12,marginBottom:8,lineHeight:1.4}}>{accMsg}</div>:null}
+                    <div style={{display:"flex",gap:8}}>
+                      <button onClick={async()=>{setAccMsg("Checking...");var res=await redeemAccessCode(accCode);if(res.ok){setAccMsg("Unlocked: "+res.tier.charAt(0).toUpperCase()+res.tier.slice(1)+" access.");setAccCode("");}else{setAccMsg(res.msg||"Invalid code.");}}} style={{...Sty.btn,flex:1,fontSize:13,padding:"10px",background:darkMode?"#1e3a1e":"#15803d",border:"1px solid "+(darkMode?"#4ade80":"#15803d"),color:darkMode?"#4ade80":"#fff",fontWeight:700}}>Apply</button>
+                      <button onClick={()=>{setAccCodeOpen(false);setAccMsg("");}} style={{...Sty.btn,fontSize:13,padding:"10px 14px",background:"transparent",border:`1px solid ${BORDER}`,color:MUT,fontWeight:600}}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             <div style={{display:"flex",gap:6,marginTop:6}}>
               <button onClick={goBack} style={{...Sty.btn,flex:1,fontSize:13,fontWeight:600,background:"transparent",border:`1px solid ${BORDER}`,color:MUT}}>← Back</button>
               <button onClick={goNext} disabled={!curTier} style={{...Sty.btn,flex:1,fontSize:13,fontWeight:700,background:curTier?(darkMode?"#1e3a1e":"#15803d"):"transparent",border:"1px solid "+(curTier?(darkMode?"#4ade80":"#15803d"):BORDER),color:curTier?(darkMode?"#4ade80":"#fff"):MUT,opacity:curTier?1:0.5,cursor:curTier?"pointer":"not-allowed"}}>Continue →</button>
