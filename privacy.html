@@ -108,14 +108,14 @@
 </head>
 <body>
 <div class="container">
-<a href="https://onestoplawnapp.com" class="back-link">&larr; Back to onestoplawnapp.com</a>
+<a href="https://onestoplawnapp.com/landing" class="back-link">&larr; Back to One Stop Lawn</a>
 <h1>One Stop Lawn — Privacy Policy</h1>
-<p><strong>Effective Date:</strong> May 17, 2026
-<strong>App Version:</strong> v237+
+<p><strong>Effective Date:</strong> June 16, 2026
+<strong>App Version:</strong> 1.0
 <strong>Owner:</strong> One Stop Lawn, LLC, registered in South Carolina, USA</p>
 <hr />
 <h2>Summary</h2>
-<p>One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data and photos stay on your device, backed up to your iCloud or Google Drive account, unless you explicitly use a feature that requires sending data to a third party (clearly marked below).</p>
+<p>One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data and photos stay on your device — and may be included in your device's standard backup (iCloud or Google Drive) if you have that enabled — unless you explicitly use a feature that requires sending data to a third party (clearly marked below).</p>
 <p><strong>We do not sell your data. We do not use your data for advertising. We do not share your data with anyone except the specific service providers listed below who help us operate the app.</strong></p>
 <hr />
 <h2>What We Collect</h2>
@@ -131,7 +131,8 @@
 <h3>Information collected automatically</h3>
 <ul>
 <li>Approximate location coordinates (latitude/longitude derived from your ZIP code) used to fetch weather and soil data from public weather services</li>
-<li>Standard app usage data (which features you use, errors you encounter) only if crash reporting is enabled</li>
+<li>Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)</li>
+<li>We do <strong>not</strong> currently collect usage analytics or crash-report data. The app includes a "Send anonymous diagnostics" setting reserved for a future anonymous diagnostics feature; if it is ever activated, it would never include personal content (journal entries, photos, AI questions, soil values, or your lawn address)</li>
 </ul>
 <h3>Information we do NOT collect</h3>
 <ul>
@@ -159,10 +160,10 @@
 </ul>
 <h3>Backed up to your cloud account</h3>
 <ul>
-<li>Your data is automatically backed up to your iCloud account (iOS users) or Google Drive (Android users) via your device's standard backup mechanism</li>
-<li><strong>We do not have access to these backups.</strong> They are managed entirely by Apple or Google and encrypted with your account credentials</li>
-<li>You can disable cloud backup in your device settings (iOS: Settings → [Your Name] → iCloud; Android: Settings → System → Backup)</li>
-<li>If you disable cloud backup, your data exists only on your current device</li>
+<li>If you have your device's standard backup enabled (iCloud on iOS, Android Auto Backup to Google Drive), your app data may be included in that backup. This is handled entirely by Apple or Google and encrypted with your account credentials</li>
+<li><strong>We do not have access to these backups.</strong> They are managed entirely by Apple or Google</li>
+<li>You can enable or disable this in your device settings (iOS: Settings → [Your Name] → iCloud; Android: Settings → System → Backup)</li>
+<li>For a reliable backup and to move your data between devices, use <strong>Settings → Export Data</strong> to save a JSON copy you control</li>
 </ul>
 <h3>On our backend</h3>
 <ul>
@@ -186,7 +187,7 @@
 <ul>
 <li>Lawn Journal photos and Wall of Fame photos are stored only in your device's local storage</li>
 <li>These photos are not uploaded to any server (except as described above for AI identification)</li>
-<li>They are backed up to your iCloud or Google Drive account via your device's standard backup, accessible only to you</li>
+<li>They may be included in your device's standard backup (iCloud or Google Drive) if you have it enabled, accessible only to you</li>
 <li>They are deleted when you delete the entry or when you clear the app's local data</li>
 </ul>
 <h3>Photo Library and Camera Access</h3>
@@ -252,10 +253,24 @@
 </tr>
 <tr>
 <td><strong>Open-Meteo / Zippopotam</strong></td>
-<td>Geocodes ZIP to coordinates if NWS data is unavailable</td>
-<td>ZIP code</td>
+<td>Provides soil temperature and recent rainfall data, and geocodes your ZIP to coordinates</td>
+<td>Approximate latitude/longitude derived from your ZIP</td>
 <td>EU (Open-Meteo)</td>
 <td>https://open-meteo.com/en/terms</td>
+</tr>
+<tr>
+<td><strong>RevenueCat</strong></td>
+<td>Manages your subscription, free trial, and purchase restoration across platforms</td>
+<td>An anonymized app-user ID and your purchase/transaction history (no name, email, or payment details)</td>
+<td>USA</td>
+<td>https://www.revenuecat.com/privacy</td>
+</tr>
+<tr>
+<td><strong>Apple App Store / Google Play billing</strong></td>
+<td>Processes subscription payments and free trials</td>
+<td>Payment and transaction data handled entirely by Apple or Google; we never receive your payment details</td>
+<td>Per store</td>
+<td>https://www.apple.com/legal/privacy / https://policies.google.com/privacy</td>
 </tr>
 <tr>
 <td><strong>Rachio</strong> (optional)</td>
@@ -290,7 +305,7 @@
 <p>We do not use Google Analytics, Facebook Pixel, advertising networks, or any other third-party tracking services.</p>
 <hr />
 <h2>International Data Transfers</h2>
-<p>One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Rachio) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.</p>
+<p>One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Rachio, RevenueCat) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.</p>
 <p>For users in the European Union, European Economic Area, or United Kingdom, we rely on the following safeguards for international data transfers under GDPR Chapter V:</p>
 <ul>
 <li><strong>EU-US Data Privacy Framework</strong>, where applicable to the receiving service</li>
@@ -303,15 +318,15 @@
 <ul>
 <li><strong>Lawn calculations and recommendations:</strong> Your ZIP, grass type, and lawn size drive seasonal task recommendations, watering schedules, and product suggestions</li>
 <li><strong>AI features:</strong> Photos and text you submit are used to generate the requested identification or response, then discarded by us</li>
-<li><strong>Storage on your device:</strong> Journal entries, Wall of Fame photos, soil test history, schedules, and zones are stored locally and backed up via your cloud account</li>
-<li><strong>Subscription management:</strong> Your tier selection and trial dates are stored locally and used to gate premium features</li>
+<li><strong>Storage on your device:</strong> Journal entries, Wall of Fame photos, soil test history, schedules, and zones are stored locally on your device (and may be included in your device's standard backup if enabled)</li>
+<li><strong>Subscription management:</strong> Your subscription tier and free-trial status are managed through RevenueCat and the App Store / Google Play. Purchases are processed by Apple or Google; RevenueCat receives an anonymized app-user ID and your purchase history to unlock and restore your subscription. We never receive your payment details.</li>
 </ul>
 <p>We do not use your data for any other purpose. We do not advertise. We do not sell your data.</p>
 <hr />
 <h2>Data Retention</h2>
 <ul>
 <li><strong>On your device:</strong> All your local data persists until you uninstall the app or clear its local storage</li>
-<li><strong>In your cloud backup (iCloud / Google Drive):</strong> Persists according to Apple's or Google's retention policies, controlled by you</li>
+<li><strong>In your device backup (iCloud / Google Drive), if enabled:</strong> Persists according to Apple's or Google's retention policies, controlled by you</li>
 <li><strong>In our backend:</strong> We do not store user data on our backend. The proxy forwards AI requests in real time and does not persist them</li>
 <li><strong>In server logs:</strong> Vercel may keep request logs for up to 30 days for operational purposes; we cannot tie those logs back to a specific user since we do not collect user identifiers</li>
 </ul>
@@ -391,7 +406,8 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy</p>
 <hr />
 <h2>Version History</h2>
 <ul>
-<li><strong>May 17, 2026 (this version):</strong> Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.</li>
+<li><strong>1.0 (June 16, 2026 — release version):</strong> Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.</li>
+<li><strong>May 17, 2026:</strong> Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.</li>
 <li><strong>v200 (May 4, 2026):</strong> Added Photo and Image Handling section, EXIF metadata disclosure, updated third-party services table.</li>
 </ul>
 </div>
