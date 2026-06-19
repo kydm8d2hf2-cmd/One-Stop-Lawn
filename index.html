@@ -11027,7 +11027,7 @@ function OneStopLawn(){
           Row 1: ☰ + lawn-context + Ask AI + 🔍 (hollow magnifying glass)
           Row 2: full-width search bar — collapsed by default, expands when 🔍 is tapped.
                  Phase 1 ships placeholder only; Phase 3 wires real cross-app search. */}
-      <div ref={headerRef} style={{background:"#090c12",borderBottom:`1px solid ${BORDER}`,position:"sticky",top:0,zIndex:200,filter:colorMuteFilter}}>
+      <div ref={headerRef} style={{background:"#090c12",borderBottom:`1px solid ${BORDER}`,position:"sticky",top:0,zIndex:200,filter:colorMuteFilter,paddingTop:"env(safe-area-inset-top, 0px)"}}>
         {/* Row 1 */}
         <div style={{padding:"10px 12px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:8}}>
           <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0,flex:1}}>
