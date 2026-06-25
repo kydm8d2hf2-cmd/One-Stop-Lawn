@@ -6,7 +6,29 @@
 // v222: Now enforces X-App-Secret header via the shared checkSecret helper. When
 // APP_SHARED_SECRET is set on Vercel, only requests carrying the matching header succeed.
 // CORS Allow-Headers expanded to permit X-App-Secret on browser preflight.
+//
+// v239: Model routing by payload. Any request whose messages contain an image content
+// block is routed to Sonnet (vision quality matters for weed/disease/soil ID); text-only
+// requests go to Haiku (far cheaper for chat). This OVERRIDES whatever model the client
+// sent, so the client bundle needs no change to get the split.
 import { checkSecret } from "./_lib/checkSecret.js";
+
+// Model routing targets (override client-supplied model).
+const MODEL_VISION = "claude-sonnet-4-6";       // image present
+const MODEL_TEXT   = "claude-haiku-4-5-20251001"; // text only
+
+function pickModel(body) {
+  try {
+    const msgs = Array.isArray(body && body.messages) ? body.messages : [];
+    const hasImage = msgs.some(m =>
+      Array.isArray(m.content) && m.content.some(b => b && b.type === "image")
+    );
+    return hasImage ? MODEL_VISION : MODEL_TEXT;
+  } catch (_) {
+    // If the body shape is unexpected, fall back to vision (never under-serve quality).
+    return MODEL_VISION;
+  }
+}
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,6 +44,10 @@ export default async function handler(req, res) {
   if (!checkSecret(req, res)) return;
 
   try {
+    // v239: route by payload (image → Sonnet, text-only → Haiku), overriding client model.
+    const body = req.body || {};
+    body.model = pickModel(body);
+
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -29,7 +55,7 @@ export default async function handler(req, res) {
         "x-api-key": process.env.ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01"
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify(body)
     });
     const data = await response.json();
     return res.status(response.status).json(data);
