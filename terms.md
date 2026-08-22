@@ -4,7 +4,7 @@ Terms of Service — One Stop Lawn
 
 # One Stop Lawn — Terms of Service
 
-**Effective Date:** May 17, 2026
+**Effective Date:** August 22, 2026
 **App Version:** v237+
 **Owner:** One Stop Lawn, LLC, registered in South Carolina
 

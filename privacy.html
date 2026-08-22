@@ -110,8 +110,8 @@
 <div class="container">
 <a href="https://onestoplawnapp.com/landing" class="back-link">&larr; Back to One Stop Lawn</a>
 <h1>One Stop Lawn — Privacy Policy</h1>
-<p><strong>Effective Date:</strong> June 16, 2026
-<strong>App Version:</strong> 1.0
+<p><strong>Effective Date:</strong> August 22, 2026
+<strong>App Version:</strong> 1.6
 <strong>Owner:</strong> One Stop Lawn, LLC, registered in South Carolina, USA</p>
 <hr />
 <h2>Summary</h2>
@@ -132,7 +132,9 @@
 <ul>
 <li>Approximate location coordinates (latitude/longitude derived from your ZIP code) used to fetch weather and soil data from public weather services</li>
 <li>Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)</li>
-<li>We do <strong>not</strong> currently collect usage analytics or crash-report data. The app includes a "Send anonymous diagnostics" setting reserved for a future anonymous diagnostics feature; if it is ever activated, it would never include personal content (journal entries, photos, AI questions, soil values, or your lawn address)</li>
+<li><strong>Anonymous usage events.</strong> The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you or to each other. They are used only in aggregate, to see which parts of the app people reach.</li>
+<li>These events <strong>never</strong> include personal content — journal entries, photos, AI questions, soil values, or your lawn address are not collected for analytics under any circumstances.</li>
+<li>We do <strong>not</strong> collect crash-report data.</li>
 </ul>
 <h3>Information we do NOT collect</h3>
 <ul>
@@ -215,7 +217,8 @@
 - Tracking cookies
 - Third-party advertising cookies
 - Cross-site or cross-app identifiers
-- Analytics cookies</p>
+- Third-party analytics or advertising SDKs</p>
+<p>The anonymous usage events described above are sent directly to our own backend. They do not use cookies, do not set any identifier on your device, and are not used for tracking as defined by the ePrivacy Directive or Apple's App Tracking Transparency framework.</p>
 <hr />
 <h2>Third-Party Services We Use</h2>
 <p>We use a small number of third-party services to operate the app. Each is described here with a link to their privacy policy.</p>
@@ -287,6 +290,13 @@
 <td>https://tally.so/privacy</td>
 </tr>
 <tr>
+<td><strong>Supabase</strong></td>
+<td>Stores the anonymous usage counts described above</td>
+<td>Event name, date, platform, app version — no identifiers</td>
+<td>USA</td>
+<td>https://supabase.com/privacy</td>
+</tr>
+<tr>
 <td><strong>Apple iCloud</strong> (iOS)</td>
 <td>Stores your encrypted device backup (includes app data)</td>
 <td>All app data on your device</td>
@@ -302,10 +312,10 @@
 </tr>
 </tbody>
 </table>
-<p>We do not use Google Analytics, Facebook Pixel, advertising networks, or any other third-party tracking services.</p>
+<p>We do not use Google Analytics, Facebook Pixel, advertising networks, or any other third-party tracking services. Our own anonymous usage counts, described above, are the only analytics of any kind in the app.</p>
 <hr />
 <h2>International Data Transfers</h2>
-<p>One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Rachio, RevenueCat) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.</p>
+<p>One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Supabase, Rachio, RevenueCat) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.</p>
 <p>For users in the European Union, European Economic Area, or United Kingdom, we rely on the following safeguards for international data transfers under GDPR Chapter V:</p>
 <ul>
 <li><strong>EU-US Data Privacy Framework</strong>, where applicable to the receiving service</li>
@@ -406,6 +416,7 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy</p>
 <hr />
 <h2>Version History</h2>
 <ul>
+<li><strong>1.6 (August 22, 2026 — this version):</strong> The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier.</li>
 <li><strong>1.0 (June 16, 2026 — release version):</strong> Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.</li>
 <li><strong>May 17, 2026:</strong> Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.</li>
 <li><strong>v200 (May 4, 2026):</strong> Added Photo and Image Handling section, EXIF metadata disclosure, updated third-party services table.</li>
