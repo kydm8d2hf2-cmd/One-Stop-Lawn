@@ -25,7 +25,20 @@ const ALLOWED_EVENTS = new Set([
   "explore_started",
   "paywall_shown",
   "explore_expired",
-  "trial_started"
+  "trial_started",
+  // v1.7 -- AI usage. Photo requests route to Sonnet and text to Haiku, so the split
+  // maps directly onto spend. Milestones are per calendar month, matching the tier
+  // caps: 15 (Plus), 100 (Premium), 150 (Pro). 25 is the explore-window cap.
+  "ai_query_text",
+  "ai_query_photo",
+  "ai_milestone_1",
+  "ai_milestone_5",
+  "ai_milestone_15",
+  "ai_milestone_25",
+  "ai_milestone_50",
+  "ai_milestone_75",
+  "ai_milestone_100",
+  "ai_milestone_150"
 ]);
 
 // Defensive cap on the two free-text fields. Nothing legitimate approaches this.
