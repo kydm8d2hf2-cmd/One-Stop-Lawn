@@ -38,7 +38,16 @@ const ALLOWED_EVENTS = new Set([
   "ai_milestone_50",
   "ai_milestone_75",
   "ai_milestone_100",
-  "ai_milestone_150"
+  "ai_milestone_150",
+  // v1.8 -- paywall clarity. paywall_shown could not tell the post-onboarding upsell
+  // apart from the blocking wall at expiry; those are very different signals.
+  // paywall_shown is kept one more version so the new data stays comparable.
+  "paywall_upsell",
+  "paywall_blocking",
+  "paywall_dismissed",
+  // v1.8 -- ai_query_* only fires on a COMPLETED request, so someone who opens the AI
+  // and backs out looked identical to someone who never found it.
+  "ai_screen_opened"
 ]);
 
 // Defensive cap on the two free-text fields. Nothing legitimate approaches this.
