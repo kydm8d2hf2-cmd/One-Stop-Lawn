@@ -110,8 +110,8 @@
 <div class="container">
 <a href="https://onestoplawnapp.com/landing" class="back-link">&larr; Back to One Stop Lawn</a>
 <h1>One Stop Lawn — Privacy Policy</h1>
-<p><strong>Effective Date:</strong> August 22, 2026
-<strong>App Version:</strong> 1.6
+<p><strong>Effective Date:</strong> September 2, 2026
+<strong>App Version:</strong> 1.9
 <strong>Owner:</strong> One Stop Lawn, LLC, registered in South Carolina, USA</p>
 <hr />
 <h2>Summary</h2>
@@ -132,7 +132,8 @@
 <ul>
 <li>Approximate location coordinates (latitude/longitude derived from your ZIP code) used to fetch weather and soil data from public weather services</li>
 <li>Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)</li>
-<li><strong>Anonymous usage events.</strong> The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you or to each other. They are used only in aggregate, to see which parts of the app people reach.</li>
+<li><strong>Anonymous usage events.</strong> The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you. They are used only in aggregate, to see which parts of the app people reach.</li>
+<li><strong>Session grouping.</strong> Each event also carries a random session identifier. It is generated afresh every time the app starts, held only in memory, and discarded when the app closes — it is never written to your device and never sent anywhere else. Two separate launches on the same phone produce two unrelated values, so it cannot be used to recognise a device or to follow anyone over time. Its only purpose is to tell apart events that came from one visit to the app and events that came from several different people.</li>
 <li>These events <strong>never</strong> include personal content — journal entries, photos, AI questions, soil values, or your lawn address are not collected for analytics under any circumstances.</li>
 <li>We do <strong>not</strong> collect crash-report data.</li>
 </ul>
@@ -416,6 +417,7 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy</p>
 <hr />
 <h2>Version History</h2>
 <ul>
+<li><strong>1.9 (September 2, 2026):</strong> Events now carry a random per-launch session identifier, described above. It is not stored on your device and cannot connect two app launches, so the store privacy declarations are unchanged; the previous wording that events could not be linked to each other has been corrected, since events within a single launch now can be.</li>
 <li><strong>1.6 (August 22, 2026 — this version):</strong> The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier.</li>
 <li><strong>1.0 (June 16, 2026 — release version):</strong> Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.</li>
 <li><strong>May 17, 2026:</strong> Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.</li>

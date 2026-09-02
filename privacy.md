@@ -1,7 +1,7 @@
 # One Stop Lawn — Privacy Policy
 
-**Effective Date:** August 22, 2026
-**App Version:** 1.6
+**Effective Date:** September 2, 2026
+**App Version:** 1.9
 **Owner:** One Stop Lawn, LLC, registered in South Carolina, USA
 
 ---
@@ -26,7 +26,8 @@ One Stop Lawn helps you care for your lawn using AI-powered identification, weat
 
 ### Information collected automatically
 - Approximate location coordinates (latitude/longitude derived from your ZIP code) used to fetch weather and soil data from public weather services
-- **Anonymous usage events.** The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you or to each other. They are used only in aggregate, to see which parts of the app people reach.
+- **Anonymous usage events.** The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you. They are used only in aggregate, to see which parts of the app people reach.
+- **Session grouping.** Each event also carries a random session identifier. It is generated afresh every time the app starts, held only in memory, and discarded when the app closes — it is never written to your device and never sent anywhere else. Two separate launches on the same phone produce two unrelated values, so it cannot be used to recognise a device or to follow anyone over time. Its only purpose is to tell apart events that came from one visit to the app and events that came from several different people.
 - These events **never** include personal content — journal entries, photos, AI questions, soil values, or your lawn address are not collected for analytics under any circumstances.
 - We do **not** collect crash-report data.
 - Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)
@@ -281,6 +282,7 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy
 
 ## Version History
 
+- **1.9 (September 2, 2026):** Events now carry a random per-launch session identifier, described above. It is not stored on your device and cannot connect two app launches, so the store privacy declarations are unchanged; the previous wording that events could not be linked to each other has been corrected, since events within a single launch now can be.
 - **1.6 (August 22, 2026 — this version):** The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier. Note: this file had drifted behind privacy.html; the HTML was treated as authoritative and this version brings the two back in line.
 - **1.0 (June 16, 2026 — release version):** Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.
 - **May 17, 2026 (this version):** Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.
