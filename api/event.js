@@ -8,9 +8,11 @@
 // delete the whole table. So the client posts here, and this endpoint -- running on
 // Vercel where the key lives in an env var -- does the insert server-side.
 //
-// Privacy: no user IDs, no device IDs, no IP address, no request body beyond the
-// event name. Rows cannot be tied to a person or joined to each other. This is what
-// keeps the App Store declaration at "not linked to the user / not used for tracking".
+// Privacy: no user IDs, no device IDs, no IP address. Rows cannot be tied to a person.
+// Since v1.9 they carry a session id -- random per app launch, memory-only, discarded
+// on close -- so events within ONE session can be grouped, but nothing links two
+// sessions or identifies a device. Still "not linked to the user / not used for
+// tracking" on both stores.
 //
 // Matches api/ask.js and api/rachio.js: ESM, same CORS setup, same checkSecret gate.
 import { checkSecret } from "./_lib/checkSecret.js";
@@ -50,11 +52,22 @@ const ALLOWED_EVENTS = new Set([
   "ai_screen_opened"
 ]);
 
-// Defensive cap on the two free-text fields. Nothing legitimate approaches this.
+// Defensive cap on the free-text fields. Nothing legitimate approaches these.
 function clean(v) {
   if (typeof v !== "string") return null;
   const s = v.trim().slice(0, 32);
   return s.length ? s : null;
+}
+
+// v1.9: session id. Random, generated fresh at every app start, held in memory only
+// and discarded when the app closes -- NOT a device id and not persisted anywhere.
+// Two launches on the same phone produce two unrelated ids, so it cannot follow a
+// person over time. Restricted to the charset the client generates so a caller cannot
+// smuggle anything else into the column.
+function cleanSession(v) {
+  if (typeof v !== "string") return null;
+  const s = v.trim().slice(0, 40);
+  return /^[A-Za-z0-9_-]{8,40}$/.test(s) ? s : null;
 }
 
 export default async function handler(req, res) {
@@ -114,7 +127,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         event: event,
         platform: clean(body.platform),
-        app_version: clean(body.app_version)
+        app_version: clean(body.app_version),
+        session_id: cleanSession(body.session_id)
       })
     });
 
