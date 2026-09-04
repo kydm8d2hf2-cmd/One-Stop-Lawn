@@ -49,7 +49,10 @@ const ALLOWED_EVENTS = new Set([
   "paywall_dismissed",
   // v1.8 -- ai_query_* only fires on a COMPLETED request, so someone who opens the AI
   // and backs out looked identical to someone who never found it.
-  "ai_screen_opened"
+  "ai_screen_opened",
+  // v2.0 -- fired when someone exhausts their AI allowance. The most engaged users in
+  // the funnel are the only ones who can reach it, and until now they were invisible.
+  "ai_limit_reached"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
