@@ -14,8 +14,8 @@
 // TO PUBLISH A NEW VERSION: edit LATEST below and push. That is the whole job.
 
 const LATEST = {
-  ios: "1.10",
-  android: "1.10"
+  ios: "1.11",
+  android: "1.11"
 };
 
 // Optional. Absent by design.

@@ -52,7 +52,11 @@ const ALLOWED_EVENTS = new Set([
   "ai_screen_opened",
   // v2.0 -- fired when someone exhausts their AI allowance. The most engaged users in
   // the funnel are the only ones who can reach it, and until now they were invisible.
-  "ai_limit_reached"
+  "ai_limit_reached",
+  // v1.11 -- fired once per app launch. Every other event needs a specific action, so a
+  // user who opens the app and browses leaves no trace. Without this, "nobody reached
+  // day 7" and "they reached it and never came back" are the same empty result.
+  "app_opened"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
