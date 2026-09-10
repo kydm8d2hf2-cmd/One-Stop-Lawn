@@ -24,7 +24,7 @@ const LATEST = {
   // appears late, which is harmless. A value ahead of the store means prompting for a
   // build nobody can download, which is the failure this file exists to prevent.
   ios: "1.11",
-  android: "1.11"
+  android: "1.12"
 };
 
 // Optional. Absent by design.
