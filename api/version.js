@@ -23,8 +23,8 @@ const LATEST = {
   // Keep it at the last KNOWN-LIVE version. A stale value here means the prompt
   // appears late, which is harmless. A value ahead of the store means prompting for a
   // build nobody can download, which is the failure this file exists to prevent.
-  ios: "1.11",
-  android: "1.12"
+  ios: "1.12",
+  android: "1.13"
 };
 
 // Optional. Absent by design.
