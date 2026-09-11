@@ -8,7 +8,8 @@
 // delete the whole table. So the client posts here, and this endpoint -- running on
 // Vercel where the key lives in an env var -- does the insert server-side.
 //
-// Privacy: no user IDs, no device IDs, no IP address. Rows cannot be tied to a person.
+// Privacy: no accounts, no device identifiers, no IP address, no contact details.
+// Rows cannot be tied to a person.
 // Since v1.9 they carry a session id -- random per app launch, memory-only, discarded
 // on close -- so events within ONE session can be grouped, but nothing links two
 // sessions or identifies a device. Still "not linked to the user / not used for
@@ -56,7 +57,11 @@ const ALLOWED_EVENTS = new Set([
   // v1.11 -- fired once per app launch. Every other event needs a specific action, so a
   // user who opens the app and browses leaves no trace. Without this, "nobody reached
   // day 7" and "they reached it and never came back" are the same empty result.
-  "app_opened"
+  "app_opened",
+  // v1.14 -- a starter question tapped. The point of the starters is to get a first
+  // question asked, so the number worth watching is not taps but whether ai_query_*
+  // follows them.
+  "ai_starter_tapped"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
@@ -75,6 +80,13 @@ function cleanSession(v) {
   if (typeof v !== "string") return null;
   const s = v.trim().slice(0, 40);
   return /^[A-Za-z0-9_-]{8,40}$/.test(s) ? s : null;
+}
+
+// v1.14: install id. Random, generated once on the device, kept in local storage and
+// reset by a reinstall. Same validation as the session id -- restricted to the charset
+// the client generates so nothing else can reach the column.
+function cleanInstall(v) {
+  return cleanSession(v);
 }
 
 export default async function handler(req, res) {
@@ -135,7 +147,8 @@ export default async function handler(req, res) {
         event: event,
         platform: clean(body.platform),
         app_version: clean(body.app_version),
-        session_id: cleanSession(body.session_id)
+        session_id: cleanSession(body.session_id),
+        install_id: cleanInstall(body.install_id)
       })
     });
 
