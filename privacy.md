@@ -1,14 +1,14 @@
 # One Stop Lawn — Privacy Policy
 
-**Effective Date:** September 11, 2026
-**App Version:** 1.14
+**Effective Date:** September 18, 2026
+**App Version:** 1.15
 **Owner:** One Stop Lawn, LLC, registered in South Carolina, USA
 
 ---
 
 ## Summary
 
-One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data and photos stay on your device, backed up to your iCloud or Google Drive account, unless you explicitly use a feature that requires sending data to a third party (clearly marked below).
+One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data stays on your device — and may be included in your device's standard backup (iCloud or Google Drive) if you have that enabled — unless you explicitly use a feature that requires sending data to a third party (clearly marked below). Photos you add are also copied into your own photo library, so they survive removing the app.
 
 **We do not sell your data. We do not use your data for advertising. We do not share your data with anyone except the specific service providers listed below who help us operate the app.**
 
@@ -17,7 +17,8 @@ One Stop Lawn helps you care for your lawn using AI-powered identification, weat
 ## What We Collect
 
 ### Information you provide directly
-- ZIP code (required for weather and growing-zone calculations)
+
+- ZIP code (US) or postcode (UK), required for weather and growing-zone calculations. USDA growing zones are a US system and are not shown for UK postcodes.
 - Grass type, lawn size, and zone names you enter
 - Optional address you input into the lawn measuring tool (used only on-device to position the map; we do not store it on our servers)
 - Photos you choose to attach to AI features, save to your Lawn Journal, or save to your Wall of Fame
@@ -25,15 +26,17 @@ One Stop Lawn helps you care for your lawn using AI-powered identification, weat
 - Subscription tier selection and trial activation timestamps
 
 ### Information collected automatically
+
 - Approximate location coordinates (latitude/longitude derived from your ZIP code) used to fetch weather and soil data from public weather services
+- Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)
 - **Anonymous usage events.** The app records a small, fixed set of product-interaction events — that onboarding was started or completed, that the free explore window started or ended, that the upgrade screen was shown, and that a trial was started. Each event is stored as a single dated count with the platform (iOS or Android) and app version. No account, device identifier, advertising identifier, IP address, or location is attached, and the events cannot be linked to you. They are used only in aggregate, to see which parts of the app people reach.
 - **Session grouping.** Each event also carries a random session identifier. It is generated afresh every time the app starts, held only in memory, and discarded when the app closes — it is never written to your device and never sent anywhere else. Two separate launches on the same phone produce two unrelated values, so it cannot be used to recognise a device or to follow anyone over time. Its only purpose is to tell apart events that came from one visit to the app and events that came from several different people.
-- **Counting repeat visits.** Each event also carries a random installation number. It is created once when you install the app, stored on your device, and sent with each event so we can tell one person opening the app ten times from ten people opening it once — without which we cannot tell whether the app is useful enough to come back to. It is not your device's identifier and cannot follow you to any other app, it carries no name, email, address or contact details, and deleting the app discards it for good. It is used only to count usage in aggregate.
+- **Counting repeat visits.** Each event also carries a random installation number. It is created once when you install the app, stored on your device, and sent with each event so we can tell one person opening the app ten times from ten people opening it once — without which we cannot tell whether the app is useful enough to come back to. It is not your device’s identifier and cannot follow you to any other app, it carries no name, email, address or contact details, and deleting the app discards it for good. It is used only to count usage in aggregate.
 - These events **never** include personal content — journal entries, photos, AI questions, soil values, or your lawn address are not collected for analytics under any circumstances.
 - We do **not** collect crash-report data.
-- Purchase and subscription transaction data, processed by the App Store / Google Play and our subscription manager RevenueCat (an anonymized app-user ID and your purchase history; no name, email, or payment details reach us)
 
 ### Information we do NOT collect
+
 - Your real name (unless you put it in a lawn name)
 - Your phone number, email, or contact information (the app does not require an account)
 - Your precise device location (we use ZIP-based approximate location only)
@@ -57,16 +60,19 @@ You may withdraw consent for any consent-based processing at any time by ceasing
 ## Where Your Data Lives
 
 ### On your device
+
 - Lawn names, zone names, journal entries, soil test history, schedules, photos, Wall of Fame photos, and subscription tier selection are stored locally on your device
 - This data is **not stored on our servers**
 
 ### Backed up to your cloud account
-- Your data is automatically backed up to your iCloud account (iOS users) or Google Drive (Android users) via your device's standard backup mechanism
-- **We do not have access to these backups.** They are managed entirely by Apple or Google and encrypted with your account credentials
-- You can disable cloud backup in your device settings (iOS: Settings → [Your Name] → iCloud; Android: Settings → System → Backup)
-- If you disable cloud backup, your data exists only on your current device
+
+- If you have your device's standard backup enabled (iCloud on iOS, Android Auto Backup to Google Drive), your app data may be included in that backup. This is handled entirely by Apple or Google and encrypted with your account credentials
+- **We do not have access to these backups.** They are managed entirely by Apple or Google
+- You can enable or disable this in your device settings (iOS: Settings → [Your Name] → iCloud; Android: Settings → System → Backup)
+- For a reliable backup and to move your data between devices, use **Settings → Export Data** to save a JSON copy you control
 
 ### On our backend
+
 - We do NOT store user data on our backend
 - API requests (AI prompts, weather lookups) pass through our Vercel proxy in real time and are not persisted
 - Server logs may briefly capture request metadata for operational purposes; see "Data Retention" below
@@ -78,6 +84,7 @@ You may withdraw consent for any consent-based processing at any time by ceasing
 When you use a feature that involves a photo (Ask AI image attachment, Field Guide weed/insect/fungus/grass identification, fertilizer label scanning, baseline photos, Wall of Fame photos, or journal entry photos), the following applies:
 
 ### Photos sent for AI identification
+
 - Resized to 1200 pixels max and JPEG-compressed before transmission
 - Sent through our backend proxy (hosted on Vercel) to Anthropic's Claude API
 - Used only to generate the AI response you requested
@@ -86,17 +93,30 @@ When you use a feature that involves a photo (Ask AI image attachment, Field Gui
 - May appear briefly in our Vercel server logs alongside the request, automatically deleted per Vercel's standard retention
 
 ### Photos saved to your device
-- Lawn Journal photos and Wall of Fame photos are stored only in your device's local storage
+
+- Lawn Journal photos, Wall of Fame photos and equipment attachments are stored in the app's own storage on your device
 - These photos are not uploaded to any server (except as described above for AI identification)
-- They are backed up to your iCloud or Google Drive account via your device's standard backup, accessible only to you
+- They may be included in your device's standard backup (iCloud or Google Drive) if you have it enabled, accessible only to you
 - They are deleted when you delete the entry or when you clear the app's local data
 
+### Copies saved to your photo library
+
+- When you add a photo to My Shed, Wall of Fame, or an AI photo question, the app also saves a copy into your device's own photo library — your camera roll on iOS, your gallery on Android
+- This is so your photos survive deleting the app, which would otherwise take the app's copy with it
+- Where your device permits it, these copies are grouped into an album named **One Stop Lawn**. On iOS this requires full photo library access; if you grant limited access the copy is still saved, but no album is created
+- Once a copy is in your photo library it is an ordinary photo: it is covered by whatever photo backup you use (iCloud Photos, Google Photos), it is visible to other apps you have granted photo access, and deleting it is done in your photos app, not in One Stop Lawn
+- PDF attachments are never copied to your photo library
+- We do not receive these copies. They are written directly to your device by the operating system
+
 ### Photo Library and Camera Access
-- The app may request access to your photo library or camera when you choose to attach a photo
+
+- The app may request access to your photo library when you choose to attach a photo, and to add the copies described above
+- Choosing "Take Photo" from your device's file picker uses the camera; the app has no camera screen of its own
 - These permissions are managed by your device's operating system
 - You can revoke access at any time without losing app functionality
 
 ### EXIF metadata
+
 - Photos may contain EXIF metadata such as the date the photo was taken
 - We extract only the DateTimeOriginal field to populate the photo's date in your Wall of Fame timeline
 - We do not extract or transmit GPS coordinates from your photos
@@ -137,9 +157,14 @@ We use a small number of third-party services to operate the app. Each is descri
 | **Anthropic (Claude API)** | Powers all AI features | Photo data and text prompts; ZIP code and grass type for context | USA | https://www.anthropic.com/legal/privacy |
 | **Vercel** | Hosts our backend proxy that forwards AI requests | Request payloads pass through; not retained | USA | https://vercel.com/legal/privacy-policy |
 | **National Weather Service (NWS)** | Provides forecasts, soil temperature, and rainfall data | Approximate latitude/longitude derived from your ZIP | USA | https://www.weather.gov/disclaimer |
-| **Open-Meteo / Zippopotam** | Geocodes ZIP to coordinates if NWS data is unavailable | ZIP code | EU (Open-Meteo) | https://open-meteo.com/en/terms |
+| **Open-Meteo / Zippopotam** | Provides soil temperature and recent rainfall data, and geocodes a US ZIP code to coordinates | Your ZIP code, and the coordinates derived from it | EU (Open-Meteo) | https://open-meteo.com/en/terms |
+| **Postcodes.io** (UK only) | Geocodes a UK postcode to coordinates so weather and soil data can be fetched | Your postcode | UK | https://postcodes.io/about |
+| **OpenStreetMap / Nominatim** (UK only, fallback) | Geocodes a UK postcode if Postcodes.io is unavailable | Your postcode | EU (Germany) | https://osmfoundation.org/wiki/Privacy_Policy |
+| **RevenueCat** | Manages your subscription, free trial, and purchase restoration across platforms | An anonymized app-user ID and your purchase/transaction history (no name, email, or payment details) | USA | https://www.revenuecat.com/privacy |
+| **Apple App Store / Google Play billing** | Processes subscription payments and free trials | Payment and transaction data handled entirely by Apple or Google; we never receive your payment details | Per store | https://www.apple.com/legal/privacy / https://policies.google.com/privacy |
 | **Rachio** (optional) | Auto-syncs sprinkler schedule and watering history if you connect your account | Your Rachio Personal Access Token | USA | https://rachio.com/privacy |
 | **Tally.so** (optional) | Hosts our feedback form | Whatever you choose to type in the form | EU (Belgium) | https://tally.so/privacy |
+| **Supabase** | Stores the anonymous usage counts described above | Event name, date, platform, app version, the per-launch session number and the random installation number described above — no name, email, account, advertising identifier, IP address or location | USA | https://supabase.com/privacy |
 | **Apple iCloud** (iOS) | Stores your encrypted device backup (includes app data) | All app data on your device | Per your iCloud region | https://www.apple.com/legal/privacy |
 | **Google Drive** (Android) | Stores your encrypted device backup (includes app data) | All app data on your device | Per your Google account region | https://policies.google.com/privacy |
 
@@ -149,7 +174,7 @@ We do not use Google Analytics, Facebook Pixel, advertising networks, or any oth
 
 ## International Data Transfers
 
-One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Rachio) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.
+One Stop Lawn, LLC is based in the United States. Some of our service providers (Anthropic, Vercel, Supabase, Rachio, RevenueCat) are also based in the United States. This means data you send to these services may be transferred to and processed in the United States.
 
 For users in the European Union, European Economic Area, or United Kingdom, we rely on the following safeguards for international data transfers under GDPR Chapter V:
 
@@ -165,8 +190,8 @@ If you are an EU/EEA/UK user, you may request information about the specific saf
 
 - **Lawn calculations and recommendations:** Your ZIP, grass type, and lawn size drive seasonal task recommendations, watering schedules, and product suggestions
 - **AI features:** Photos and text you submit are used to generate the requested identification or response, then discarded by us
-- **Storage on your device:** Journal entries, Wall of Fame photos, soil test history, schedules, and zones are stored locally and backed up via your cloud account
-- **Subscription management:** Your tier selection and trial dates are stored locally and used to gate premium features
+- **Storage on your device:** Journal entries, Wall of Fame photos, soil test history, schedules, and zones are stored locally on your device (and may be included in your device's standard backup if enabled)
+- **Subscription management:** Your subscription tier and free-trial status are managed through RevenueCat and the App Store / Google Play. Purchases are processed by Apple or Google; RevenueCat receives an anonymized app-user ID and your purchase history to unlock and restore your subscription. We never receive your payment details.
 
 We do not use your data for any other purpose. We do not advertise. We do not sell your data.
 
@@ -175,7 +200,7 @@ We do not use your data for any other purpose. We do not advertise. We do not se
 ## Data Retention
 
 - **On your device:** All your local data persists until you uninstall the app or clear its local storage
-- **In your cloud backup (iCloud / Google Drive):** Persists according to Apple's or Google's retention policies, controlled by you
+- **In your device backup (iCloud / Google Drive), if enabled:** Persists according to Apple's or Google's retention policies, controlled by you
 - **In our backend:** We do not store user data on our backend. The proxy forwards AI requests in real time and does not persist them
 - **In server logs:** Vercel may keep request logs for up to 30 days for operational purposes; we cannot tie those logs back to a specific user since we do not collect user identifiers
 
@@ -186,6 +211,7 @@ We do not use your data for any other purpose. We do not advertise. We do not se
 Because we do not maintain accounts or store your data on our servers, most data control happens directly on your device. Specific rights depending on your location:
 
 ### All users
+
 - **Access:** Use Settings → Export Data to download a JSON copy of everything stored on your device
 - **Deletion:** Delete individual journal entries, photos, or zones from within the app, OR clear all app data via your device settings to erase everything at once
 - **Photo permissions:** Revoke camera or photo library access at any time via your device's Settings → Privacy
@@ -283,9 +309,10 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy
 
 ## Version History
 
+- **1.15 (September 18, 2026 — this version):** Photos you add are now also copied into your own photo library, and grouped into a One Stop Lawn album where your device allows it; a new section above explains what that means. UK postcodes are now accepted at setup, so Postcodes.io and OpenStreetMap/Nominatim have been added to the third-party services table as geocoders for UK users. Corrected the Supabase row, which still said usage events carried no identifiers — they have carried a per-launch session number since 1.9 and a random installation number since 1.14, both already described in this policy. No new categories of data are collected.
 - **1.14 (September 11, 2026):** Events now also carry a random installation number, described above, so repeat visits can be counted. It is not a device identifier, cannot follow you to another app, and is discarded when the app is deleted. Because it does persist between launches, the app store privacy labels now declare an identifier collected for analytics — still not linked to you and still not used for tracking.
 - **1.9 (September 2, 2026):** Events now carry a random per-launch session identifier, described above. It is not stored on your device and cannot connect two app launches, so the store privacy declarations are unchanged; the previous wording that events could not be linked to each other has been corrected, since events within a single launch now can be.
-- **1.6 (August 22, 2026 — this version):** The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier. Note: this file had drifted behind privacy.html; the HTML was treated as authoritative and this version brings the two back in line.
+- **1.6 (August 22, 2026):** The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier.
 - **1.0 (June 16, 2026 — release version):** Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.
-- **May 17, 2026 (this version):** Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.
+- **May 17, 2026:** Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.
 - **v200 (May 4, 2026):** Added Photo and Image Handling section, EXIF metadata disclosure, updated third-party services table.

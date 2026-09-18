@@ -4,8 +4,8 @@ Terms of Service — One Stop Lawn
 
 # One Stop Lawn — Terms of Service
 
-**Effective Date:** August 22, 2026
-**App Version:** v237+
+**Effective Date:** September 18, 2026
+**App Version:** 1.15
 **Owner:** One Stop Lawn, LLC, registered in South Carolina
 
 ---
@@ -169,7 +169,7 @@ If a third-party service becomes unavailable, changes its API, or shuts down, th
 
 ## 7. User Content
 
-The App allows you to enter and store data (lawn names, zone names, journal entries, soil test results, photos, etc.). This data is stored locally on your device. We do not store this content on our servers.
+The App allows you to enter and store data (lawn names, zone names, journal entries, soil test results, photos, etc.). This data is stored locally on your device. We do not store this content on our servers. Photos you add are additionally copied into your own photo library on your device; once there they are ordinary photos under your control, and removing them is done in your photos app.
 
 You retain all ownership of your content. By entering content into the App, you grant us a limited license to display it back to you within the App and to process it (e.g., resize photos before sending to AI services) as required for the features to function.
 

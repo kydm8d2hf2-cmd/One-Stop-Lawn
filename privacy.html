@@ -110,18 +110,18 @@
 <div class="container">
 <a href="https://onestoplawnapp.com/landing" class="back-link">&larr; Back to One Stop Lawn</a>
 <h1>One Stop Lawn — Privacy Policy</h1>
-<p><strong>Effective Date:</strong> September 11, 2026
-<strong>App Version:</strong> 1.14
+<p><strong>Effective Date:</strong> September 18, 2026
+<strong>App Version:</strong> 1.15
 <strong>Owner:</strong> One Stop Lawn, LLC, registered in South Carolina, USA</p>
 <hr />
 <h2>Summary</h2>
-<p>One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data and photos stay on your device — and may be included in your device's standard backup (iCloud or Google Drive) if you have that enabled — unless you explicitly use a feature that requires sending data to a third party (clearly marked below).</p>
+<p>One Stop Lawn helps you care for your lawn using AI-powered identification, weather data, soil testing guidance, and journaling. We collect the minimum data needed to make those features work. Your lawn data stays on your device — and may be included in your device's standard backup (iCloud or Google Drive) if you have that enabled — unless you explicitly use a feature that requires sending data to a third party (clearly marked below). Photos you add are also copied into your own photo library, so they survive removing the app.</p>
 <p><strong>We do not sell your data. We do not use your data for advertising. We do not share your data with anyone except the specific service providers listed below who help us operate the app.</strong></p>
 <hr />
 <h2>What We Collect</h2>
 <h3>Information you provide directly</h3>
 <ul>
-<li>ZIP code (required for weather and growing-zone calculations)</li>
+<li>ZIP code (US) or postcode (UK), required for weather and growing-zone calculations. USDA growing zones are a US system and are not shown for UK postcodes.</li>
 <li>Grass type, lawn size, and zone names you enter</li>
 <li>Optional address you input into the lawn measuring tool (used only on-device to position the map; we do not store it on our servers)</li>
 <li>Photos you choose to attach to AI features, save to your Lawn Journal, or save to your Wall of Fame</li>
@@ -189,14 +189,24 @@
 </ul>
 <h3>Photos saved to your device</h3>
 <ul>
-<li>Lawn Journal photos and Wall of Fame photos are stored only in your device's local storage</li>
+<li>Lawn Journal photos, Wall of Fame photos and equipment attachments are stored in the app's own storage on your device</li>
 <li>These photos are not uploaded to any server (except as described above for AI identification)</li>
 <li>They may be included in your device's standard backup (iCloud or Google Drive) if you have it enabled, accessible only to you</li>
 <li>They are deleted when you delete the entry or when you clear the app's local data</li>
 </ul>
+<h3>Copies saved to your photo library</h3>
+<ul>
+<li>When you add a photo to My Shed, Wall of Fame, or an AI photo question, the app also saves a copy into your device's own photo library — your camera roll on iOS, your gallery on Android</li>
+<li>This is so your photos survive deleting the app, which would otherwise take the app's copy with it</li>
+<li>Where your device permits it, these copies are grouped into an album named <strong>One Stop Lawn</strong>. On iOS this requires full photo library access; if you grant limited access the copy is still saved, but no album is created</li>
+<li>Once a copy is in your photo library it is an ordinary photo: it is covered by whatever photo backup you use (iCloud Photos, Google Photos), it is visible to other apps you have granted photo access, and deleting it is done in your photos app, not in One Stop Lawn</li>
+<li>PDF attachments are never copied to your photo library</li>
+<li>We do not receive these copies. They are written directly to your device by the operating system</li>
+</ul>
 <h3>Photo Library and Camera Access</h3>
 <ul>
-<li>The app may request access to your photo library or camera when you choose to attach a photo</li>
+<li>The app may request access to your photo library when you choose to attach a photo, and to add the copies described above</li>
+<li>Choosing "Take Photo" from your device's file picker uses the camera; the app has no camera screen of its own</li>
 <li>These permissions are managed by your device's operating system</li>
 <li>You can revoke access at any time without losing app functionality</li>
 </ul>
@@ -258,10 +268,24 @@
 </tr>
 <tr>
 <td><strong>Open-Meteo / Zippopotam</strong></td>
-<td>Provides soil temperature and recent rainfall data, and geocodes your ZIP to coordinates</td>
-<td>Approximate latitude/longitude derived from your ZIP</td>
+<td>Provides soil temperature and recent rainfall data, and geocodes a US ZIP code to coordinates</td>
+<td>Your ZIP code, and the coordinates derived from it</td>
 <td>EU (Open-Meteo)</td>
 <td>https://open-meteo.com/en/terms</td>
+</tr>
+<tr>
+<td><strong>Postcodes.io</strong> (UK only)</td>
+<td>Geocodes a UK postcode to coordinates so weather and soil data can be fetched</td>
+<td>Your postcode</td>
+<td>UK</td>
+<td>https://postcodes.io/about</td>
+</tr>
+<tr>
+<td><strong>OpenStreetMap / Nominatim</strong> (UK only, fallback)</td>
+<td>Geocodes a UK postcode if Postcodes.io is unavailable</td>
+<td>Your postcode</td>
+<td>EU (Germany)</td>
+<td>https://osmfoundation.org/wiki/Privacy_Policy</td>
 </tr>
 <tr>
 <td><strong>RevenueCat</strong></td>
@@ -294,7 +318,7 @@
 <tr>
 <td><strong>Supabase</strong></td>
 <td>Stores the anonymous usage counts described above</td>
-<td>Event name, date, platform, app version — no identifiers</td>
+<td>Event name, date, platform, app version, the per-launch session number and the random installation number described above — no name, email, account, advertising identifier, IP address or location</td>
 <td>USA</td>
 <td>https://supabase.com/privacy</td>
 </tr>
@@ -418,9 +442,10 @@ Contact Anthropic directly at https://www.anthropic.com/legal/privacy</p>
 <hr />
 <h2>Version History</h2>
 <ul>
+<li><strong>1.15 (September 18, 2026 — this version):</strong> Photos you add are now also copied into your own photo library, and grouped into a One Stop Lawn album where your device allows it; a new section above explains what that means. UK postcodes are now accepted at setup, so Postcodes.io and OpenStreetMap/Nominatim have been added to the third-party services table as geocoders for UK users. Corrected the Supabase row, which still said usage events carried no identifiers — they have carried a per-launch session number since 1.9 and a random installation number since 1.14, both already described in this policy. No new categories of data are collected.</li>
 <li><strong>1.14 (September 11, 2026):</strong> Events now also carry a random installation number, described above, so repeat visits can be counted. It is not a device identifier, cannot follow you to another app, and is discarded when the app is deleted. Because it does persist between launches, the app store privacy labels now declare an identifier collected for analytics — still not linked to you and still not used for tracking.</li>
 <li><strong>1.9 (September 2, 2026):</strong> Events now carry a random per-launch session identifier, described above. It is not stored on your device and cannot connect two app launches, so the store privacy declarations are unchanged; the previous wording that events could not be linked to each other has been corrected, since events within a single launch now can be.</li>
-<li><strong>1.6 (August 22, 2026 — this version):</strong> The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier.</li>
+<li><strong>1.6 (August 22, 2026):</strong> The app now records a small set of anonymous usage events; this policy describes exactly what they contain and what they do not. Removed the reference to a "Send anonymous diagnostics" setting — that control has been removed from the app, because the events carry no identifier, cannot be linked to a person, and are not used for tracking. Added Supabase to the third-party services table. Restated the cookies section to make clear these events set no identifier.</li>
 <li><strong>1.0 (June 16, 2026 — release version):</strong> Set app version to 1.0 for launch. Added RevenueCat and App Store / Google Play billing to third-party services for subscription management. Clarified that Open-Meteo provides soil temperature and rainfall data.</li>
 <li><strong>May 17, 2026:</strong> Added GDPR-specific sections — lawful basis, full user rights, international data transfers, automated decision-making disclosure, EU representative status, data breach notification, cookies/local storage disclosure. Added cloud backup disclosure (iCloud / Google Drive). Strengthened Children's Privacy section for EU age-of-consent variations. Added CCPA/CPRA section for California residents.</li>
 <li><strong>v200 (May 4, 2026):</strong> Added Photo and Image Handling section, EXIF metadata disclosure, updated third-party services table.</li>
