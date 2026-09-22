@@ -40,7 +40,7 @@ const MIN = null;
 
 // Optional one-line note shown inside the prompt. Normally null — the app has its own
 // generic copy, which is the point: it does not need rewriting every release.
-const NOTE = null;
+const NOTE = "Backups now include My Shed, Wall of Fame and everything else they were missing. If you have a backup from an older version, make a fresh one after updating.";
 
 // Cached across warm invocations so a burst of launches does not hammer Apple; their
 // docs carry a rate-limit note and this is hit on every cold start.
