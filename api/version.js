@@ -24,7 +24,7 @@ const LATEST = {
   // appears late, which is harmless. A value ahead of the store means prompting for a
   // build nobody can download, which is the failure this file exists to prevent.
   ios: "1.14",
-  android: "1.15"
+  android: "1.17"
 };
 
 // Optional. Absent by design.
@@ -40,7 +40,7 @@ const MIN = null;
 
 // Optional one-line note shown inside the prompt. Normally null — the app has its own
 // generic copy, which is the point: it does not need rewriting every release.
-const NOTE = "Backups now include My Shed, Wall of Fame and everything else they were missing. If you have a backup from an older version, make a fresh one after updating.";
+const NOTE = "Fixes for adding equipment with a receipt, a Camera button in Wall of Fame, and buttons at the bottom of the screen no longer sitting under the navigation bar.";
 
 // Cached across warm invocations so a burst of launches does not hammer Apple; their
 // docs carry a rate-limit note and this is hit on every cold start.
