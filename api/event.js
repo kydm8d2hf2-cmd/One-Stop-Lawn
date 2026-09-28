@@ -61,7 +61,13 @@ const ALLOWED_EVENTS = new Set([
   // v1.14 -- a starter question tapped. The point of the starters is to get a first
   // question asked, so the number worth watching is not taps but whether ai_query_*
   // follows them.
-  "ai_starter_tapped"
+  "ai_starter_tapped",
+  // v1.18 core-action events. Everything above this line is acquisition, paywall or AI;
+  // nothing recorded whether anyone actually USED the app after setup, so a productive
+  // session and an abandoned one looked identical in the data.
+  "journal_entry_added",
+  "shed_item_added",
+  "lawn_measured"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
