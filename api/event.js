@@ -67,7 +67,10 @@ const ALLOWED_EVENTS = new Set([
   // session and an abandoned one looked identical in the data.
   "journal_entry_added",
   "shed_item_added",
-  "lawn_measured"
+  "lawn_measured",
+  "wof_photo_added",
+  "journal_photo_added",
+  "shed_attachment_added"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
