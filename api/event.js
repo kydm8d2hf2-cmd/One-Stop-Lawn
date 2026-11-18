@@ -70,7 +70,33 @@ const ALLOWED_EVENTS = new Set([
   "lawn_measured",
   "wof_photo_added",
   "journal_photo_added",
-  "shed_attachment_added"
+  "shed_attachment_added",
+  // v1.21 -- fired when the app is opened by tapping a scheduled notification. The only
+  // way to tell whether the day-1/day-3 return nudges actually bring anyone back.
+  "opened_from_notification",
+  // v1.21 instrumentation --------------------------------------------------------
+  // js_error: window.onerror / unhandledrejection, once per launch.
+  // app_restarted_unexpectedly: relaunch within 60s of the last interaction, i.e. a
+  //   crash, an ANR, or the OS reclaiming the WebView. Play reports "data unavailable"
+  //   for crashes below a minimum user count, so this is the only route to that number.
+  // ai_answer_ok / ai_answer_failed: ai_query_* fires BEFORE the call is attempted, so
+  //   it only means "allowed past the paywall". These say whether an answer came back.
+  // affiliate_click: one delegated listener over all 362 shop links. No href is sent.
+  // onboarding_step_N: where in the 8-step wizard people stop. Completion is 70% on
+  //   1.20 against 90.9% on 1.15 and nothing so far says which screen loses them.
+  "js_error",
+  "app_restarted_unexpectedly",
+  "ai_answer_ok",
+  "ai_answer_failed",
+  "affiliate_click",
+  "onboarding_step_1",
+  "onboarding_step_2",
+  "onboarding_step_3",
+  "onboarding_step_4",
+  "onboarding_step_5",
+  "onboarding_step_6",
+  "onboarding_step_7",
+  "onboarding_step_8"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
