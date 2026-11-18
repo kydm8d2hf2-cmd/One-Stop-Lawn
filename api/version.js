@@ -24,7 +24,7 @@ const LATEST = {
   // appears late, which is harmless. A value ahead of the store means prompting for a
   // build nobody can download, which is the failure this file exists to prevent.
   ios: "1.14",
-  android: "1.20"
+  android: "1.21"
 };
 
 // Optional. Absent by design.
@@ -40,7 +40,7 @@ const MIN = null;
 
 // Optional one-line note shown inside the prompt. Normally null — the app has its own
 // generic copy, which is the point: it does not need rewriting every release.
-const NOTE = "Fall pre-emergent is now tracked for fall instead of spring, and evening entries no longer get tomorrow's date.";
+const NOTE = "Lawn reminders now work on Android, with cleaner, easier-to-read text and more product links.";
 
 // Cached across warm invocations so a burst of launches does not hammer Apple; their
 // docs carry a rate-limit note and this is hit on every cold start.
@@ -82,18 +82,20 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-App-Secret");
   // Five minutes at the edge: costs nothing at any volume, and a release still reaches
   // everyone the same day.
-  res.setHeader("Cache-Control", "public, max-age=300, s-maxage=300");
+  res.setHeader("Cache-Control", "private, max-age=300");
 
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "GET") return res.status(405).end();
 
+  const plat = String((req.query && req.query.platform) || "").toLowerCase();
+  const isAndroid = plat === "android" || (plat !== "ios" && /android/i.test(String(req.headers["user-agent"] || "")));
   const live = await appleLiveVersion();
 
   return res.status(200).json({
     ios: live || LATEST.ios,
     android: LATEST.android,
     min: MIN,
-    note: NOTE,
+    note: isAndroid ? NOTE : null,
     // Visible in a browser so you can tell at a glance whether the lookup is working or
     // the fallback is carrying it. Costs nothing and saves guessing later.
     iosSource: live ? "appstore" : "fallback"
