@@ -96,7 +96,10 @@ const ALLOWED_EVENTS = new Set([
   "onboarding_step_5",
   "onboarding_step_6",
   "onboarding_step_7",
-  "onboarding_step_8"
+  "onboarding_step_8",
+  // v1.22: a launch that finds a photo-picker stamp under ten minutes old, i.e. the app
+  // was killed while the camera or gallery was open. Diagnostic only.
+  "app_restarted_after_photo"
 ]);
 
 // Defensive cap on the free-text fields. Nothing legitimate approaches these.
